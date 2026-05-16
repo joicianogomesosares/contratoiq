@@ -370,10 +370,29 @@ async function iniciarAnalise() {
     });
 
     const data = await response.json();
-    if (data.error) { alert(data.error); return; }
 
-    const texto = data.content[0].text;
-    const resultado = JSON.parse(texto.replace(/```json|```/g, '').trim());
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
+
+    if (!data.content || !data.content[0] || !data.content[0].text) {
+      alert('Erro na análise: resposta inválida da IA. Tente novamente.');
+      console.error('Resposta inválida:', data);
+      return;
+    }
+
+    let resultado;
+    try {
+      const texto = data.content[0].text;
+      const limpo = texto.replace(/```json|```/g, '').trim();
+      resultado = JSON.parse(limpo);
+    } catch(parseErr) {
+      alert('Erro ao processar o resultado. Tente novamente com um PDF menor.');
+      console.error('Parse error:', parseErr);
+      return;
+    }
+
     resultado._restantes = data.analises_restantes;
 
     if (data.analises_restantes !== undefined) {
