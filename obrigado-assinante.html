@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assinatura Confirmada — ContratoIQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --ink: #0D0D0D; --cream: #F5F0E8; --gold: #C9A84C; --paper: #FAF7F2; --rule: rgba(13,13,13,0.12); --green: #1E7D5A; }
+  body { background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 24px 48px; border-bottom: 1px solid var(--rule); background: var(--cream); }
+  .logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; text-decoration: none; color: var(--ink); }
+  .logo span { color: var(--gold); }
+  main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 60px 24px; }
+  .card { max-width: 560px; width: 100%; text-align: center; }
+  .check { width: 72px; height: 72px; background: rgba(30,125,90,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 32px; font-size: 32px; }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--green); margin-bottom: 16px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 42px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 16px; }
+  .sub { font-size: 15px; line-height: 1.8; opacity: .6; margin-bottom: 40px; max-width: 420px; margin-left: auto; margin-right: auto; }
+  .steps { background: var(--paper); border: 1px solid var(--rule); padding: 32px; text-align: left; margin-bottom: 32px; }
+  .steps-title { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; opacity: .4; margin-bottom: 20px; }
+  .step { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+  .step:last-child { margin-bottom: 0; }
+  .step-num { width: 28px; height: 28px; background: var(--ink); color: var(--cream); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+  .step-content {}
+  .step-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .step-desc { font-size: 12px; line-height: 1.7; opacity: .6; }
+  .highlight { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); padding: 16px 20px; margin-bottom: 32px; display: flex; align-items: center; gap: 12px; text-align: left; }
+  .highlight-icon { font-size: 20px; flex-shrink: 0; }
+  .highlight-text { font-size: 13px; line-height: 1.7; opacity: .75; }
+  .btn-primary { display: inline-block; background: var(--ink); color: var(--cream); padding: 16px 40px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; text-decoration: none; transition: all .25s; letter-spacing: 0.3px; margin-bottom: 16px; }
+  .btn-primary:hover { background: #1a1a1a; transform: translateY(-2px); }
+  .btn-secondary { display: block; font-family: 'DM Mono', monospace; font-size: 11px; opacity: .4; color: var(--ink); text-decoration: none; letter-spacing: 0.5px; transition: opacity .2s; }
+  .btn-secondary:hover { opacity: .8; }
+  footer { border-top: 1px solid var(--rule); padding: 24px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-family: 'DM Mono', monospace; font-size: 10px; opacity: .35; color: var(--ink); text-decoration: none; transition: opacity .2s; }
+  .footer-links a:hover { opacity: 1; }
+  @media (max-width: 700px) { nav { padding: 20px 24px; } footer { padding: 20px 24px; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Contrato<span>IQ</span></a>
+</nav>
+
+<main>
+  <div class="card">
+    <div class="check">✓</div>
+    <div class="eyebrow">Assinatura confirmada</div>
+    <h1>Bem-vindo ao ContratoIQ.</h1>
+    <p class="sub">Seu pagamento foi processado com sucesso. Em instantes você receberá seu token de acesso exclusivo por email.</p>
+
+    <div class="steps">
+      <div class="steps-title">O que acontece agora</div>
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Verifique seu email</div>
+          <div class="step-desc">Seu token de acesso exclusivo será enviado em até 15 minutos para o email cadastrado no Mercado Pago. Verifique também a caixa de spam.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Acesse a plataforma</div>
+          <div class="step-desc">Com o token em mãos, acesse contratoiq.com/app.html e insira o código para entrar na plataforma.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Faça sua primeira análise</div>
+          <div class="step-desc">Faça upload do contrato em PDF e receba o parecer jurídico completo em menos de 2 minutos.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <span class="highlight-icon">⏱</span>
+      <span class="highlight-text">Se não receber o token em até 15 minutos, entre em contato pelo WhatsApp <strong>(85) 99232-3262</strong> ou pelo email <strong>suporte@contratoiq.com</strong></span>
+    </div>
+
+    <a href="/app.html" class="btn-primary">Acessar plataforma →</a>
+    <a href="/" class="btn-secondary">Voltar ao site</a>
+  </div>
+</main>
+
+<footer>
+  <a href="/" style="text-decoration:none"><span style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:#0D0D0D">Contrato<span style="color:#C9A84C">IQ</span></span></a>
+  <div class="footer-links">
+    <a href="/suporte.html">Suporte</a>
+    <a href="/termos.html">Termos</a>
+    <a href="/privacidade.html">Privacidade</a>
+  </div>
+  <div style="font-family:'DM Mono',monospace;font-size:9px;opacity:.3;">CNPJ 66.816.981/0001-58 · © 2026 ContratoIQ</div>
+</footer>
+
+</body>
+</html>

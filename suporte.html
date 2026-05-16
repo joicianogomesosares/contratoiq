@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suporte — ContratoIQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --ink: #0D0D0D; --cream: #F5F0E8; --gold: #C9A84C; --paper: #FAF7F2; --rule: rgba(13,13,13,0.12); }
+  body { background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 24px 48px; border-bottom: 1px solid var(--rule); background: var(--cream); position: sticky; top: 0; z-index: 10; }
+  .logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; text-decoration: none; color: var(--ink); }
+  .logo span { color: var(--gold); }
+  .nav-back { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; color: var(--ink); opacity: 0.5; text-decoration: none; transition: opacity .2s; }
+  .nav-back:hover { opacity: 1; }
+  .container { max-width: 760px; margin: 0 auto; padding: 80px 48px; }
+  .doc-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 16px; }
+  .doc-meta { font-family: 'DM Mono', monospace; font-size: 11px; opacity: 0.4; margin-bottom: 56px; }
+  h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 16px; margin-top: 48px; }
+  p { font-size: 14px; line-height: 1.85; opacity: 0.7; margin-bottom: 16px; }
+  .canais { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--rule); margin: 32px 0; }
+  .canal { background: var(--paper); padding: 32px; }
+  .canal-icon { font-size: 28px; margin-bottom: 12px; }
+  .canal-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .canal-desc { font-size: 12px; opacity: .6; line-height: 1.7; margin-bottom: 16px; }
+  .canal-cta { display: inline-block; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(201,168,76,0.3); padding-bottom: 2px; transition: border-color .2s; }
+  .canal-cta:hover { border-color: var(--gold); }
+  .faq { margin-top: 48px; }
+  .faq-item { border-bottom: 1px solid var(--rule); padding: 20px 0; cursor: pointer; }
+  .faq-question { font-size: 14px; font-weight: 500; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .faq-icon { font-family: 'DM Mono', monospace; font-size: 16px; color: var(--gold); flex-shrink: 0; transition: transform .2s; }
+  .faq-answer { font-size: 13px; line-height: 1.8; opacity: .65; margin-top: 12px; display: none; }
+  .faq-item.open .faq-answer { display: block; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  footer { border-top: 1px solid var(--rule); padding: 32px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .footer-links a { font-family: 'DM Mono', monospace; font-size: 10px; opacity: 0.4; color: var(--ink); text-decoration: none; transition: opacity .2s; }
+  .footer-links a:hover { opacity: 1; }
+  @media (max-width: 700px) { nav { padding: 20px 24px; } .container { padding: 48px 24px; } .canais { grid-template-columns: 1fr; } footer { padding: 24px; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Contrato<span>IQ</span></a>
+  <a href="/" class="nav-back">← Voltar ao site</a>
+</nav>
+<div class="container">
+  <div class="doc-eyebrow">Atendimento</div>
+  <h1>Como podemos ajudar?</h1>
+  <div class="doc-meta">Respondemos em até 24 horas úteis</div>
+
+  <div class="canais">
+    <div class="canal">
+      <div class="canal-icon">💬</div>
+      <div class="canal-title">WhatsApp</div>
+      <div class="canal-desc">Atendimento rápido para dúvidas urgentes sobre acesso, token e uso da plataforma.</div>
+      <a href="https://wa.me/5585992323262" target="_blank" class="canal-cta">(85) 99232-3262 →</a>
+    </div>
+    <div class="canal">
+      <div class="canal-icon">✉</div>
+      <div class="canal-title">Email</div>
+      <div class="canal-desc">Para solicitações de cancelamento, reembolso, dados pessoais e questões técnicas.</div>
+      <a href="mailto:suporte@contratoiq.com" class="canal-cta">suporte@contratoiq.com →</a>
+    </div>
+  </div>
+
+  <h2>Perguntas frequentes</h2>
+  <div class="faq">
+    <div class="faq-item" onclick="toggle(this)">
+      <div class="faq-question">Como recebo meu token de acesso? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Após a confirmação do pagamento, você recebe o token automaticamente por email em até 15 minutos. Se não receber, verifique o spam ou entre em contato pelo WhatsApp.</div>
+    </div>
+    <div class="faq-item" onclick="toggle(this)">
+      <div class="faq-question">Meu token não está funcionando. O que faço? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Verifique se digitou o token corretamente, incluindo os hifens (ex: CIQ-2025-ADV-XXXXXX). Se o problema persistir, entre em contato pelo WhatsApp ou email.</div>
+    </div>
+    <div class="faq-item" onclick="toggle(this)">
+      <div class="faq-question">Qual o limite de páginas por contrato? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">O limite é de 100 páginas por contrato. A maioria dos contratos empresariais tem entre 5 e 40 páginas, dentro desse limite. Documentos maiores como processos judiciais completos podem ser rejeitados.</div>
+    </div>
+    <div class="faq-item" onclick="toggle(this)">
+      <div class="faq-question">Por que a análise demorou mais do que o esperado? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">O tempo varia conforme o tipo de documento. Contratos em texto puro são os mais rápidos (30-60 segundos). Contratos com tabelas e formatação complexa levam mais tempo. Documentos escaneados ou com imagens são os mais lentos e podem ter menor precisão.</div>
+    </div>
+    <div class="faq-item" onclick="toggle(this)">
+      <div class="faq-question">O parecer gerado substitui um advogado? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Não. O ContratoIQ é uma ferramenta de apoio à análise jurídica, não um serviço de advocacia. O parecer deve ser usado como ponto de partida para revisão por um advogado habilitado pela OAB, especialmente em contratos de alto valor ou complexidade.</div>
+    </div>
+    <div class="faq-item" onclick="toggle(this)">
+      <div class="faq-question">Os contratos enviados ficam armazenados? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Não. Os contratos são processados em tempo real e descartados após a geração do relatório. Não armazenamos o conteúdo dos documentos permanentemente. Consulte nossa Política de Privacidade para mais detalhes.</div>
+    </div>
+    <div class="faq-item" onclick="toggle(this)">
+      <div class="faq-question">Como cancelo minha assinatura? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Envie um email para suporte@contratoiq.com ou mensagem pelo WhatsApp (85) 99232-3262. Consulte nossos Termos de Uso para entender as condições de reembolso conforme o momento do cancelamento.</div>
+    </div>
+    <div class="faq-item" onclick="toggle(this)">
+      <div class="faq-question">Posso compartilhar meu token com colegas? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">Não. O token é pessoal e intransferível. O compartilhamento pode resultar no cancelamento imediato do acesso sem reembolso. Para múltiplos usuários, consulte nossos planos Enterprise.</div>
+    </div>
+    <div class="faq-item" onclick="toggle(this)">
+      <div class="faq-question">Qual a diferença entre os planos? <span class="faq-icon">+</span></div>
+      <div class="faq-answer">A diferença principal é o número de análises mensais: Starter (100), Advanced (300), Enterprise Lite (1.000) e Enterprise Pro (3.000). Todos incluem o mesmo conjunto completo de análise jurídica, score de risco e download em PDF.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a href="/" style="text-decoration:none"><span style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#0D0D0D">Contrato<span style="color:#C9A84C">IQ</span></span></a>
+  <div class="footer-links">
+    <a href="/">Início</a><a href="/suporte.html">Suporte</a><a href="/termos.html">Termos</a><a href="/privacidade.html">Privacidade</a>
+  </div>
+  <div style="font-family:'DM Mono',monospace;font-size:9px;opacity:.3;letter-spacing:0.5px">CNPJ 66.816.981/0001-58 · Joiciano Gomes Soares de Lima MEI · Fortaleza/CE · © 2026 ContratoIQ</div>
+</footer>
+
+<script>
+function toggle(el) {
+  el.classList.toggle('open');
+}
+</script>
+</body>
+</html>

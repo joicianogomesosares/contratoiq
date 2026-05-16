@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContratoIQ — Plataforma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#0D0D0D;--cream:#F5F0E8;--gold:#C9A84C;--paper:#FAF7F2;--rule:rgba(13,13,13,0.1);--red:#C0392B;--green:#1E7D5A;--amber:#E67E22}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh}
+
+/* ── NAV ── */
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 48px;border-bottom:1px solid var(--rule);background:var(--cream);position:sticky;top:0;z-index:10}
+.logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;text-decoration:none;color:var(--ink)}
+.logo span{color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:24px}
+.nav-user{font-family:'DM Mono',monospace;font-size:10px;opacity:.5;letter-spacing:0.5px}
+.nav-back{font-family:'DM Mono',monospace;font-size:10px;opacity:.4;color:var(--ink);text-decoration:none;letter-spacing:0.5px;transition:opacity .2s}
+.nav-back:hover{opacity:1}
+
+/* ── ACESSO ── */
+#tela-acesso{max-width:480px;margin:80px auto;padding:0 24px}
+.acesso-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:8px;text-align:center}
+.acesso-title{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:8px}
+.acesso-sub{font-size:13px;opacity:.5;text-align:center;margin-bottom:40px;line-height:1.7}
+.acesso-card{background:var(--paper);border:1px solid var(--rule);padding:32px}
+.acesso-input-wrap{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.acesso-input{flex:1;min-width:180px;padding:14px 16px;border:1px solid rgba(13,13,13,0.15);background:var(--cream);font-family:'DM Mono',monospace;font-size:13px;outline:none;letter-spacing:0.5px;transition:border-color .2s}
+.acesso-input:focus{border-color:var(--gold)}
+.acesso-input::placeholder{opacity:.35}
+.btn-validar{background:var(--ink);color:var(--cream);border:none;padding:14px 24px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .2s}
+.btn-validar:hover{background:#2a2a2a}
+.btn-validar:disabled{opacity:.5;cursor:not-allowed}
+#acesso-msg{font-family:'DM Mono',monospace;font-size:11px;min-height:20px;letter-spacing:0.3px}
+.acesso-footer{text-align:center;margin-top:24px;font-size:12px;opacity:.4}
+.acesso-footer a{color:var(--ink)}
+
+/* ── APP ── */
+#app{display:none;max-width:900px;margin:0 auto;padding:40px 24px 80px}
+.app-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:16px}
+.app-welcome{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;letter-spacing:-0.5px}
+.app-plano-info{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.plano-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:rgba(201,168,76,0.1);color:var(--gold);padding:4px 12px}
+.analises-badge{font-family:'DM Mono',monospace;font-size:10px;opacity:.5;letter-spacing:0.5px}
+
+/* ── AVISO ── */
+.aviso{background:var(--paper);border:1px solid rgba(201,168,76,0.2);padding:20px 24px;margin-bottom:28px}
+.aviso-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.aviso-text{font-size:12px;line-height:1.8;opacity:.65}
+
+/* ── UPLOAD ── */
+.upload-card{background:var(--paper);border:1px solid var(--rule);padding:40px;text-align:center;margin-bottom:20px}
+.upload-zone{border:2px dashed rgba(13,13,13,0.15);padding:48px 32px;cursor:pointer;transition:all .2s;margin-bottom:16px}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--gold);background:rgba(201,168,76,0.04)}
+.upload-icon{font-size:32px;margin-bottom:12px;opacity:.3}
+.upload-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:8px}
+.upload-sub{font-family:'DM Mono',monospace;font-size:10px;opacity:.35;letter-spacing:1px}
+.btn-upload{background:var(--ink);color:var(--cream);border:none;padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;margin-top:20px;transition:background .2s}
+.btn-upload:hover{background:#2a2a2a}
+
+.file-preview{display:none;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);padding:16px 20px;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px}
+.file-preview.show{display:flex}
+.file-info{display:flex;align-items:center;gap:12px}
+.file-name{font-size:13px;font-weight:500}
+.file-size{font-family:'DM Mono',monospace;font-size:10px;opacity:.4}
+.btn-remover{background:none;border:none;cursor:pointer;font-size:16px;opacity:.4;transition:opacity .2s;padding:4px}
+.btn-remover:hover{opacity:1}
+
+.btn-analisar{width:100%;padding:18px;background:var(--ink);color:var(--cream);border:none;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:0.3px;transition:all .25s;display:none}
+.btn-analisar:hover{background:#1a1a1a}
+.btn-analisar:disabled{opacity:.5;cursor:not-allowed}
+.btn-analisar.visible{display:block}
+.analise-hint{font-family:'DM Mono',monospace;font-size:9px;opacity:.35;letter-spacing:0.5px;margin-top:10px;display:none}
+.analise-hint.visible{display:block}
+
+/* ── RESULTADO ── */
+#resultado{margin-top:32px}
+.res-section{background:var(--paper);border:1px solid var(--rule);padding:32px;margin-bottom:2px}
+.res-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:12px}
+.res-h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:16px}
+.res-text{font-size:13px;line-height:1.8;opacity:.75}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.res-field{margin-bottom:0}
+.res-field-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;opacity:.35;margin-bottom:6px}
+.res-field-value{font-size:13px;opacity:.75;line-height:1.5}
+.leis-wrap{display:flex;gap:8px;flex-wrap:wrap;grid-column:span 2}
+.lei-badge{background:rgba(201,168,76,0.1);color:var(--gold);font-family:'DM Mono',monospace;font-size:10px;padding:3px 10px}
+.clausula-item{padding:14px;margin-bottom:6px;border-left:3px solid transparent}
+.clausula-item.alto{border-left-color:var(--red);background:rgba(192,57,43,0.06)}
+.clausula-item.medio{border-left-color:var(--amber);background:rgba(230,126,34,0.06)}
+.clausula-item.baixo{border-left-color:var(--green);background:rgba(30,125,90,0.06)}
+.clausula-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap;gap:8px}
+.clausula-title{font-size:13px;font-weight:500}
+.clausula-badges{display:flex;gap:6px}
+.badge{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;padding:2px 8px;text-transform:uppercase}
+.badge-alto{background:rgba(192,57,43,0.1);color:var(--red)}
+.badge-medio{background:rgba(230,126,34,0.1);color:var(--amber)}
+.badge-baixo{background:rgba(30,125,90,0.1);color:var(--green)}
+.badge-abusiva{background:rgba(192,57,43,0.15);color:var(--red)}
+.clausula-resumo{font-size:12px;opacity:.7;line-height:1.6;margin-bottom:4px}
+.clausula-legal{font-size:11px;color:var(--gold);opacity:.8}
+.clausula-consequencia{font-family:'DM Mono',monospace;font-size:10px;opacity:.5;margin-top:4px}
+.obrig-col{margin-bottom:0}
+.obrig-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;opacity:.35;margin-bottom:8px}
+.obrig-item{font-size:12px;opacity:.7;padding:6px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px}
+.prazo-item,.risco-item{display:flex;justify-content:space-between;align-items:flex-start;padding:12px;margin-bottom:6px;gap:12px}
+.prazo-item.alto,.risco-item.alto{background:rgba(192,57,43,0.06);border-left:3px solid var(--red)}
+.prazo-item.medio,.risco-item.medio{background:rgba(230,126,34,0.06);border-left:3px solid var(--amber)}
+.prazo-item.baixo,.risco-item.baixo{background:rgba(30,125,90,0.06);border-left:3px solid var(--green)}
+.prazo-info,.risco-info{flex:1}
+.prazo-desc,.risco-desc{font-size:13px;font-weight:500;margin-bottom:4px}
+.prazo-data{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold)}
+.risco-valor{font-family:'DM Mono',monospace;font-size:12px;color:var(--gold);font-weight:700}
+.prazo-consequencia,.risco-condicao{font-size:11px;opacity:.55;margin-top:4px}
+.ausente-item{padding:14px;border:1px solid rgba(192,57,43,0.2);background:rgba(192,57,43,0.04);margin-bottom:6px}
+.ausente-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap;gap:8px}
+.ausente-name{font-size:13px;font-weight:500;color:var(--red)}
+.ausente-importancia{font-family:'DM Mono',monospace;font-size:8px;padding:2px 8px;background:rgba(192,57,43,0.1);color:var(--red);letter-spacing:1px}
+.ausente-risco{font-size:12px;opacity:.7;margin-bottom:4px}
+.ausente-sugestao{font-size:11px;color:var(--gold)}
+.rec-item{padding:14px;border:1px solid var(--rule);margin-bottom:6px}
+.rec-header{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.rec-tipo{font-family:'DM Mono',monospace;font-size:10px;padding:3px 10px;letter-spacing:1px}
+.rec-tipo.INCLUIR{background:rgba(30,125,90,0.1);color:var(--green)}
+.rec-tipo.REMOVER{background:rgba(192,57,43,0.1);color:var(--red)}
+.rec-tipo.NEGOCIAR{background:rgba(230,126,34,0.1);color:var(--amber)}
+.rec-tipo.ATENCAO{background:rgba(230,126,34,0.1);color:var(--amber)}
+.rec-prio{font-family:'DM Mono',monospace;font-size:9px;opacity:.5;letter-spacing:0.5px}
+.rec-prio.urgente{color:var(--red);opacity:1}
+.rec-prio.importante{color:var(--amber);opacity:1}
+.rec-desc{font-size:13px;opacity:.8;margin-bottom:4px}
+.rec-legal{font-size:11px;color:var(--gold)}
+.parecer-box{background:var(--ink);color:var(--cream);padding:40px;margin-bottom:2px}
+.parecer-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:16px}
+.parecer-text{font-size:14px;line-height:1.9;opacity:.85;white-space:pre-line}
+.parecer-footer{display:flex;align-items:center;justify-content:space-between;margin-top:32px;padding-top:24px;border-top:1px solid rgba(245,240,232,0.1)}
+.rec-final-badge{padding:10px 24px;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:2px;font-weight:700}
+.rec-ASSINAR{background:rgba(30,125,90,0.2);color:#2ecc71}
+.rec-NEGOCIAR{background:rgba(230,126,34,0.2);color:var(--amber)}
+.rec-RECUSAR{background:rgba(192,57,43,0.2);color:#e74c3c}
+.download-area{text-align:center;padding:32px;background:var(--paper);border:1px solid var(--rule);margin-bottom:2px}
+.btn-download{background:var(--gold);color:var(--ink);border:none;padding:16px 48px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s}
+.btn-download:hover{background:#b8962a;transform:translateY(-2px)}
+
+/* ── HISTÓRICO ── */
+.historico-card{background:var(--paper);border:1px solid var(--rule);padding:28px;margin-top:32px}
+.historico-vazio{font-size:13px;opacity:.4;text-align:center;padding:20px 0;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.5px}
+.historico-item{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--rule);flex-wrap:wrap;gap:8px}
+.historico-item:last-child{border-bottom:none}
+.historico-tipo{font-size:13px;font-weight:500}
+.historico-data{font-family:'DM Mono',monospace;font-size:10px;opacity:.4}
+.historico-plano{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;background:rgba(201,168,76,0.1);color:var(--gold);padding:3px 10px;text-transform:uppercase}
+
+@media(max-width:700px){
+  nav{padding:16px 20px}
+  #app{padding:24px 16px 60px}
+  .res-grid,.obrig-grid{grid-template-columns:1fr}
+  .upload-card{padding:24px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Contrato<span>IQ</span></a>
+  <div class="nav-right">
+    <span class="nav-user" id="nav-user-info" style="display:none"></span>
+    <a href="/" class="nav-back">← Voltar ao site</a>
+  </div>
+</nav>
+
+<!-- TELA DE ACESSO -->
+<div id="tela-acesso">
+  <div class="acesso-label">Plataforma ContratoIQ</div>
+  <h1 class="acesso-title">Acesse sua conta</h1>
+  <p class="acesso-sub">Insira o token de acesso recebido após a assinatura.<br>Não tem um token? <a href="/#planos" style="color:var(--ink);opacity:.7">Escolha um plano.</a></p>
+  <div class="acesso-card">
+    <div class="acesso-input-wrap">
+      <input type="text" id="tokenInput" class="acesso-input" placeholder="CIQ-2025-XXX-XXXXXX" autocomplete="off" spellcheck="false"
+        onkeydown="if(event.key==='Enter')validarToken()">
+      <button class="btn-validar" id="btnValidar" onclick="validarToken()">Entrar</button>
+    </div>
+    <div id="acesso-msg"></div>
+  </div>
+  <div class="acesso-footer">Suporte: <a href="/suporte.html">suporte@contratoiq.com</a> · WhatsApp: (85) 99232-3262</div>
+</div>
+
+<!-- APP PRINCIPAL -->
+<div id="app">
+  <div class="app-header">
+    <div class="app-welcome" id="app-welcome">Bem-vindo</div>
+    <div class="app-plano-info">
+      <span class="plano-badge" id="app-plano"></span>
+      <span class="analises-badge" id="app-analises"></span>
+    </div>
+  </div>
+
+  <!-- AVISO TÉCNICO -->
+  <div class="aviso">
+    <div class="aviso-title">Para melhores resultados</div>
+    <div class="aviso-text">
+      A análise ContratoIQ é ultra detalhada — inclui parecer jurídico completo, análise legislativa e identificação de cláusulas abusivas com fundamentação legal. Por isso, algumas orientações:
+      <br><br>
+      <strong>• Um contrato por vez</strong> — não é possível analisar múltiplos documentos simultaneamente.<br>
+      <strong>• Limite de 100 páginas</strong> — documentos maiores serão rejeitados.<br>
+      <strong>• Formato: apenas PDF</strong> — DOCX e outros não são suportados.<br>
+      <strong>• Tempo varia conforme o tipo:</strong><br>
+      &nbsp;&nbsp;— Só texto → mais rápido e mais preciso<br>
+      &nbsp;&nbsp;— Com tabelas e formatação → tempo médio<br>
+      &nbsp;&nbsp;— Escaneado ou com imagens → mais lento, menor precisão<br>
+      <strong>• Recomendado:</strong> PDF nativo (não escaneado) para maior precisão.
+    </div>
+  </div>
+
+  <!-- UPLOAD -->
+  <div class="upload-card">
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+      <div class="upload-icon">⬆</div>
+      <div class="upload-title">Arraste seu contrato aqui</div>
+      <div class="upload-sub" style="margin-top:8px">PDF · Máximo 100 páginas</div>
+      <button class="btn-upload" onclick="event.stopPropagation();document.getElementById('fileInput').click()">Selecionar arquivo</button>
+      <input type="file" id="fileInput" accept=".pdf" style="display:none">
+    </div>
+
+    <div class="file-preview" id="filePreview">
+      <div class="file-info">
+        <span style="font-size:20px">📄</span>
+        <div>
+          <div class="file-name" id="fileName"></div>
+          <div class="file-size" id="fileSize"></div>
+        </div>
+      </div>
+      <button class="btn-remover" onclick="removerArquivo()" title="Remover">✕</button>
+    </div>
+
+    <button class="btn-analisar" id="btnAnalisar" onclick="iniciarAnalise()">
+      Analisar contrato →
+    </button>
+    <div class="analise-hint" id="analiseHint">A análise pode levar de 30 segundos a 2 minutos dependendo do contrato</div>
+  </div>
+
+  <!-- HISTÓRICO -->
+  <div class="historico-card" id="historico-card" style="display:none">
+    <div class="res-label">Histórico de análises</div>
+    <div id="historico-lista"></div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="resultado"></div>
+</div>
+
+<script>
+let tokenAtivo = null;
+let dadosCliente = null;
+
+// ── VALIDAR TOKEN ──
+async function validarToken() {
+  const t = document.getElementById('tokenInput').value.trim().toUpperCase();
+  const msg = document.getElementById('acesso-msg');
+  const btn = document.getElementById('btnValidar');
+  if (!t) { msg.style.color = 'var(--red)'; msg.textContent = 'Digite seu token de acesso.'; return; }
+
+  btn.textContent = 'Validando...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/.netlify/functions/historico', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: t })
+    });
+    const data = await res.json();
+
+    if (res.ok && data.cliente) {
+      tokenAtivo = t;
+      dadosCliente = data.cliente;
+      entrarApp(data.cliente, data.historico);
+    } else {
+      msg.style.color = 'var(--red)';
+      msg.textContent = data.error || '✗ Token inválido. Entre em contato: (85) 99232-3262.';
+    }
+  } catch(e) {
+    // Fallback tokens enquanto Supabase não está configurado
+    const FALLBACK = {
+      'CIQ-2025-ADV01': { nome:'Cliente Starter', plano:'starter', analises_limite:100, analises_usadas:0, ativo:true },
+      'CIQ-2025-ADV02': { nome:'Cliente Starter 2', plano:'starter', analises_limite:100, analises_usadas:0, ativo:true },
+      'CIQ-2025-ADV03': { nome:'Cliente Advanced', plano:'advanced', analises_limite:300, analises_usadas:0, ativo:true },
+      'CIQ-2025-ENT01': { nome:'Cliente Enterprise', plano:'enterprise_lite', analises_limite:1000, analises_usadas:0, ativo:true }
+    };
+    if (FALLBACK[t]) {
+      tokenAtivo = t;
+      dadosCliente = FALLBACK[t];
+      entrarApp(FALLBACK[t], []);
+    } else {
+      msg.style.color = 'var(--red)';
+      msg.textContent = '✗ Token inválido. Entre em contato: (85) 99232-3262.';
+    }
+  } finally {
+    btn.textContent = 'Entrar';
+    btn.disabled = false;
+  }
+}
+
+function entrarApp(cliente, historico) {
+  document.getElementById('tela-acesso').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  const restantes = cliente.analises_limite - cliente.analises_usadas;
+  document.getElementById('app-welcome').textContent = `Olá, ${cliente.nome.split(' ')[0]}!`;
+  document.getElementById('app-plano').textContent = cliente.plano.replace('_',' ').toUpperCase();
+  document.getElementById('app-analises').textContent = `${restantes} análises restantes`;
+  document.getElementById('nav-user-info').textContent = cliente.nome;
+  document.getElementById('nav-user-info').style.display = 'inline';
+  renderHistorico(historico);
+}
+
+// ── UPLOAD ──
+const zone = document.getElementById('uploadZone');
+const input = document.getElementById('fileInput');
+
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => {
+  e.preventDefault(); zone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if(f) selecionarArquivo(f);
+});
+input.addEventListener('change', e => { if(e.target.files[0]) selecionarArquivo(e.target.files[0]); });
+
+function selecionarArquivo(f) {
+  if (!f.name.toLowerCase().endsWith('.pdf')) { alert('Apenas arquivos PDF são suportados.'); return; }
+  if (f.size > 30 * 1024 * 1024) { alert('Arquivo muito grande. Limite: 30MB / 100 páginas.'); return; }
+  document.getElementById('fileName').textContent = f.name;
+  document.getElementById('fileSize').textContent = (f.size/1024/1024).toFixed(2) + ' MB';
+  document.getElementById('filePreview').classList.add('show');
+  document.getElementById('btnAnalisar').classList.add('visible');
+  document.getElementById('analiseHint').classList.add('visible');
+  document.getElementById('resultado').innerHTML = '';
+}
+
+function removerArquivo() {
+  input.value = '';
+  document.getElementById('filePreview').classList.remove('show');
+  document.getElementById('btnAnalisar').classList.remove('visible');
+  document.getElementById('analiseHint').classList.remove('visible');
+}
+
+// ── ANÁLISE ──
+async function iniciarAnalise() {
+  if (!tokenAtivo) { alert('Token inválido.'); return; }
+  const file = input.files[0];
+  if (!file) { alert('Selecione um arquivo PDF.'); return; }
+
+  const btn = document.getElementById('btnAnalisar');
+  btn.textContent = 'Analisando contrato...';
+  btn.disabled = true;
+
+  const base64 = await new Promise(res => {
+    const reader = new FileReader();
+    reader.onload = () => res(reader.result.split(',')[1]);
+    reader.readAsDataURL(file);
+  });
+
+  try {
+    const response = await fetch('/.netlify/functions/analisar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ base64, mediaType: 'application/pdf', token: tokenAtivo })
+    });
+
+    const data = await response.json();
+    if (data.error) { alert(data.error); return; }
+
+    const texto = data.content[0].text;
+    const resultado = JSON.parse(texto.replace(/```json|```/g, '').trim());
+    resultado._restantes = data.analises_restantes;
+
+    if (data.analises_restantes !== undefined) {
+      document.getElementById('app-analises').textContent = `${data.analises_restantes} análises restantes`;
+    }
+
+    renderResultado(resultado);
+
+    // Atualiza histórico
+    if (dadosCliente) {
+      const h = [{
+        tipo_contrato: resultado.identificacao?.tipo_contrato || 'Contrato',
+        data_analise: new Date().toISOString(),
+        plano: dadosCliente.plano
+      }];
+      renderHistorico(h, true);
+    }
+
+  } catch(err) {
+    alert('Erro na análise. Verifique sua conexão e tente novamente.');
+    console.error(err);
+  } finally {
+    btn.textContent = 'Analisar contrato →';
+    btn.disabled = false;
+  }
+}
+
+// ── RENDER HISTÓRICO ──
+function renderHistorico(historico, prepend) {
+  const card = document.getElementById('historico-card');
+  const lista = document.getElementById('historico-lista');
+
+  if (!historico || historico.length === 0) {
+    if (!prepend) {
+      card.style.display = 'block';
+      lista.innerHTML = '<div class="historico-vazio">Nenhuma análise realizada ainda.</div>';
+    }
+    return;
+  }
+
+  card.style.display = 'block';
+  const html = historico.map(h => `
+    <div class="historico-item">
+      <div>
+        <div class="historico-tipo">${h.tipo_contrato || 'Contrato'}</div>
+        <div class="historico-data">${new Date(h.data_analise).toLocaleDateString('pt-BR')} às ${new Date(h.data_analise).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+      <span class="historico-plano">${(h.plano||'').replace('_',' ')}</span>
+    </div>
+  `).join('');
+
+  if (prepend) lista.innerHTML = html + lista.innerHTML;
+  else lista.innerHTML = html;
+}
+
+// ── RENDER RESULTADO ──
+function renderResultado(r) {
+  const div = document.getElementById('resultado');
+  const corR = { alto:'var(--red)', medio:'var(--amber)', baixo:'var(--green)' };
+  const bgRec = { ASSINAR:'rgba(30,125,90,0.1)', NEGOCIAR:'rgba(230,126,34,0.1)', RECUSAR:'rgba(192,57,43,0.1)' };
+  const corRec = { ASSINAR:'var(--green)', NEGOCIAR:'var(--amber)', RECUSAR:'var(--red)' };
+
+  div.innerHTML = `
+    <!-- HEADER -->
+    <div class="res-section" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;">
+      <div>
+        <div class="res-label">Parecer ContratoIQ</div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;">${(r.identificacao||{}).tipo_contrato||'Análise de Contrato'}</div>
+        <div style="font-size:12px;opacity:.45;margin-top:4px;">${(r.identificacao||{}).natureza_juridica||''}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="res-label">Score de Risco</div>
+        <div style="font-family:'Playfair Display',serif;font-size:52px;font-weight:900;letter-spacing:-3px;color:${r.score>=70?'var(--green)':r.score>=40?'var(--amber)':'var(--red)'}">${r.score}<span style="font-size:20px;opacity:.3">/100</span></div>
+        <div style="display:inline-block;padding:6px 16px;background:${bgRec[r.recomendacao]};color:${corRec[r.recomendacao]};font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;margin-top:4px;">${r.recomendacao}</div>
+      </div>
+    </div>
+
+    <!-- RESUMO -->
+    <div class="res-section"><div class="res-label">Resumo Executivo</div><div class="res-text">${r.resumo_executivo||''}</div></div>
+
+    <!-- IDENTIFICAÇÃO -->
+    <div class="res-section">
+      <div class="res-h3">Identificação do Contrato</div>
+      <div class="res-grid">
+        <div class="res-field"><div class="res-field-label">Tipo</div><div class="res-field-value">${(r.identificacao||{}).tipo_contrato||'—'}</div></div>
+        <div class="res-field"><div class="res-field-label">Vigência</div><div class="res-field-value">${(r.identificacao||{}).vigencia||'—'}</div></div>
+        <div class="res-field"><div class="res-field-label">Valor Total</div><div class="res-field-value">${(r.identificacao||{}).valor_total||'—'}</div></div>
+        <div class="res-field"><div class="res-field-label">Foro</div><div class="res-field-value">${(r.identificacao||{}).foro||'—'}</div></div>
+        <div class="leis-wrap"><div class="res-field-label" style="width:100%;margin-bottom:8px">Leis Aplicáveis</div>${((r.identificacao||{}).leis_aplicaveis||[]).map(l=>`<span class="lei-badge">${l}</span>`).join('')}</div>
+      </div>
+    </div>
+
+    <!-- PARTES -->
+    <div class="res-section">
+      <div class="res-h3">Partes Envolvidas</div>
+      ${(r.partes||[]).map(p=>`
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+            <div style="font-size:14px;font-weight:500;">${p.nome}</div>
+            <span style="font-family:'DM Mono',monospace;font-size:9px;background:rgba(201,168,76,0.1);color:var(--gold);padding:2px 8px;letter-spacing:1px;">${p.papel}</span>
+          </div>
+          <div style="font-size:12px;opacity:.65;">${p.qualificacao}</div>
+          <div style="font-size:11px;opacity:.4;margin-top:4px;font-family:'DM Mono',monospace;">Capacidade: ${p.capacidade_juridica}</div>
+          ${p.observacoes?`<div style="font-size:11px;color:var(--amber);margin-top:4px;">⚠ ${p.observacoes}</div>`:''}
+        </div>`).join('')}
+    </div>
+
+    <!-- CLÁUSULAS -->
+    <div class="res-section">
+      <div class="res-h3">Análise Cláusula por Cláusula</div>
+      ${(r.clausulas||[]).map(c=>`
+        <div class="clausula-item ${c.risco}">
+          <div class="clausula-header">
+            <div class="clausula-title">${c.numero?`Cláusula ${c.numero} — `:''}${c.titulo}</div>
+            <div class="clausula-badges">
+              ${c.abusiva?`<span class="badge badge-abusiva">ABUSIVA</span>`:''}
+              <span class="badge badge-${c.risco}">${c.risco}</span>
+            </div>
+          </div>
+          <div class="clausula-resumo">${c.resumo}</div>
+          ${c.consequencia_descumprimento?`<div class="clausula-consequencia">Descumprimento: ${c.consequencia_descumprimento}</div>`:''}
+          ${c.observacao_legal?`<div class="clausula-legal">⚖ ${c.observacao_legal}</div>`:''}
+        </div>`).join('')}
+    </div>
+
+    <!-- LEGISLAÇÃO -->
+    <div class="res-section">
+      <div class="res-h3">Base Legal Aplicável</div>
+      ${(r.legislacao_aplicavel||[]).map(l=>`
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:8px;">
+          <div style="font-size:13px;font-weight:500;margin-bottom:6px;">${l.lei}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">${(l.artigos||[]).map(a=>`<span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">${a}</span>`).join('')}</div>
+          <div style="font-size:12px;opacity:.65;margin-bottom:2px;">${l.aplicacao}</div>
+          <div style="font-size:11px;opacity:.45;">${l.impacto}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- OBRIGAÇÕES -->
+    <div class="res-section">
+      <div class="res-h3">Obrigações das Partes</div>
+      <div class="res-grid">
+        <div class="obrig-col"><div class="obrig-title">Contratante</div>${((r.obrigacoes||{}).contratante||[]).map(o=>`<div class="obrig-item"><span style="color:var(--gold);flex-shrink:0">→</span>${o}</div>`).join('')}</div>
+        <div class="obrig-col"><div class="obrig-title">Contratada</div>${((r.obrigacoes||{}).contratada||[]).map(o=>`<div class="obrig-item"><span style="color:var(--gold);flex-shrink:0">→</span>${o}</div>`).join('')}</div>
+      </div>
+      ${((r.obrigacoes||{}).mutuas||[]).length?`<div style="margin-top:16px;"><div class="obrig-title">Mútuas</div>${(r.obrigacoes.mutuas||[]).map(o=>`<div class="obrig-item"><span style="color:var(--gold);flex-shrink:0">↔</span>${o}</div>`).join('')}</div>`:''}
+    </div>
+
+    <!-- PRAZOS -->
+    <div class="res-section">
+      <div class="res-h3">Prazos e Datas Importantes</div>
+      ${(r.prazos||[]).map(p=>`
+        <div class="prazo-item ${p.risco}">
+          <div class="prazo-info">
+            <div class="prazo-desc">${p.descricao}</div>
+            <div class="prazo-data">${p.data_ou_prazo}</div>
+            ${p.consequencia?`<div class="prazo-consequencia">${p.consequencia}</div>`:''}
+          </div>
+          <span class="badge badge-${p.risco}">${p.risco}</span>
+        </div>`).join('')}
+    </div>
+
+    <!-- RISCOS FINANCEIROS -->
+    <div class="res-section">
+      <div class="res-h3">Riscos Financeiros</div>
+      ${(r.riscos_financeiros||[]).map(f=>`
+        <div class="risco-item ${f.risco}">
+          <div class="risco-info">
+            <div class="risco-desc">${f.descricao}</div>
+            <div class="risco-valor">${f.valor_ou_percentual}</div>
+            ${f.condicao?`<div class="risco-condicao">${f.condicao}</div>`:''}
+          </div>
+          <span class="badge badge-${f.risco}">${f.risco}</span>
+        </div>`).join('')}
+    </div>
+
+    <!-- CLÁUSULAS AUSENTES -->
+    <div class="res-section">
+      <div class="res-h3">O que Está Faltando no Contrato</div>
+      ${(r.clausulas_ausentes||[]).map(a=>`
+        <div class="ausente-item">
+          <div class="ausente-header">
+            <div class="ausente-name">✗ ${a.clausula}</div>
+            <span class="ausente-importancia">${a.importancia}</span>
+          </div>
+          <div class="ausente-risco">${a.risco_ausencia}</div>
+          <div class="ausente-sugestao">Sugestão: ${a.sugestao}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- RECOMENDAÇÕES -->
+    <div class="res-section">
+      <div class="res-h3">Recomendações Práticas</div>
+      ${(r.recomendacoes_praticas||[]).map(rec=>`
+        <div class="rec-item">
+          <div class="rec-header">
+            <span class="rec-tipo ${rec.tipo}">${rec.tipo}</span>
+            <span class="rec-prio ${rec.prioridade}">${rec.prioridade}</span>
+          </div>
+          <div class="rec-desc">${rec.descricao}</div>
+          ${rec.justificativa_legal?`<div class="rec-legal">⚖ ${rec.justificativa_legal}</div>`:''}
+        </div>`).join('')}
+    </div>
+
+    <!-- PARECER FINAL -->
+    <div class="parecer-box">
+      <div class="parecer-label">Parecer Jurídico Final</div>
+      <div class="parecer-text">${r.parecer_final||''}</div>
+      <div class="parecer-footer">
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900;">Contrato<span style="color:var(--gold)">IQ</span></div>
+        <div class="rec-final-badge rec-${r.recomendacao}">${r.recomendacao}</div>
+      </div>
+    </div>
+
+    <!-- DOWNLOAD -->
+    <div class="download-area">
+      <button class="btn-download" onclick="downloadPDF()">⬇ Baixar relatório em PDF</button>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;opacity:.35;margin-top:10px;letter-spacing:0.5px">Gerado localmente — sem custo adicional de API</div>
+    </div>
+  `;
+
+  div.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ── DOWNLOAD PDF ──
+function downloadPDF() {
+  const r = document.getElementById('resultado');
+  if (!r) return;
+  const data = new Date().toLocaleDateString('pt-BR');
+  const hora = new Date().toLocaleTimeString('pt-BR');
+  const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Parecer ContratoIQ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',sans-serif;background:#FAF7F2;color:#0D0D0D;padding:48px}.header{background:#0D0D0D;color:#F5F0E8;padding:32px 48px;display:flex;justify-content:space-between;align-items:center;margin-bottom:0}.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900}.logo span{color:#C9A84C}.data{font-size:11px;opacity:.4;font-family:'DM Mono',monospace}.body{}</style>
+  </head><body>
+  <div class="header"><div class="logo">Contrato<span>IQ</span></div><div class="data">Gerado em ${data} às ${hora}</div></div>
+  <div class="body">${r.innerHTML}</div>
+  
+  <div style="text-align:center;padding:12px 0;border-top:1px solid var(--rule);margin-top:16px;font-family:'DM Mono',monospace;font-size:9px;opacity:.3;letter-spacing:0.5px">CNPJ 66.816.981/0001-58 · Joiciano Gomes Soares de Lima MEI · Fortaleza/CE · © 2026 ContratoIQ</div>
+</body></html>`;
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `parecer-contratoiq-${Date.now()}.html`; a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+
+  <div style="text-align:center;padding:12px 0;border-top:1px solid var(--rule);margin-top:16px;font-family:'DM Mono',monospace;font-size:9px;opacity:.3;letter-spacing:0.5px">CNPJ 66.816.981/0001-58 · Joiciano Gomes Soares de Lima MEI · Fortaleza/CE · © 2026 ContratoIQ</div>
+</body>
+</html>

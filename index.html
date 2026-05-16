@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContratoIQ — Parecer Jurídico com Inteligência Artificial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0D0D0D;--cream:#F5F0E8;--gold:#C9A84C;--paper:#FAF7F2;
+  --rule:rgba(13,13,13,0.1);--red:#C0392B;--green:#1E7D5A;--amber:#E67E22;
+}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:rgba(245,240,232,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+.logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;text-decoration:none;color:var(--ink);letter-spacing:-0.5px}
+.logo span{color:var(--gold)}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);text-decoration:none;opacity:.5;transition:opacity .2s}
+.nav-links a:hover{opacity:1}
+.nav-cta{background:var(--ink)!important;color:var(--cream)!important;padding:10px 20px!important;opacity:1!important;font-family:'DM Sans',sans-serif!important;font-size:12px!important;font-weight:500!important;letter-spacing:0.3px!important;text-transform:none!important}
+.nav-cta:hover{background:#2a2a2a!important}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:120px 48px 80px;gap:80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 70%);pointer-events:none}
+.hero-left{position:relative;z-index:1}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--gold)}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(40px,5vw,68px);font-weight:900;line-height:1.05;letter-spacing:-2px;margin-bottom:24px}
+.hero-title em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:16px;line-height:1.8;opacity:.6;max-width:460px;margin-bottom:40px}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.btn-primary{background:var(--ink);color:var(--cream);padding:16px 36px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:all .25s;letter-spacing:0.3px}
+.btn-primary:hover{background:#1a1a1a;transform:translateY(-2px);box-shadow:0 8px 32px rgba(13,13,13,0.2)}
+.btn-secondary{color:var(--ink);padding:16px 36px;font-family:'DM Mono',monospace;font-size:11px;border:1px solid rgba(13,13,13,0.2);cursor:pointer;text-decoration:none;display:inline-block;transition:all .25s;letter-spacing:1px;text-transform:uppercase}
+.btn-secondary:hover{border-color:var(--ink);background:rgba(13,13,13,0.04)}
+.hero-trust{display:flex;gap:24px;margin-top:32px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;opacity:.4}
+
+/* ── HERO RIGHT - DEMO CARD ── */
+.hero-right{position:relative}
+.demo-card{background:white;border:1px solid rgba(13,13,13,0.08);box-shadow:0 32px 80px rgba(13,13,13,0.12);overflow:hidden}
+.demo-header{background:var(--ink);padding:20px 24px;display:flex;align-items:center;justify-content:space-between}
+.demo-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cream);opacity:.6}
+.demo-score-wrap{text-align:right}
+.demo-score{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--gold);letter-spacing:-2px;line-height:1}
+.demo-score-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--cream);opacity:.4;margin-top:2px}
+.demo-body{padding:24px}
+.demo-row{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--rule)}
+.demo-row:last-child{border-bottom:none}
+.demo-key{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;opacity:.35;width:120px;flex-shrink:0}
+.demo-val{font-size:12px;line-height:1.5;opacity:.75;text-align:right;flex:1}
+.demo-clausulas{margin-top:0}
+.demo-clausula{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--rule);gap:12px}
+.demo-clausula:last-child{border-bottom:none}
+.demo-clausula-text{font-size:11px;opacity:.7;line-height:1.4;flex:1}
+.badge-risco{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;padding:3px 8px;text-transform:uppercase;white-space:nowrap}
+.badge-alto{background:rgba(192,57,43,0.1);color:var(--red)}
+.badge-medio{background:rgba(230,126,34,0.1);color:var(--amber)}
+.badge-baixo{background:rgba(30,125,90,0.1);color:var(--green)}
+.demo-rec{background:rgba(30,125,90,0.06);border:1px solid rgba(30,125,90,0.15);padding:12px 16px;margin-top:16px;display:flex;align-items:center;justify-content:space-between}
+.demo-rec-text{font-size:11px;opacity:.7}
+.demo-rec-badge{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:var(--green);letter-spacing:2px}
+.demo-footer{background:var(--paper);padding:16px 24px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center}
+.demo-footer-label{font-family:'DM Mono',monospace;font-size:9px;opacity:.3;letter-spacing:1px}
+
+/* ── SECTION DIVIDER ── */
+.divider{height:1px;background:var(--rule);margin:0 48px}
+
+/* ── METRICS ── */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);padding:60px 48px;gap:2px;background:var(--rule)}
+.metric{background:var(--cream);padding:40px 32px}
+.metric-num{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;letter-spacing:-2px;color:var(--ink);margin-bottom:8px}
+.metric-num span{color:var(--gold)}
+.metric-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;opacity:.4;line-height:1.6}
+
+/* ── BEFORE/AFTER ── */
+.ba{padding:80px 48px;display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--rule)}
+.ba-panel{padding:48px;background:var(--cream)}
+.ba-panel.after{background:var(--ink);color:var(--cream)}
+.ba-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;opacity:.4;margin-bottom:24px}
+.ba-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:24px;line-height:1.2}
+.ba-list{display:flex;flex-direction:column;gap:12px}
+.ba-item{display:flex;align-items:flex-start;gap:12px;font-size:13px;line-height:1.6;opacity:.7}
+.ba-item.after{opacity:.8}
+.ba-icon{flex-shrink:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:2px}
+
+/* ── HOW IT WORKS ── */
+.how{padding:80px 48px;background:var(--paper)}
+.how-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.35;margin-bottom:16px;text-align:center}
+.how-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,42px);font-weight:900;letter-spacing:-1.5px;text-align:center;margin-bottom:64px}
+.how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--rule)}
+.how-step{background:var(--cream);padding:40px 32px;position:relative}
+.how-num{font-family:'Playfair Display',serif;font-size:72px;font-weight:900;color:var(--gold);opacity:.15;position:absolute;top:16px;right:24px;line-height:1;letter-spacing:-3px}
+.how-step-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:12px}
+.how-step-text{font-size:13px;line-height:1.8;opacity:.6}
+
+/* ── O QUE VOCÊ RECEBE ── */
+.entrega{padding:80px 48px;background:var(--cream)}
+.entrega-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.35;margin-bottom:16px;text-align:center}
+.entrega-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,42px);font-weight:900;letter-spacing:-1.5px;text-align:center;margin-bottom:64px}
+.entrega-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--rule)}
+.entrega-item{background:var(--paper);padding:32px;border-left:2px solid transparent;transition:border-color .2s}
+.entrega-item:hover{border-left-color:var(--gold)}
+.entrega-icon{font-size:24px;margin-bottom:16px}
+.entrega-item-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:10px}
+.entrega-item-text{font-size:12px;line-height:1.8;opacity:.6}
+
+/* ── PRICING ── */
+.pricing{padding:80px 48px;background:var(--paper)}
+.pricing-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.35;margin-bottom:16px;text-align:center}
+.pricing-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,42px);font-weight:900;letter-spacing:-1.5px;text-align:center;margin-bottom:16px}
+.pricing-sub{text-align:center;font-size:14px;opacity:.5;margin-bottom:48px}
+.toggle-wrap{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:48px}
+.toggle-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;transition:opacity .3s}
+.toggle-btn{width:52px;height:28px;background:var(--ink);border-radius:14px;position:relative;cursor:pointer;flex-shrink:0}
+.toggle-dot{width:22px;height:22px;background:var(--gold);border-radius:50%;position:absolute;top:3px;left:3px;transition:transform .3s}
+.economy-badge{background:rgba(30,125,90,0.1);color:var(--green);font-family:'DM Mono',monospace;font-size:9px;padding:3px 10px;letter-spacing:1px;margin-left:8px}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--rule)}
+.price-card{background:var(--cream);padding:36px 28px;position:relative;transition:transform .25s}
+.price-card:hover{transform:translateY(-4px);z-index:1;box-shadow:0 16px 48px rgba(13,13,13,0.12)}
+.price-card.featured{background:var(--ink);color:var(--cream)}
+.price-badge{position:absolute;top:-1px;left:28px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;background:var(--gold);color:var(--ink);padding:4px 12px;font-weight:700}
+.price-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:8px}
+.price-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:20px;letter-spacing:-0.5px}
+.price-amount{font-family:'Playfair Display',serif;font-size:40px;font-weight:900;letter-spacing:-2px;line-height:1;margin-bottom:4px}
+.price-period{font-family:'DM Mono',monospace;font-size:10px;opacity:.4;margin-bottom:4px;letter-spacing:0.5px}
+.price-economy{font-family:'DM Mono',monospace;font-size:9px;color:var(--green);margin-bottom:20px;display:none;letter-spacing:0.5px}
+.price-divider{height:1px;background:var(--rule);margin:20px 0}
+.price-card.featured .price-divider{background:rgba(245,240,232,0.1)}
+.price-features{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.price-feature{font-size:12px;line-height:1.5;display:flex;align-items:flex-start;gap:8px;opacity:.7}
+.price-feature::before{content:'→';font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);flex-shrink:0;margin-top:1px}
+.price-cta{width:100%;padding:14px;background:transparent;border:1px solid rgba(13,13,13,0.2);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .25s;color:var(--ink)}
+.price-cta:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.price-card.featured .price-cta{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:600}
+.price-card.featured .price-cta:hover{background:#b8962a}
+.price-card.featured .price-feature{opacity:.8}
+
+/* ── CTA FINAL ── */
+.cta-final{padding:100px 48px;background:var(--ink);color:var(--cream);text-align:center;position:relative;overflow:hidden}
+.cta-final::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 70%)}
+.cta-final-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;opacity:.8}
+.cta-final-title{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,60px);font-weight:900;letter-spacing:-2px;line-height:1.1;margin-bottom:24px}
+.cta-final-title em{font-style:italic;color:var(--gold)}
+.cta-final-sub{font-size:15px;opacity:.5;margin-bottom:40px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.8}
+.btn-gold{background:var(--gold);color:var(--ink);padding:18px 48px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:all .25s;letter-spacing:0.3px}
+.btn-gold:hover{background:#b8962a;transform:translateY(-2px)}
+
+/* ── FOOTER ── */
+footer{padding:40px 48px;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;background:var(--cream)}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap}
+.footer-links a{font-family:'DM Mono',monospace;font-size:10px;opacity:.35;color:var(--ink);text-decoration:none;letter-spacing:0.5px;transition:opacity .2s}
+.footer-links a:hover{opacity:1}
+
+/* ── EXEMPLO SECTION ── */
+.exemplo-section{padding:80px 48px;background:var(--paper)}
+.exemplo-label-wrap{display:flex;align-items:center;gap:12px;margin-bottom:8px;justify-content:center}
+.exemplo-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:rgba(201,168,76,0.15);color:var(--gold);padding:4px 12px;border:1px solid rgba(201,168,76,0.3)}
+.exemplo-title{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,36px);font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:8px}
+.exemplo-sub{text-align:center;font-size:13px;opacity:.45;margin-bottom:40px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.5px}
+.exemplo-card{max-width:720px;margin:0 auto;background:white;box-shadow:0 24px 64px rgba(13,13,13,0.1);overflow:hidden;border:1px solid rgba(13,13,13,0.06)}
+.ex-header{background:var(--ink);color:var(--cream);padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
+.ex-header-left{}
+.ex-tipo{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:6px}
+.ex-nome{font-family:'Playfair Display',serif;font-size:18px;font-weight:900}
+.ex-natureza{font-size:12px;opacity:.5;margin-top:4px}
+.ex-score-wrap{text-align:right}
+.ex-score{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;letter-spacing:-3px;color:#E67E22;line-height:1}
+.ex-score-label{font-family:'DM Mono',monospace;font-size:8px;opacity:.4;letter-spacing:1px;margin-top:2px}
+.ex-rec{display:inline-block;padding:5px 14px;background:rgba(230,126,34,0.2);color:#E67E22;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;font-weight:700;margin-top:8px}
+.ex-body{padding:0}
+.ex-section{padding:20px 28px;border-bottom:1px solid rgba(13,13,13,0.07)}
+.ex-section-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;opacity:.3;margin-bottom:10px}
+.ex-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ex-field-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;opacity:.3;margin-bottom:4px}
+.ex-field-value{font-size:12px;opacity:.75;line-height:1.5}
+.ex-leis{display:flex;gap:6px;flex-wrap:wrap;grid-column:span 2}
+.ex-lei{font-family:'DM Mono',monospace;font-size:9px;background:rgba(201,168,76,0.1);color:var(--gold);padding:2px 8px}
+.ex-clausula{padding:12px;border-left:3px solid transparent;margin-bottom:6px}
+.ex-clausula.alto{border-left-color:#C0392B;background:rgba(192,57,43,0.05)}
+.ex-clausula.medio{border-left-color:#E67E22;background:rgba(230,126,34,0.05)}
+.ex-clausula.baixo{border-left-color:#1E7D5A;background:rgba(30,125,90,0.05)}
+.ex-clausula-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px;flex-wrap:wrap}
+.ex-clausula-title{font-size:12px;font-weight:500;flex:1}
+.ex-clausula-badges{display:flex;gap:4px;flex-shrink:0}
+.ex-badge{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;padding:2px 6px;text-transform:uppercase}
+.ex-badge.alto{background:rgba(192,57,43,0.1);color:#C0392B}
+.ex-badge.medio{background:rgba(230,126,34,0.1);color:#E67E22}
+.ex-badge.baixo{background:rgba(30,125,90,0.1);color:#1E7D5A}
+.ex-badge.abusiva{background:rgba(192,57,43,0.15);color:#C0392B}
+.ex-clausula-resumo{font-size:11px;opacity:.65;line-height:1.6;margin-bottom:3px}
+.ex-clausula-legal{font-size:10px;color:var(--gold);opacity:.8}
+.ex-ausente{padding:10px;border:1px solid rgba(192,57,43,0.2);background:rgba(192,57,43,0.04);margin-bottom:6px}
+.ex-ausente-name{font-size:12px;font-weight:500;color:#C0392B;margin-bottom:3px}
+.ex-ausente-risco{font-size:11px;opacity:.65}
+.ex-parecer{background:var(--ink);color:var(--cream);padding:24px 28px}
+.ex-parecer-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;opacity:.4;margin-bottom:12px;text-transform:uppercase}
+.ex-parecer-text{font-size:12px;line-height:1.9;opacity:.8}
+.ex-download{background:var(--paper);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-top:1px solid rgba(13,13,13,0.06)}
+.ex-download-btn{background:var(--gold);color:var(--ink);border:2px solid var(--gold);padding:10px 24px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(201,168,76,0.35);transition:all .2s}
+.ex-download-btn:hover{background:#b8962a;border-color:#b8962a;transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,168,76,0.45)}
+.ex-tempo{font-family:'DM Mono',monospace;font-size:9px;opacity:.35;letter-spacing:0.5px}
+
+/* Recolhido/expandido */
+.ex-collapsed{max-height:420px;overflow:hidden;position:relative}
+.ex-collapsed::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,transparent,white)}
+.ex-expand-btn{display:block;width:100%;padding:16px;background:var(--cream);border:none;border-top:1px solid rgba(13,13,13,0.08);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s}
+.ex-expand-btn:hover{background:rgba(201,168,76,0.06)}
+.ex-expand-icon{font-family:'DM Mono',monospace;font-size:16px;color:var(--gold);transition:transform .3s}
+.ex-expand-btn.open .ex-expand-icon{transform:rotate(180deg)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:16px 24px}
+  .nav-links{display:none}
+  .hero{grid-template-columns:1fr;padding:100px 24px 60px;gap:48px}
+  .hero-right{display:none}
+  .metrics{grid-template-columns:1fr 1fr}
+  .ba,.how-steps,.entrega-grid,.pricing-grid{grid-template-columns:1fr}
+  .ba{padding:48px 24px}
+  .how,.entrega,.pricing,.cta-final{padding:60px 24px}
+  .exemplo-section{padding:60px 24px}
+  footer{padding:32px 24px}
+  .divider{margin:0 24px}
+  .ex-grid{grid-template-columns:1fr}
+  .ex-leis{grid-column:span 1}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">Contrato<span>IQ</span></a>
+  <div class="nav-links">
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#entrega">O que você recebe</a>
+    <a href="#planos">Planos</a>
+    <a href="/suporte.html">Suporte</a>
+    <a href="/app.html" class="nav-cta">Acessar plataforma →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">IA Jurídica Empresarial</div>
+    <h1 class="hero-title">
+      Parecer jurídico<br>
+      completo em<br>
+      <em>menos de 2 minutos.</em>
+    </h1>
+    <p class="hero-sub">ContratoIQ analisa contratos empresariais com profundidade de advogado sênior — identificando riscos, cláusulas abusivas e comparando com a legislação brasileira vigente.</p>
+    <div class="hero-actions">
+      <a href="#planos" class="btn-primary">Ver planos e preços</a>
+      <a href="#como-funciona" class="btn-secondary">Como funciona</a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-item">🔒 LGPD Compliance</div>
+      <div class="trust-item">⚖ Direito Brasileiro</div>
+      <div class="trust-item">🔐 Criptografia TLS</div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div style="background:var(--ink);color:var(--cream);padding:24px 28px;border:1px solid rgba(245,240,232,0.08);">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;opacity:.4;margin-bottom:6px;text-transform:uppercase;">Parecer ContratoIQ</div>
+      <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:900;margin-bottom:2px;">Contrato de Prestação de Serviços</div>
+      <div style="font-size:11px;opacity:.4;margin-bottom:20px;">Tecnologia da Informação · São Paulo/SP</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <div><div style="font-family:'DM Mono',monospace;font-size:8px;opacity:.35;letter-spacing:1px;margin-bottom:4px;">SCORE DE RISCO</div><div style="font-family:'Playfair Display',serif;font-size:52px;font-weight:900;letter-spacing:-3px;color:#E67E22;line-height:1">58<span style="font-size:18px;opacity:.3">/100</span></div></div>
+        <div style="padding:8px 16px;background:rgba(230,126,34,0.2);color:#E67E22;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;font-weight:700;">NEGOCIAR</div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;opacity:.3;text-transform:uppercase;margin-bottom:10px;">Cláusulas críticas detectadas</div>
+      <div style="border-left:2px solid #C0392B;background:rgba(192,57,43,0.08);padding:10px 12px;margin-bottom:6px;"><div style="font-size:11px;font-weight:500;margin-bottom:2px;">Multa rescisória unilateral de 30%</div><div style="font-size:10px;opacity:.55;">⚖ Violação do art. 413 do Código Civil</div></div>
+      <div style="border-left:2px solid #E67E22;background:rgba(230,126,34,0.08);padding:10px 12px;margin-bottom:6px;"><div style="font-size:11px;font-weight:500;margin-bottom:2px;">Prazo de pagamento de 45 dias</div><div style="font-size:10px;opacity:.55;">Acima do padrão de mercado — negociar</div></div>
+      <div style="border-left:2px solid #1E7D5A;background:rgba(30,125,90,0.08);padding:10px 12px;margin-bottom:16px;"><div style="font-size:11px;font-weight:500;margin-bottom:2px;">Cláusula de confidencialidade adequada</div><div style="font-size:10px;opacity:.55;">Conforme Lei 9.279/1996</div></div>
+      <div style="text-align:center;padding-top:16px;border-top:1px solid rgba(245,240,232,0.08);">
+        <a href="#exemplo" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);text-decoration:none;letter-spacing:1px;opacity:.8;">Ver análise completa ↓</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="metric">
+    <div class="metric-num">9<span>+</span></div>
+    <div class="metric-label">Seções de análise por contrato</div>
+  </div>
+  <div class="metric">
+    <div class="metric-num"><2<span>min</span></div>
+    <div class="metric-label">Tempo médio de processamento</div>
+  </div>
+  <div class="metric">
+    <div class="metric-num">100<span>%</span></div>
+    <div class="metric-label">Baseado no direito brasileiro vigente</div>
+  </div>
+  <div class="metric">
+    <div class="metric-num">0<span>x</span></div>
+    <div class="metric-label">Custo adicional por download de PDF</div>
+  </div>
+</div>
+
+<!-- EXEMPLO DE ANÁLISE COMPLETO -->
+<section class="exemplo-section" id="exemplo">
+  <div class="exemplo-label-wrap">
+    <span class="exemplo-badge">✦ Exemplo ilustrativo</span>
+  </div>
+  <h2 class="exemplo-title">Veja como fica o relatório na prática</h2>
+  <p class="exemplo-sub">⚠ Todos os dados abaixo são completamente fictícios e criados exclusivamente para fins ilustrativos. CPFs, CNPJs, nomes, valores e empresas são exemplos criados para demonstração — não representam pessoas ou entidades reais.</p>
+
+  <div class="exemplo-card">
+
+    <!-- HEADER -->
+    <div class="ex-header">
+      <div class="ex-header-left">
+        <div class="ex-tipo">Parecer ContratoIQ · Dados Ilustrativos</div>
+        <div class="ex-nome">Contrato de Prestação de Serviços de Consultoria Empresarial e Desenvolvimento de Software</div>
+        <div class="ex-natureza">Contrato bilateral oneroso comutativo · São Paulo/SP · 24 páginas</div>
+      </div>
+      <div class="ex-score-wrap">
+        <div class="ex-score">54</div>
+        <div class="ex-score-label">Score de risco</div>
+        <div class="ex-rec">NEGOCIAR</div>
+      </div>
+    </div>
+
+    <!-- CORPO RECOLHIDO -->
+    <div class="ex-collapsed" id="exBody">
+
+      <!-- AVISO FICTÍCIO -->
+      <div style="background:rgba(201,168,76,0.08);border-bottom:1px solid rgba(201,168,76,0.2);padding:12px 28px;display:flex;align-items:center;gap:10px;">
+        <span style="font-size:14px">⚠</span>
+        <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.5px;">Todos os dados deste exemplo são fictícios. CPFs, CNPJs, nomes e valores são ilustrativos.</span>
+      </div>
+
+      <!-- RESUMO -->
+      <div class="ex-section">
+        <div class="ex-section-label">Resumo Executivo</div>
+        <div style="font-size:13px;line-height:1.9;opacity:.75;">O contrato de prestação de serviços celebrado entre a Nexus Soluções Tecnológicas Ltda. e a Comercial Bergamasco S.A. apresenta risco moderado-alto (score 54/100), com 4 cláusulas de risco alto, 6 de risco médio e 3 pontos críticos ausentes que comprometem a segurança jurídica de ambas as partes. Destaca-se a ausência de cláusula de proteção de dados conforme LGPD — obrigatória dado o volume de dados pessoais envolvidos —, multa rescisória desproporcional e ausência de definição de SLA para os serviços contratados. Recomenda-se negociar os pontos críticos antes da assinatura, com especial atenção às cláusulas 7, 11 e 14.</div>
+      </div>
+
+      <!-- IDENTIFICAÇÃO -->
+      <div class="ex-section">
+        <div class="ex-section-label">Identificação do Contrato</div>
+        <div class="ex-grid">
+          <div><div class="ex-field-label">Tipo</div><div class="ex-field-value">Prestação de Serviços de Consultoria e Desenvolvimento de Software</div></div>
+          <div><div class="ex-field-label">Natureza Jurídica</div><div class="ex-field-value">Contrato bilateral, oneroso e comutativo</div></div>
+          <div><div class="ex-field-label">Data de Assinatura</div><div class="ex-field-value">15 de março de 2025</div></div>
+          <div><div class="ex-field-label">Vigência</div><div class="ex-field-value">24 meses, com renovação automática por igual período</div></div>
+          <div><div class="ex-field-label">Valor Total</div><div class="ex-field-value">R$ 1.440.000,00 (R$ 60.000/mês)</div></div>
+          <div><div class="ex-field-label">Foro</div><div class="ex-field-value">Comarca de São Paulo/SP — 2ª Vara Cível</div></div>
+          <div class="ex-leis">
+            <div class="ex-field-label" style="width:100%;margin-bottom:8px">Leis Aplicáveis Identificadas</div>
+            <span class="ex-lei">Código Civil — Lei 10.406/2002</span>
+            <span class="ex-lei">LGPD — Lei 13.709/2018</span>
+            <span class="ex-lei">CDC — Lei 8.078/1990</span>
+            <span class="ex-lei">Lei de Software — Lei 9.609/1998</span>
+            <span class="ex-lei">Lei de PI — Lei 9.279/1996</span>
+            <span class="ex-lei">CLT — Decreto-Lei 5.452/1943</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PARTES -->
+      <div class="ex-section">
+        <div class="ex-section-label">Partes Envolvidas</div>
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+            <div style="font-size:14px;font-weight:600;">Nexus Soluções Tecnológicas Ltda.</div>
+            <span style="font-family:'DM Mono',monospace;font-size:9px;background:rgba(201,168,76,0.1);color:var(--gold);padding:2px 8px;letter-spacing:1px;">CONTRATADA</span>
+          </div>
+          <div style="font-size:12px;opacity:.65;margin-bottom:4px;">CNPJ: 34.872.019/0001-45 · Rua Consolação, 2.847, 8º andar, São Paulo/SP</div>
+          <div style="font-size:12px;opacity:.65;margin-bottom:4px;">Representante: Carlos Eduardo Mendonça · CPF: 847.291.034-67 · RG: 32.847.291-9 SSP/SP</div>
+          <div style="font-size:11px;opacity:.45;font-family:'DM Mono',monospace;">Capacidade: Pessoa jurídica regularmente constituída — verificado contrato social e certidão JUCESC</div>
+        </div>
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+            <div style="font-size:14px;font-weight:600;">Comercial Bergamasco S.A.</div>
+            <span style="font-family:'DM Mono',monospace;font-size:9px;background:rgba(201,168,76,0.1);color:var(--gold);padding:2px 8px;letter-spacing:1px;">CONTRATANTE</span>
+          </div>
+          <div style="font-size:12px;opacity:.65;margin-bottom:4px;">CNPJ: 08.473.920/0001-83 · Av. Paulista, 1.374, 12º andar, São Paulo/SP</div>
+          <div style="font-size:12px;opacity:.65;margin-bottom:4px;">Representante: Adriana Fonseca Bergamasco · CPF: 293.847.105-91 · RG: 18.293.847-2 SSP/SP</div>
+          <div style="font-size:11px;opacity:.45;font-family:'DM Mono',monospace;">Capacidade: Sociedade anônima de capital fechado — verificado estatuto e ata de assembleia</div>
+          <div style="font-size:11px;color:#E67E22;margin-top:6px;">⚠ Verificar se a representante tem poderes suficientes — estatuto limita contratos acima de R$ 500.000 à aprovação do Conselho de Administração</div>
+        </div>
+      </div>
+
+      <!-- CLÁUSULAS -->
+      <div class="ex-section">
+        <div class="ex-section-label">Análise Cláusula por Cláusula (14 cláusulas analisadas)</div>
+
+        <div class="ex-clausula alto">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 7 — Multa por Rescisão Antecipada</div>
+            <div class="ex-clausula-badges"><span class="ex-badge abusiva">ABUSIVA</span><span class="ex-badge alto">alto</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Prevê multa de 40% sobre o valor total remanescente do contrato em caso de rescisão antecipada pela Contratante, sem qualquer contrapartida equivalente para a Contratada. No caso de rescisão no 12º mês, a multa seria de R$ 288.000,00.</div>
+          <div class="ex-clausula-legal">⚖ Violação do art. 413 do Código Civil: "A penalidade deve ser reduzida equitativamente pelo juiz se a obrigação principal tiver sido cumprida em parte." Configura enriquecimento ilícito (art. 884 CC). Jurisprudência do STJ consolidada no sentido de reduzir multas superiores a 20% do valor remanescente.</div>
+        </div>
+
+        <div class="ex-clausula alto">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 11 — Propriedade Intelectual e Cessão de Código</div>
+            <div class="ex-clausula-badges"><span class="ex-badge alto">alto</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Cede à Contratante todos os direitos sobre o software desenvolvido, incluindo código-fonte, documentação e metodologias proprietárias da Contratada, sem limitação ou ressalva para ferramentas e frameworks de terceiros utilizados no desenvolvimento.</div>
+          <div class="ex-clausula-legal">⚖ Conflito com Lei 9.609/1998 (Lei de Software) e licenças open source. Frameworks como React (MIT) e PostgreSQL (PostgreSQL License) permitem uso comercial, mas a cessão irrestrita pode criar problemas. Incluir ressalva para dependências de terceiros. Risco de ação por violação de licença.</div>
+        </div>
+
+        <div class="ex-clausula alto">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 14 — Foro e Arbitragem</div>
+            <div class="ex-clausula-badges"><span class="ex-badge alto">alto</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Elege câmara arbitral privada sediada em Lisboa, Portugal, para resolução de conflitos, com aplicação da lei portuguesa ao contrato, apesar de ambas as partes serem brasileiras e o serviço ser prestado no Brasil.</div>
+          <div class="ex-clausula-legal">⚖ Violação do art. 9º da LINDB e art. 63 do CPC — foro estrangeiro pode ser afastado quando ambas as partes são domiciliadas no Brasil e o contrato é executado em território nacional. Cláusula provavelmente ineficaz, mas geraria litígio custoso. Substituir por câmara arbitral brasileira (ex: CAMARB, CAM-CCBC).</div>
+        </div>
+
+        <div class="ex-clausula alto">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 3 — Vínculo Empregatício</div>
+            <div class="ex-clausula-badges"><span class="ex-badge alto">alto</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Prevê que os consultores da Contratada trabalharão nas instalações da Contratante, em horário fixo das 9h às 18h, com subordinação ao gestor de TI da Contratante, utilizando equipamentos fornecidos pela Contratante.</div>
+          <div class="ex-clausula-legal">⚖ Risco grave de reconhecimento de vínculo empregatício conforme art. 3º da CLT. Os quatro elementos (pessoalidade, habitualidade, subordinação, onerosidade) estão presentes. A Contratante pode ser responsabilizada por encargos trabalhistas retroativos — FGTS, INSS, férias, 13º salário. Estimar passivo potencial: R$ 180.000–R$ 240.000.</div>
+        </div>
+
+        <div class="ex-clausula medio">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 5 — Condições de Pagamento</div>
+            <div class="ex-clausula-badges"><span class="ex-badge medio">médio</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Pagamento em 60 dias após aprovação do relatório mensal pela Contratante, sem prazo definido para a aprovação. Multa de 0,5% ao mês por atraso, sem correção monetária.</div>
+          <div class="ex-clausula-legal">⚖ Prazo de 60 dias é excessivo e pode gerar problemas de fluxo de caixa para a Contratada. Ausência de prazo para aprovação cria risco de adiamento indefinido. Recomendar: 30 dias para pagamento e 5 dias úteis para aprovação do relatório, com aprovação tácita após este prazo.</div>
+        </div>
+
+        <div class="ex-clausula medio">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 8 — Reajuste de Preços</div>
+            <div class="ex-clausula-badges"><span class="ex-badge medio">médio</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Reajuste anual pelo IGPM, sem previsão de reajuste extraordinário em caso de variação cambial superior a 20%, relevante pois parte dos serviços depende de licenças em dólar.</div>
+          <div class="ex-clausula-legal">⚖ IGPM pode ser insuficiente para cobrir variações cambiais. Incluir cláusula de hardship (art. 478 CC) para revisão em casos de onerosidade excessiva superveniente. Recomendado: INPC como índice-base com gatilho cambial.</div>
+        </div>
+
+        <div class="ex-clausula medio">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 10 — Responsabilidade por Danos</div>
+            <div class="ex-clausula-badges"><span class="ex-badge medio">médio</span></div>
+          </div>
+          <div class="ex-clausula-resumo">A Contratada responde integralmente por quaisquer danos causados à Contratante ou a terceiros, sem limitação de valor, incluindo danos indiretos e lucros cessantes.</div>
+          <div class="ex-clausula-legal">⚖ Responsabilidade ilimitada por danos indiretos é uma cláusula extremamente onerosa para prestadores de serviço. Padrão de mercado: limitação ao valor do contrato para danos diretos, exclusão de danos indiretos. Negociar cap de responsabilidade em R$ 120.000 (2 mensalidades).</div>
+        </div>
+
+        <div class="ex-clausula medio">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 13 — Não Concorrência</div>
+            <div class="ex-clausula-badges"><span class="ex-badge medio">médio</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Proíbe a Contratada de prestar serviços para concorrentes da Contratante por 36 meses após o término do contrato, com multa de R$ 500.000,00 em caso de descumprimento.</div>
+          <div class="ex-clausula-legal">⚖ Cláusula de não concorrência de 36 meses é excessiva — jurisprudência do TJSP limita a 24 meses para ser considerada razoável. A definição de "concorrentes" é vaga e pode incluir qualquer empresa do setor de varejo. Multa de R$ 500.000 pode ser reduzida judicialmente. Negociar prazo de 12 meses e definição precisa de concorrentes.</div>
+        </div>
+
+        <div class="ex-clausula medio">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 6 — Entrega e Aceitação</div>
+            <div class="ex-clausula-badges"><span class="ex-badge medio">médio</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Prevê entrega de relatórios mensais e marcos trimestrais, com prazo de 30 dias para aceite pela Contratante. Em caso de silêncio, considera-se rejeitado.</div>
+          <div class="ex-clausula-legal">⚖ Silêncio equivalendo à rejeição é prejudicial à Contratada — inverte o padrão legal (art. 111 CC, onde silêncio equivale à aceitação quando há prévia convenção). Negociar para que silêncio após 10 dias úteis seja considerado aprovação tácita.</div>
+        </div>
+
+        <div class="ex-clausula medio">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 12 — Subcontratação</div>
+            <div class="ex-clausula-badges"><span class="ex-badge medio">médio</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Proíbe qualquer subcontratação sem autorização prévia e escrita da Contratante, sem prazo de resposta estabelecido para a aprovação.</div>
+          <div class="ex-clausula-legal">⚖ Restrição legítima, mas ausência de prazo para resposta pode paralisar operações. Incluir prazo de 5 dias úteis para aprovação, com aprovação tácita após este prazo.</div>
+        </div>
+
+        <div class="ex-clausula baixo">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 9 — Confidencialidade</div>
+            <div class="ex-clausula-badges"><span class="ex-badge baixo">baixo</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Obrigação de sigilo por ambas as partes por 5 anos após o término do contrato, com sanções de R$ 50.000 por violação, aplicável a informações técnicas, comerciais e financeiras.</div>
+          <div class="ex-clausula-legal">⚖ Cláusula adequada e conforme art. 195 da Lei 9.279/1996 (proteção de segredos industriais) e Lei de Software. Prazo e multa dentro do padrão de mercado.</div>
+        </div>
+
+        <div class="ex-clausula baixo">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 2 — Objeto e Escopo</div>
+            <div class="ex-clausula-badges"><span class="ex-badge baixo">baixo</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Define o objeto com razoável precisão: desenvolvimento de sistema ERP customizado, consultoria em processos e suporte técnico mensal, com referência ao Anexo I (especificação técnica).</div>
+          <div class="ex-clausula-legal">⚖ Objeto bem definido. Verificar se o Anexo I está assinado e faz parte do instrumento — sem o Anexo, o escopo fica indeterminado.</div>
+        </div>
+
+        <div class="ex-clausula baixo">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 4 — Vigência e Renovação</div>
+            <div class="ex-clausula-badges"><span class="ex-badge baixo">baixo</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Vigência de 24 meses com renovação automática por períodos iguais, com aviso prévio de 90 dias para não renovação.</div>
+          <div class="ex-clausula-legal">⚖ Prazo de aviso prévio de 90 dias é elevado mas não abusivo para contratos de alto valor. Cláusula dentro do padrão.</div>
+        </div>
+
+        <div class="ex-clausula baixo">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 1 — Das Partes e Qualificação</div>
+            <div class="ex-clausula-badges"><span class="ex-badge baixo">baixo</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Qualificação completa de ambas as partes com CNPJ, endereço, representantes legais e poderes de assinatura.</div>
+          <div class="ex-clausula-legal">⚖ Qualificação adequada. Recomenda-se verificar a certidão de regularidade fiscal de ambas as partes antes da assinatura.</div>
+        </div>
+      </div>
+
+      <!-- LEGISLAÇÃO -->
+      <div class="ex-section">
+        <div class="ex-section-label">Base Legal Aplicável</div>
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:8px;">
+          <div style="font-size:13px;font-weight:500;margin-bottom:6px;">Código Civil Brasileiro — Lei 10.406/2002</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 413</span><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 478</span><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 884</span><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 111</span><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 421</span></div>
+          <div style="font-size:12px;opacity:.65;">Aplicável às obrigações contratuais, cláusula penal, revisão por onerosidade excessiva e interpretação do silêncio.</div>
+        </div>
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:8px;">
+          <div style="font-size:13px;font-weight:500;margin-bottom:6px;">LGPD — Lei 13.709/2018</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 7º</span><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 37</span><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 46</span><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 52</span></div>
+          <div style="font-size:12px;opacity:.65;">O sistema ERP envolverá dados pessoais de funcionários e clientes da Contratante. A Contratada atuará como operadora, exigindo DPA (Data Processing Agreement). Multa ANPD: até R$ 50 milhões por infração.</div>
+        </div>
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:8px;">
+          <div style="font-size:13px;font-weight:500;margin-bottom:6px;">CLT — Decreto-Lei 5.452/1943</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 3º</span><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 9º</span><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 455</span></div>
+          <div style="font-size:12px;opacity:.65;">Risco de reconhecimento de vínculo empregatício pela Justiça do Trabalho em razão das condições previstas na Cláusula 3. Responsabilidade solidária da Contratante como tomadora de serviços.</div>
+        </div>
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:8px;">
+          <div style="font-size:13px;font-weight:500;margin-bottom:6px;">Lei de Software — Lei 9.609/1998</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 4º</span><span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(13,13,13,0.05);padding:2px 8px;">Art. 9º</span></div>
+          <div style="font-size:12px;opacity:.65;">Regula a cessão de direitos patrimoniais sobre o software. A cláusula 11 precisa ser compatibilizada com os direitos de terceiros sobre componentes open source utilizados.</div>
+        </div>
+      </div>
+
+      <!-- OBRIGAÇÕES -->
+      <div class="ex-section">
+        <div class="ex-section-label">Obrigações das Partes</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;opacity:.3;text-transform:uppercase;margin-bottom:8px;">Contratante (Bergamasco)</div>
+            <div style="font-size:12px;opacity:.7;padding:6px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px;">→ Pagar R$ 60.000/mês até o 60º dia após aprovação</div>
+            <div style="font-size:12px;opacity:.7;padding:6px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px;">→ Fornecer acesso às instalações e sistemas</div>
+            <div style="font-size:12px;opacity:.7;padding:6px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px;">→ Designar gestor interno de projeto</div>
+            <div style="font-size:12px;opacity:.7;padding:6px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px;">→ Aprovar ou rejeitar entregas em até 30 dias</div>
+            <div style="font-size:12px;opacity:.7;padding:6px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px;">→ Fornecer equipamentos e infraestrutura</div>
+            <div style="font-size:12px;opacity:.7;padding:6px 0;display:flex;gap:8px;">→ Manter sigilo sobre metodologias da Contratada</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;opacity:.3;text-transform:uppercase;margin-bottom:8px;">Contratada (Nexus)</div>
+            <div style="font-size:12px;opacity:.7;padding:6px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px;">→ Desenvolver ERP conforme especificações do Anexo I</div>
+            <div style="font-size:12px;opacity:.7;padding:6px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px;">→ Entregar relatórios mensais até o 5º dia útil</div>
+            <div style="font-size:12px;opacity:.7;padding:6px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px;">→ Prestar consultoria mínima de 160h/mês</div>
+            <div style="font-size:12px;opacity:.7;padding:6px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px;">→ Corrigir bugs críticos em até 4h úteis</div>
+            <div style="font-size:12px;opacity:.7;padding:6px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px;">→ Manter equipe mínima de 3 consultores sêniores</div>
+            <div style="font-size:12px;opacity:.7;padding:6px 0;display:flex;gap:8px;">→ Ceder todo o código-fonte ao término</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRAZOS -->
+      <div class="ex-section">
+        <div class="ex-section-label">Prazos e Datas Importantes</div>
+        <div style="border-left:3px solid #C0392B;background:rgba(192,57,43,0.05);padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-size:12px;font-weight:500;margin-bottom:3px;">Entrega da 1ª versão do ERP (MVP)</div><div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);">90 dias após assinatura — 13/06/2025</div><div style="font-size:11px;opacity:.55;margin-top:2px;">Multa de R$ 30.000 por mês de atraso</div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;background:rgba(192,57,43,0.1);color:#C0392B;padding:2px 8px;text-transform:uppercase;white-space:nowrap;">alto</span>
+        </div>
+        <div style="border-left:3px solid #E67E22;background:rgba(230,126,34,0.05);padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-size:12px;font-weight:500;margin-bottom:3px;">Aviso prévio para não renovação</div><div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);">90 dias antes do vencimento — 15/12/2026</div><div style="font-size:11px;opacity:.55;margin-top:2px;">Renovação automática se não houver manifestação</div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;background:rgba(230,126,34,0.1);color:#E67E22;padding:2px 8px;text-transform:uppercase;white-space:nowrap;">médio</span>
+        </div>
+        <div style="border-left:3px solid #E67E22;background:rgba(230,126,34,0.05);padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-size:12px;font-weight:500;margin-bottom:3px;">Reajuste anual pelo IGPM</div><div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);">Março de 2026</div><div style="font-size:11px;opacity:.55;margin-top:2px;">Sem limite de reajuste definido</div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;background:rgba(230,126,34,0.1);color:#E67E22;padding:2px 8px;text-transform:uppercase;white-space:nowrap;">médio</span>
+        </div>
+        <div style="border-left:3px solid #1E7D5A;background:rgba(30,125,90,0.05);padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-size:12px;font-weight:500;margin-bottom:3px;">Relatórios mensais</div><div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);">Até o 5º dia útil de cada mês</div><div style="font-size:11px;opacity:.55;margin-top:2px;">Sem multa específica por atraso na entrega do relatório</div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;background:rgba(30,125,90,0.1);color:#1E7D5A;padding:2px 8px;text-transform:uppercase;white-space:nowrap;">baixo</span>
+        </div>
+      </div>
+
+      <!-- RISCOS FINANCEIROS -->
+      <div class="ex-section">
+        <div class="ex-section-label">Riscos Financeiros Mapeados</div>
+        <div style="border-left:3px solid #C0392B;background:rgba(192,57,43,0.05);padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-size:12px;font-weight:500;margin-bottom:3px;">Multa rescisória — rescisão no 12º mês</div><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--gold);font-weight:700;">R$ 288.000,00</div><div style="font-size:11px;opacity:.55;">40% sobre os R$ 720.000 remanescentes</div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;background:rgba(192,57,43,0.1);color:#C0392B;padding:2px 8px;text-transform:uppercase;white-space:nowrap;">alto</span>
+        </div>
+        <div style="border-left:3px solid #C0392B;background:rgba(192,57,43,0.05);padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-size:12px;font-weight:500;margin-bottom:3px;">Passivo trabalhista estimado (vínculo empregatício)</div><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--gold);font-weight:700;">R$ 180.000 – R$ 240.000</div><div style="font-size:11px;opacity:.55;">Estimativa de 3 funcionários com salário médio de R$ 8.000/mês</div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;background:rgba(192,57,43,0.1);color:#C0392B;padding:2px 8px;text-transform:uppercase;white-space:nowrap;">alto</span>
+        </div>
+        <div style="border-left:3px solid #C0392B;background:rgba(192,57,43,0.05);padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-size:12px;font-weight:500;margin-bottom:3px;">Multa por não concorrência (se descumprida)</div><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--gold);font-weight:700;">R$ 500.000,00</div><div style="font-size:11px;opacity:.55;">Proibição de 36 meses para qualquer cliente do setor varejista</div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;background:rgba(192,57,43,0.1);color:#C0392B;padding:2px 8px;text-transform:uppercase;white-space:nowrap;">alto</span>
+        </div>
+        <div style="border-left:3px solid #E67E22;background:rgba(230,126,34,0.05);padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-size:12px;font-weight:500;margin-bottom:3px;">Multa por atraso na entrega do MVP</div><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--gold);font-weight:700;">R$ 30.000/mês</div><div style="font-size:11px;opacity:.55;">Sem limite máximo definido no contrato</div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;background:rgba(230,126,34,0.1);color:#E67E22;padding:2px 8px;text-transform:uppercase;white-space:nowrap;">médio</span>
+        </div>
+        <div style="border-left:3px solid #E67E22;background:rgba(230,126,34,0.05);padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-size:12px;font-weight:500;margin-bottom:3px;">Sanção ANPD por ausência de LGPD</div><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--gold);font-weight:700;">Até R$ 50.000.000</div><div style="font-size:11px;opacity:.55;">2% do faturamento, limitado a R$ 50MM por infração</div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;background:rgba(230,126,34,0.1);color:#E67E22;padding:2px 8px;text-transform:uppercase;white-space:nowrap;">médio</span>
+        </div>
+      </div>
+
+      <!-- AUSENTES -->
+      <div class="ex-section">
+        <div class="ex-section-label">O que Está Faltando no Contrato</div>
+        <div class="ex-ausente">
+          <div class="ex-ausente-name">✗ Adendo de Proteção de Dados (DPA) — LGPD</div>
+          <div class="ex-ausente-risco">Obrigatório quando a Contratada processa dados pessoais como operadora. Sem DPA, ambas as partes ficam expostas a sanções da ANPD de até R$ 50 milhões. Incluir: finalidade do tratamento, medidas de segurança, prazo de retenção, procedimento em caso de incidente.</div>
+        </div>
+        <div class="ex-ausente">
+          <div class="ex-ausente-name">✗ Acordo de Nível de Serviço (SLA)</div>
+          <div class="ex-ausente-risco">Sem definição de disponibilidade mínima do sistema (uptime), tempo de resposta para incidentes críticos, janelas de manutenção e penalidades por downtime. A Contratante não tem mecanismo contratual para exigir qualidade de serviço.</div>
+        </div>
+        <div class="ex-ausente">
+          <div class="ex-ausente-name">✗ Cláusula de Limitação de Responsabilidade</div>
+          <div class="ex-ausente-risco">Sem teto para indenizações, a Contratada fica exposta a danos ilimitados. Padrão de mercado: cap em 12 meses de honorários (R$ 720.000) para danos diretos e exclusão total de danos indiretos.</div>
+        </div>
+        <div class="ex-ausente">
+          <div class="ex-ausente-name">✗ Procedimento de Escalonamento de Conflitos</div>
+          <div class="ex-ausente-risco">Sem previsão de negociação direta antes da arbitragem. Recomendado: 30 dias de negociação → mediação → arbitragem. Reduz custos e tempo de resolução de conflitos.</div>
+        </div>
+        <div class="ex-ausente">
+          <div class="ex-ausente-name">✗ Plano de Transição e Saída</div>
+          <div class="ex-ausente-risco">Sem obrigação de transferência de conhecimento ao término do contrato. A Contratante pode ficar dependente tecnologicamente sem meios de migrar para outro fornecedor. Incluir: documentação técnica completa, treinamento de equipe interna, suporte pós-contrato de 6 meses.</div>
+        </div>
+      </div>
+
+      <!-- RECOMENDAÇÕES -->
+      <div class="ex-section">
+        <div class="ex-section-label">Recomendações Práticas</div>
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:6px;">
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(192,57,43,0.1);color:#C0392B;padding:3px 10px;letter-spacing:1px;">NEGOCIAR</span>
+            <span style="font-family:'DM Mono',monospace;font-size:9px;color:#C0392B;">urgente</span>
+          </div>
+          <div style="font-size:13px;opacity:.8;margin-bottom:4px;">Reduzir multa rescisória da Cláusula 7 de 40% para 10-15% com contrapartida recíproca</div>
+          <div style="font-size:11px;color:var(--gold);">⚖ Fundamentação: art. 413 CC + jurisprudência do STJ (REsp 1.641.167)</div>
+        </div>
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:6px;">
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(30,125,90,0.1);color:#1E7D5A;padding:3px 10px;letter-spacing:1px;">INCLUIR</span>
+            <span style="font-family:'DM Mono',monospace;font-size:9px;color:#C0392B;">urgente</span>
+          </div>
+          <div style="font-size:13px;opacity:.8;margin-bottom:4px;">Adendo de Proteção de Dados (DPA) conforme LGPD — obrigatório antes da assinatura</div>
+          <div style="font-size:11px;color:var(--gold);">⚖ Fundamentação: art. 37 e 46 da Lei 13.709/2018</div>
+        </div>
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:6px;">
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(192,57,43,0.1);color:#C0392B;padding:3px 10px;letter-spacing:1px;">REMOVER</span>
+            <span style="font-family:'DM Mono',monospace;font-size:9px;color:#C0392B;">urgente</span>
+          </div>
+          <div style="font-size:13px;opacity:.8;margin-bottom:4px;">Remover cláusula de foro em Lisboa — substituir por câmara arbitral brasileira (CAMARB ou CAM-CCBC)</div>
+          <div style="font-size:11px;color:var(--gold);">⚖ Fundamentação: art. 9º LINDB + art. 63 CPC</div>
+        </div>
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:6px;">
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(230,126,34,0.1);color:#E67E22;padding:3px 10px;letter-spacing:1px;">ATENÇÃO</span>
+            <span style="font-family:'DM Mono',monospace;font-size:9px;color:#C0392B;">urgente</span>
+          </div>
+          <div style="font-size:13px;opacity:.8;margin-bottom:4px;">Verificar se a representante da Contratante tem poderes para assinar — estatuto exige aprovação do CA para contratos acima de R$ 500.000</div>
+          <div style="font-size:11px;color:var(--gold);">⚖ Contrato assinado sem poderes é anulável (art. 119 CC)</div>
+        </div>
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:6px;">
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(30,125,90,0.1);color:#1E7D5A;padding:3px 10px;letter-spacing:1px;">INCLUIR</span>
+            <span style="font-family:'DM Mono',monospace;font-size:9px;color:#E67E22;">importante</span>
+          </div>
+          <div style="font-size:13px;opacity:.8;margin-bottom:4px;">Incluir SLA com uptime mínimo de 99,5%, tempo de resposta e penalidades proporcionais por downtime</div>
+          <div style="font-size:11px;color:var(--gold);">⚖ Sem SLA, a Contratante não tem base contratual para exigir qualidade</div>
+        </div>
+        <div style="padding:14px;border:1px solid var(--rule);margin-bottom:6px;">
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;background:rgba(192,57,43,0.1);color:#C0392B;padding:3px 10px;letter-spacing:1px;">NEGOCIAR</span>
+            <span style="font-family:'DM Mono',monospace;font-size:9px;color:#E67E22;">importante</span>
+          </div>
+          <div style="font-size:13px;opacity:.8;margin-bottom:4px;">Alterar Cláusula 3 para eliminar os elementos de vínculo empregatício — trabalho remoto, sem horário fixo, sem equipamentos da Contratante</div>
+          <div style="font-size:11px;color:var(--gold);">⚖ Risco de autuação trabalhista e passivo de R$ 240.000</div>
+        </div>
+      </div>
+
+      <!-- PARECER FINAL -->
+      <div class="ex-parecer">
+        <div class="ex-parecer-label">Parecer Jurídico Final — Exemplo Ilustrativo</div>
+        <div class="ex-parecer-text">O presente Contrato de Prestação de Serviços de Consultoria Empresarial e Desenvolvimento de Software, celebrado entre a Nexus Soluções Tecnológicas Ltda. (CNPJ: 34.872.019/0001-45) e a Comercial Bergamasco S.A. (CNPJ: 08.473.920/0001-83), foi submetido à análise jurídica completa, resultando em score de risco de 54/100, com recomendação de NEGOCIAR antes da assinatura.
+
+A análise identificou quatro pontos de risco alto que comprometem o equilíbrio contratual e a segurança jurídica das partes. O ponto mais crítico é a Cláusula 7, que estabelece multa rescisória de 40% sobre o valor remanescente do contrato — no caso de rescisão no 12º mês, isso representaria um desembolso de R$ 288.000,00 pela Contratante. Esta penalidade colide frontalmente com o entendimento consolidado do Superior Tribunal de Justiça, que, com fundamento no art. 413 do Código Civil, tem sistematicamente reduzido cláusulas penais manifestamente desproporcionais. Recomenda-se a redução para percentual entre 10% e 15%, com contrapartida recíproca.
+
+Não menos grave é o risco trabalhista latente decorrente da Cláusula 3. A imposição de horário fixo das 9h às 18h, a prestação de serviços nas instalações da Contratante com equipamentos por ela fornecidos e sob a supervisão direta de seu gestor de TI configura, de forma inequívoca, os quatro elementos caracterizadores do vínculo empregatício previstos no art. 3º da CLT: pessoalidade, habitualidade, subordinação e onerosidade. Em caso de ação trabalhista, a Contratante (tomadora de serviços) poderá ser responsabilizada solidariamente por todos os encargos retroativos, incluindo FGTS, INSS, férias, 13º salário e aviso prévio, com passivo estimado entre R$ 180.000 e R$ 240.000 para três colaboradores no período contratual.
+
+A ausência completa de cláusula de proteção de dados representa infração direta à Lei Geral de Proteção de Dados (Lei 13.709/2018). O sistema ERP objeto do contrato inevitavelmente processará dados pessoais de funcionários e clientes da Contratante, fazendo da Contratada sua operadora de dados. Sem o Data Processing Agreement (DPA) exigido pelo art. 37 da LGPD, ambas as partes ficam expostas a sanções administrativas da Autoridade Nacional de Proteção de Dados (ANPD) de até 2% do faturamento anual, limitadas a R$ 50.000.000 por infração. A assinatura do contrato sem este adendo não é recomendada.
+
+Por fim, a eleição de câmara arbitral sediada em Lisboa, com aplicação de lei portuguesa ao contrato, é juridicamente temerária. Ambas as partes são domiciliadas no Brasil, o contrato é executado integralmente em território nacional e envolve exclusivamente partes brasileiras — circunstâncias que, nos termos do art. 9º da LINDB e do art. 63 do Código de Processo Civil, permitem às partes afastar a cláusula arbitral estrangeira, gerando litígio custoso e desnecessário. Recomenda-se substituir por câmara arbitral brasileira reconhecida (CAMARB, CAM-CCBC ou FGV-CAM).
+
+Conclusão: o contrato não deve ser assinado em sua forma atual. Com os ajustes recomendados nas cláusulas 3, 7, 11 e 14, e com a inclusão do DPA (LGPD), SLA e cláusula de limitação de responsabilidade, o instrumento torna-se viável e adequado ao padrão de mercado para contratos de tecnologia desta natureza e valor.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:20px;border-top:1px solid rgba(245,240,232,0.1);">
+          <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;">Contrato<span style="color:var(--gold)">IQ</span></div>
+          <div style="padding:10px 24px;background:rgba(230,126,34,0.2);color:#E67E22;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:2px;font-weight:700;">NEGOCIAR</div>
+        </div>
+      </div>
+
+      <!-- DOWNLOAD -->
+      <div class="ex-download">
+        <div class="ex-tempo">⏱ Análise gerada em 1min 48s · 14 cláusulas analisadas</div>
+        <button class="ex-download-btn">
+          <span style="font-size:16px">⬇</span>
+          Baixar relatório em PDF
+        </button>
+      </div>
+
+    </div><!-- fim ex-collapsed -->
+
+    <!-- BOTÃO EXPANDIR -->
+    <button class="ex-expand-btn" id="exBtn" onclick="expandirExemplo()">
+      <span>Ver análise completa</span>
+      <span class="ex-expand-icon">▼</span>
+    </button>
+
+  </div><!-- fim exemplo-card -->
+</section>
+
+<!-- BEFORE/AFTER -->
+
+    <!-- HEADER -->
+    <div class="ex-header">
+      <div class="ex-header-left">
+        <div class="ex-tipo">Parecer ContratoIQ · Exemplo Fictício</div>
+        <div class="ex-nome">Contrato de Prestação de Serviços de TI</div>
+        <div class="ex-natureza">Contrato bilateral oneroso · São Paulo/SP</div>
+      </div>
+      <div class="ex-score-wrap">
+        <div class="ex-score">58</div>
+        <div class="ex-score-label">Score de risco</div>
+        <div class="ex-rec">NEGOCIAR</div>
+      </div>
+    </div>
+
+    <!-- CORPO RECOLHIDO -->
+    <div class="ex-collapsed" id="exBody">
+
+      <!-- RESUMO -->
+      <div class="ex-section">
+        <div class="ex-section-label">Resumo Executivo</div>
+        <div style="font-size:13px;line-height:1.8;opacity:.75;">O contrato apresenta risco moderado-alto, especialmente em razão da cláusula de multa rescisória unilateral desproporcional e do prazo de pagamento acima do padrão de mercado. A ausência de cláusula de SLA e de limitação de responsabilidade são pontos críticos que precisam ser negociados antes da assinatura.</div>
+      </div>
+
+      <!-- IDENTIFICAÇÃO -->
+      <div class="ex-section">
+        <div class="ex-section-label">Identificação do Contrato</div>
+        <div class="ex-grid">
+          <div><div class="ex-field-label">Tipo</div><div class="ex-field-value">Prestação de Serviços de TI</div></div>
+          <div><div class="ex-field-label">Vigência</div><div class="ex-field-value">12 meses, renovação automática</div></div>
+          <div><div class="ex-field-label">Valor Total</div><div class="ex-field-value">R$ 84.000/ano (R$ 7.000/mês)</div></div>
+          <div><div class="ex-field-label">Foro</div><div class="ex-field-value">Comarca de São Paulo/SP</div></div>
+          <div class="ex-leis">
+            <div class="ex-field-label" style="width:100%;margin-bottom:6px">Leis Aplicáveis</div>
+            <span class="ex-lei">Código Civil — Lei 10.406/2002</span>
+            <span class="ex-lei">LGPD — Lei 13.709/2018</span>
+            <span class="ex-lei">CDC — Lei 8.078/1990</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLÁUSULAS -->
+      <div class="ex-section">
+        <div class="ex-section-label">Análise Cláusula por Cláusula</div>
+
+        <div class="ex-clausula alto">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 8 — Multa Rescisória</div>
+            <div class="ex-clausula-badges"><span class="ex-badge abusiva">ABUSIVA</span><span class="ex-badge alto">alto</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Prevê multa de 30% sobre o valor total do contrato em caso de rescisão unilateral pela Contratante, sem contrapartida equivalente para a Contratada.</div>
+          <div class="ex-clausula-legal">⚖ Violação do art. 413 do Código Civil — multa desproporcional pode ser reduzida pelo juiz. Configura desequilíbrio contratual.</div>
+        </div>
+
+        <div class="ex-clausula medio">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 5 — Condições de Pagamento</div>
+            <div class="ex-clausula-badges"><span class="ex-badge medio">médio</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Pagamento em 45 dias após a emissão da nota fiscal, com juros de 1% ao mês em caso de atraso.</div>
+          <div class="ex-clausula-legal">⚖ Prazo acima do padrão de mercado para serviços de TI (30 dias). Negociar redução para 15-30 dias.</div>
+        </div>
+
+        <div class="ex-clausula medio">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 12 — Propriedade Intelectual</div>
+            <div class="ex-clausula-badges"><span class="ex-badge medio">médio</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Todo o código e sistema desenvolvidos passam a ser propriedade exclusiva da Contratante após a entrega, sem menção a código de terceiros (bibliotecas open source).</div>
+          <div class="ex-clausula-legal">⚖ Risco de conflito com licenças de software livre (MIT, GPL). Incluir ressalva para dependências de terceiros.</div>
+        </div>
+
+        <div class="ex-clausula baixo">
+          <div class="ex-clausula-header">
+            <div class="ex-clausula-title">Cláusula 9 — Confidencialidade</div>
+            <div class="ex-clausula-badges"><span class="ex-badge baixo">baixo</span></div>
+          </div>
+          <div class="ex-clausula-resumo">Obrigação de sigilo por ambas as partes por prazo de 5 anos após o término do contrato, com sanções em caso de violação.</div>
+          <div class="ex-clausula-legal">⚖ Conforme Lei 9.279/1996 e práticas de mercado. Cláusula adequada.</div>
+        </div>
+      </div>
+
+      <!-- RISCOS FINANCEIROS -->
+      <div class="ex-section">
+        <div class="ex-section-label">Riscos Financeiros</div>
+        <div style="border-left:3px solid #C0392B;background:rgba(192,57,43,0.05);padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-size:12px;font-weight:500;margin-bottom:3px;">Multa por rescisão antecipada</div><div style="font-size:11px;opacity:.55;">Se rescisão no 6º mês: R$ 25.200 de multa</div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;background:rgba(192,57,43,0.1);color:#C0392B;padding:2px 8px;text-transform:uppercase;white-space:nowrap;">alto</span>
+        </div>
+        <div style="border-left:3px solid #E67E22;background:rgba(230,126,34,0.05);padding:12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div><div style="font-size:12px;font-weight:500;margin-bottom:3px;">Juros por atraso de pagamento</div><div style="font-size:11px;opacity:.55;">1% ao mês + correção IPCA</div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;background:rgba(230,126,34,0.1);color:#E67E22;padding:2px 8px;text-transform:uppercase;white-space:nowrap;">médio</span>
+        </div>
+      </div>
+
+      <!-- CLÁUSULAS AUSENTES -->
+      <div class="ex-section">
+        <div class="ex-section-label">O que Está Faltando no Contrato</div>
+        <div class="ex-ausente">
+          <div class="ex-ausente-name">✗ Cláusula de SLA (Service Level Agreement)</div>
+          <div class="ex-ausente-risco">Sem definição de disponibilidade mínima, tempo de resposta e penalidades por downtime. Risco alto para a Contratante.</div>
+        </div>
+        <div class="ex-ausente">
+          <div class="ex-ausente-name">✗ Limitação de Responsabilidade</div>
+          <div class="ex-ausente-risco">Ausência de teto para indenizações. A Contratada pode ficar exposta a danos ilimitados por falhas no sistema.</div>
+        </div>
+        <div class="ex-ausente">
+          <div class="ex-ausente-name">✗ Cláusula de Proteção de Dados (LGPD)</div>
+          <div class="ex-ausente-risco">Não há menção ao tratamento de dados pessoais, responsabilidades como operador e medidas de segurança — obrigatório pela Lei 13.709/2018.</div>
+        </div>
+      </div>
+
+      <!-- PARECER FINAL -->
+      <div class="ex-parecer">
+        <div class="ex-parecer-label">Parecer Jurídico Final</div>
+        <div class="ex-parecer-text">O presente contrato de prestação de serviços de tecnologia da informação apresenta risco moderado-alto, com score de 58/100, em razão de desequilíbrios contratuais relevantes que precisam ser corrigidos antes da assinatura.
+
+A cláusula de multa rescisória unilateral de 30% (Cláusula 8) constitui o ponto mais crítico do instrumento. Nos termos do art. 413 do Código Civil, a penalidade pode ser reduzida equitativamente pelo juiz quando manifestamente excessiva ou quando a obrigação principal tiver sido parcialmente cumprida. Recomenda-se negociar a redução para 10-15% com contrapartida equivalente para ambas as partes.
+
+A ausência de cláusula de SLA representa risco operacional significativo para a Contratante, que ficará sem mecanismos contratuais para exigir nível mínimo de qualidade e disponibilidade dos serviços prestados. A inclusão de métricas de desempenho e penalidades proporcionais é indispensável.
+
+A omissão de cláusula de proteção de dados configura violação potencial à Lei Geral de Proteção de Dados (Lei 13.709/2018), especialmente considerando que serviços de TI invariavelmente envolvem acesso a dados pessoais. A ausência desta cláusula expõe ambas as partes a sanções administrativas de até R$ 50 milhões.
+
+Recomendação: NEGOCIAR as cláusulas 5 e 8, incluir SLA, limitação de responsabilidade e adendo de LGPD antes da assinatura. O contrato pode ser viabilizado com os ajustes indicados.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:16px;border-top:1px solid rgba(245,240,232,0.1);">
+          <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;">Contrato<span style="color:var(--gold)">IQ</span></div>
+          <div style="padding:8px 20px;background:rgba(230,126,34,0.2);color:#E67E22;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;font-weight:700;">NEGOCIAR</div>
+        </div>
+      </div>
+
+      <!-- DOWNLOAD -->
+      <div class="ex-download">
+        <div class="ex-tempo">⏱ Análise gerada em 1min 12s</div>
+        <button class="ex-download-btn">
+          <span style="font-size:16px">⬇</span>
+          Baixar relatório em PDF
+        </button>
+      </div>
+
+    </div><!-- fim ex-collapsed -->
+
+    <!-- BOTÃO EXPANDIR -->
+    <button class="ex-expand-btn" id="exBtn" onclick="expandirExemplo()">
+      <span>Ver análise completa</span>
+      <span class="ex-expand-icon">▼</span>
+    </button>
+
+  </div><!-- fim exemplo-card -->
+</section>
+
+<!-- BEFORE/AFTER -->
+<section class="ba" id="como-funciona">
+  <div class="ba-panel">
+    <div class="ba-label">Sem ContratoIQ</div>
+    <h3 class="ba-title">2 a 4 horas de trabalho jurídico</h3>
+    <div class="ba-list">
+      <div class="ba-item">❌ <span>Leitura manual de todas as cláusulas</span></div>
+      <div class="ba-item">❌ <span>Pesquisa de legislação aplicável</span></div>
+      <div class="ba-item">❌ <span>Formatação do parecer para o cliente</span></div>
+      <div class="ba-item">❌ <span>Risco de deixar passar cláusulas abusivas</span></div>
+      <div class="ba-item">❌ <span>Custo alto de hora/advogado</span></div>
+    </div>
+  </div>
+  <div class="ba-panel after">
+    <div class="ba-label">Com ContratoIQ</div>
+    <h3 class="ba-title">Parecer completo em menos de 2 minutos</h3>
+    <div class="ba-list">
+      <div class="ba-item after">✓ <span>Análise de cada cláusula individualmente</span></div>
+      <div class="ba-item after">✓ <span>Legislação aplicável com artigos específicos</span></div>
+      <div class="ba-item after">✓ <span>Score de risco e recomendação final</span></div>
+      <div class="ba-item after">✓ <span>Identificação automática de cláusulas abusivas</span></div>
+      <div class="ba-item after">✓ <span>Download do relatório em PDF profissional</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="how-label">Processo</div>
+  <h2 class="how-title">Como funciona</h2>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-num">01</div>
+      <h4 class="how-step-title">Faça upload do contrato</h4>
+      <p class="how-step-text">Envie o PDF do contrato diretamente na plataforma. Suportamos contratos de até 100 páginas com criptografia ponta a ponta.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-num">02</div>
+      <h4 class="how-step-title">A IA analisa tudo</h4>
+      <p class="how-step-text">Nossa IA lê cada cláusula, compara com o Código Civil, CDC, CLT, LGPD e legislação específica do setor. Em até 2 minutos.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-num">03</div>
+      <h4 class="how-step-title">Receba o parecer completo</h4>
+      <p class="how-step-text">Score de risco, análise por cláusula, riscos financeiros, pontos ausentes e recomendação final: ASSINAR, NEGOCIAR ou RECUSAR.</p>
+    </div>
+  </div>
+</section>
+
+<!-- O QUE VOCÊ RECEBE -->
+<section class="entrega" id="entrega">
+  <div class="entrega-label">Relatório completo</div>
+  <h2 class="entrega-title">O que cada análise entrega</h2>
+  <div class="entrega-grid">
+    <div class="entrega-item">
+      <div class="entrega-icon">⚖</div>
+      <h4 class="entrega-item-title">Identificação e Classificação</h4>
+      <p class="entrega-item-text">Tipo de contrato, natureza jurídica, leis aplicáveis, vigência, valor e foro competente.</p>
+    </div>
+    <div class="entrega-item">
+      <div class="entrega-icon">🔍</div>
+      <h4 class="entrega-item-title">Análise Cláusula por Cláusula</h4>
+      <p class="entrega-item-text">Cada cláusula analisada individualmente com risco (alto/médio/baixo), consequências e base legal.</p>
+    </div>
+    <div class="entrega-item">
+      <div class="entrega-icon">📋</div>
+      <h4 class="entrega-item-title">Base Legal Aplicável</h4>
+      <p class="entrega-item-text">Código Civil, CDC, CLT, LGPD e leis específicas do setor com artigos citados.</p>
+    </div>
+    <div class="entrega-item">
+      <div class="entrega-icon">💰</div>
+      <h4 class="entrega-item-title">Riscos Financeiros</h4>
+      <p class="entrega-item-text">Todas as multas, penalidades, juros e indenizações previstas com valores e condições.</p>
+    </div>
+    <div class="entrega-item">
+      <div class="entrega-icon">🚨</div>
+      <h4 class="entrega-item-title">O que Está Faltando</h4>
+      <p class="entrega-item-text">Cláusulas ausentes que deveriam estar no contrato para proteção das partes.</p>
+    </div>
+    <div class="entrega-item">
+      <div class="entrega-icon">📄</div>
+      <h4 class="entrega-item-title">Parecer Final + Download PDF</h4>
+      <p class="entrega-item-text">Parecer jurídico completo com fundamentação legal e recomendação: ASSINAR, NEGOCIAR ou RECUSAR.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="planos">
+  <div class="pricing-label">Planos</div>
+  <h2 class="pricing-title">Escolha seu plano</h2>
+  <p class="pricing-sub">Todos os planos incluem parecer jurídico completo, download em PDF e suporte.</p>
+
+  <div class="toggle-wrap">
+    <span class="toggle-label" id="lbl-mensal">MENSAL</span>
+    <div class="toggle-btn" onclick="togglePlanos()">
+      <div class="toggle-dot" id="tdot"></div>
+    </div>
+    <span class="toggle-label" id="lbl-anual" style="opacity:.4">ANUAL <span class="economy-badge">-10%</span></span>
+  </div>
+
+  <div class="pricing-grid" style="grid-template-columns:repeat(5,1fr)">
+    <div class="price-card">
+      <div class="price-tag">Entrada</div>
+      <div class="price-name">Lite</div>
+      <div class="price-amount" id="p-lite">R$1.090</div>
+      <div class="price-period" id="per-lite">por mês</div>
+      <div class="price-economy" id="eco-lite">Economia de R$1.308/ano</div>
+      <div class="price-divider"></div>
+      <div class="price-features">
+        <div class="price-feature">300 análises por mês</div>
+        <div class="price-feature">Parecer jurídico completo</div>
+        <div class="price-feature">Score de risco</div>
+        <div class="price-feature">Download PDF</div>
+        <div class="price-feature">Suporte por email</div>
+      </div>
+      <button class="price-cta" onclick="window.open('#','_blank')">Assinar agora</button>
+    </div>
+    <div class="price-card featured">
+      <div class="price-badge">Mais escolhido</div>
+      <div class="price-tag" style="opacity:.4;color:var(--cream)">Escritório</div>
+      <div class="price-name">Starter</div>
+      <div class="price-amount" id="p-starter">R$3.490</div>
+      <div class="price-period" id="per-starter" style="opacity:.4;color:var(--cream)">por mês</div>
+      <div class="price-economy" id="eco-starter" style="color:var(--gold)">Economia de R$4.188/ano</div>
+      <div class="price-divider"></div>
+      <div class="price-features">
+        <div class="price-feature">1.000 análises por mês</div>
+        <div class="price-feature">Tudo do Lite</div>
+        <div class="price-feature">Análise legislativa completa</div>
+        <div class="price-feature">Cláusulas abusivas detectadas</div>
+        <div class="price-feature">Suporte prioritário</div>
+      </div>
+      <button class="price-cta" onclick="window.open('#','_blank')">Assinar agora</button>
+    </div>
+    <div class="price-card">
+      <div class="price-tag">Crescimento</div>
+      <div class="price-name">Advanced</div>
+      <div class="price-amount" id="p-advanced" style="font-size:28px;letter-spacing:-1px">R$10.490</div>
+      <div class="price-period" id="per-advanced">por mês</div>
+      <div class="price-economy" id="eco-advanced">Economia de R$12.588/ano</div>
+      <div class="price-divider"></div>
+      <div class="price-features">
+        <div class="price-feature">3.000 análises por mês</div>
+        <div class="price-feature">Tudo do Starter</div>
+        <div class="price-feature">Múltiplos usuários</div>
+        <div class="price-feature">API dedicada</div>
+        <div class="price-feature">SLA garantido</div>
+      </div>
+      <button class="price-cta" onclick="window.open('#','_blank')">Assinar agora</button>
+    </div>
+    <div class="price-card">
+      <div class="price-tag">Corporativo</div>
+      <div class="price-name">Enterprise</div>
+      <div class="price-amount" id="p-enterprise" style="font-size:28px;letter-spacing:-1px">R$34.900</div>
+      <div class="price-period" id="per-enterprise">por mês</div>
+      <div class="price-economy" id="eco-enterprise">Economia de R$41.880/ano</div>
+      <div class="price-divider"></div>
+      <div class="price-features">
+        <div class="price-feature">10.000 análises por mês</div>
+        <div class="price-feature">Tudo do Advanced</div>
+        <div class="price-feature">Suporte dedicado 24h</div>
+        <div class="price-feature">Onboarding dedicado</div>
+        <div class="price-feature">Relatórios customizados</div>
+      </div>
+      <button class="price-cta" onclick="window.open('#','_blank')">Assinar agora</button>
+    </div>
+    <div class="price-card">
+      <div class="price-tag">Sem limites</div>
+      <div class="price-name">Infinity</div>
+      <div class="price-amount" id="p-infinity" style="font-size:28px;letter-spacing:-1px">R$64.900</div>
+      <div class="price-period" id="per-infinity">por mês</div>
+      <div class="price-economy" id="eco-infinity">Economia de R$77.880/ano</div>
+      <div class="price-divider"></div>
+      <div class="price-features">
+        <div class="price-feature">Análises ilimitadas</div>
+        <div class="price-feature">Tudo do Enterprise</div>
+        <div class="price-feature">Infraestrutura dedicada</div>
+        <div class="price-feature">Gerente de conta exclusivo</div>
+        <div class="price-feature">SLA premium 99,99%</div>
+      </div>
+      <button class="price-cta" onclick="window.location.href='/formulario'">Falar com especialista</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <div class="cta-final-label">Comece hoje</div>
+  <h2 class="cta-final-title">Seu próximo contrato<br>merece uma análise <em>completa.</em></h2>
+  <p class="cta-final-sub">Escolha seu plano, receba seu token de acesso e comece a analisar contratos em minutos.</p>
+  <a href="#planos" class="btn-gold">Ver planos →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="/" style="text-decoration:none"><span style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--ink)">Contrato<span style="color:var(--gold)">IQ</span></span></a>
+  <div class="footer-links">
+    <a href="/app.html">Plataforma</a>
+    <a href="/suporte.html">Suporte</a>
+    <a href="/termos.html">Termos</a>
+    <a href="/privacidade.html">Privacidade</a>
+    <a href="/enterprise.html">Enterprise</a>
+  </div>
+  <div style="font-family:'DM Mono',monospace;font-size:9px;opacity:.3;letter-spacing:0.5px">CNPJ 66.816.981/0001-58 · Joiciano Gomes Soares de Lima · MEI · Fortaleza/CE · © 2026 ContratoIQ</div>
+</footer>
+
+<script>
+function expandirExemplo() {
+  const body = document.getElementById('exBody');
+  const btn = document.getElementById('exBtn');
+  const isOpen = btn.classList.contains('open');
+  if (isOpen) {
+    body.classList.add('ex-collapsed');
+    btn.classList.remove('open');
+    btn.querySelector('span:first-child').textContent = 'Ver análise completa';
+    body.scrollIntoView({behavior:'smooth',block:'start'});
+  } else {
+    body.classList.remove('ex-collapsed');
+    btn.classList.add('open');
+    btn.querySelector('span:first-child').textContent = 'Recolher análise';
+  }
+}
+
+function togglePlanos() {
+  anual = !anual;
+  document.getElementById('tdot').style.transform = anual ? 'translateX(24px)' : 'none';
+  document.getElementById('lbl-anual').style.opacity = anual ? '1' : '0.4';
+  document.getElementById('lbl-mensal').style.opacity = anual ? '0.4' : '1';
+
+  const planos = [
+    { id:'lite',       m:'R$1.090',  a:'R$981',    eco:'Economia de R$1.308/ano',  pera:'/mês · R$11.772/ano' },
+    { id:'starter',    m:'R$3.490',  a:'R$3.141',  eco:'Economia de R$4.188/ano',  pera:'/mês · R$37.692/ano' },
+    { id:'advanced',   m:'R$10.490', a:'R$9.441',  eco:'Economia de R$12.588/ano', pera:'/mês · R$113.292/ano' },
+    { id:'enterprise', m:'R$34.900', a:'R$31.410', eco:'Economia de R$41.880/ano', pera:'/mês · R$376.920/ano' },
+    { id:'infinity',   m:'R$64.900', a:'R$58.410', eco:'Economia de R$77.880/ano', pera:'/mês · R$701.520/ano' },
+  ];
+
+  planos.forEach(p => {
+    document.getElementById('p-'+p.id).textContent = anual ? p.a : p.m;
+    document.getElementById('per-'+p.id).textContent = anual ? p.pera : 'por mês';
+    document.getElementById('eco-'+p.id).style.display = anual ? 'block' : 'none';
+  });
+}
+</script>
+</body>
+</html>
