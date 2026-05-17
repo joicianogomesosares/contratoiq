@@ -16,45 +16,8 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { base64, mediaType, token } = JSON.parse(event.body);
+    const { base64, mediaType } = JSON.parse(event.body);
 
-    const SUPABASE_URL = process.env.SUPABASE_URL;
-    const SUPABASE_KEY = process.env.SUPABASE_KEY;
-
-    // Valida token no Supabase
-    const tokenCheck = await fetch(
-      `${SUPABASE_URL}/rest/v1/tokens?token=eq.${token}&select=*`,
-      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-    );
-    const tokenData = await tokenCheck.json();
-
-    if (!tokenData || tokenData.length === 0) {
-      return {
-        statusCode: 401,
-        headers: { 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify({ error: 'Token inválido. Entre em contato pelo WhatsApp (85) 99232-3262.' })
-      };
-    }
-
-    const cliente = tokenData[0];
-
-    if (!cliente.ativo) {
-      return {
-        statusCode: 401,
-        headers: { 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify({ error: 'Token inativo. Entre em contato com o suporte.' })
-      };
-    }
-
-    if (cliente.analises_usadas >= cliente.analises_limite) {
-      return {
-        statusCode: 402,
-        headers: { 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify({ error: `Limite de análises atingido (${cliente.analises_limite}/${cliente.analises_limite}). Faça upgrade do seu plano.` })
-      };
-    }
-
-    // Análise com IA
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -69,43 +32,7 @@ exports.handler = async (event) => {
           role: 'user',
           content: [
             { type: 'document', source: { type: 'base64', media_type: mediaType, data: base64 } },
-            { type: 'text', text: `Você é um advogado sênior especialista em direito empresarial brasileiro com 20 anos de experiência. Emita um PARECER JURÍDICO COMPLETO e PROFISSIONAL sobre o contrato enviado.
-
-Retorne EXATAMENTE este JSON sem nada antes ou depois:
-
-{
-  "score": 0,
-  "recomendacao": "ASSINAR",
-  "resumo_executivo": "",
-  "parecer_final": "",
-  "identificacao": {
-    "tipo_contrato": "",
-    "natureza_juridica": "",
-    "leis_aplicaveis": [],
-    "data_assinatura": "",
-    "vigencia": "",
-    "valor_total": "",
-    "foro": ""
-  },
-  "partes": [{"nome":"","qualificacao":"","papel":"","capacidade_juridica":"","observacoes":""}],
-  "clausulas": [{"numero":"","titulo":"","resumo":"","risco":"baixo","consequencia_descumprimento":"","abusiva":false,"observacao_legal":""}],
-  "legislacao_aplicavel": [{"lei":"","artigos":[],"aplicacao":"","impacto":""}],
-  "obrigacoes": {"contratante":[],"contratada":[],"mutuas":[]},
-  "prazos": [{"descricao":"","data_ou_prazo":"","consequencia":"","risco":"baixo"}],
-  "riscos_financeiros": [{"descricao":"","valor_ou_percentual":"","condicao":"","risco":"baixo"}],
-  "clausulas_ausentes": [{"clausula":"","importancia":"","risco_ausencia":"","sugestao":""}],
-  "recomendacoes_praticas": [{"tipo":"INCLUIR","descricao":"","prioridade":"urgente","justificativa_legal":""}]
-}
-
-REGRAS:
-- score: 0 a 100
-- recomendacao: apenas "ASSINAR", "NEGOCIAR" ou "RECUSAR"
-- risco: apenas "alto", "medio" ou "baixo"
-- tipo: apenas "INCLUIR", "REMOVER", "NEGOCIAR" ou "ATENCAO"
-- prioridade: apenas "urgente", "importante" ou "sugerido"
-- Analise CADA clausula individualmente
-- Verifique: Codigo Civil, CDC, CLT, LGPD e leis do setor
-- parecer_final: minimo 5 paragrafos com fundamentacao legal` }
+            { type: 'text', text: `Você é um advogado sênior especialista em direito empresarial brasileiro com 20 anos de experiência. Emita um PARECER JURÍDICO COMPLETO e PROFISSIONAL sobre o contrato enviado.\n\nRetorne EXATAMENTE este JSON sem nada antes ou depois:\n\n{\n  "score": 0,\n  "recomendacao": "ASSINAR",\n  "resumo_executivo": "",\n  "parecer_final": "",\n  "identificacao": {\n    "tipo_contrato": "",\n    "natureza_juridica": "",\n    "leis_aplicaveis": [],\n    "data_assinatura": "",\n    "vigencia": "",\n    "valor_total": "",\n    "foro": ""\n  },\n  "partes": [{"nome":"","qualificacao":"","papel":"","capacidade_juridica":"","observacoes":""}],\n  "clausulas": [{"numero":"","titulo":"","resumo":"","risco":"baixo","consequencia_descumprimento":"","abusiva":false,"observacao_legal":""}],\n  "legislacao_aplicavel": [{"lei":"","artigos":[],"aplicacao":"","impacto":""}],\n  "obrigacoes": {"contratante":[],"contratada":[],"mutuas":[]},\n  "prazos": [{"descricao":"","data_ou_prazo":"","consequencia":"","risco":"baixo"}],\n  "riscos_financeiros": [{"descricao":"","valor_ou_percentual":"","condicao":"","risco":"baixo"}],\n  "clausulas_ausentes": [{"clausula":"","importancia":"","risco_ausencia":"","sugestao":""}],\n  "recomendacoes_praticas": [{"tipo":"INCLUIR","descricao":"","prioridade":"urgente","justificativa_legal":""}]\n}\n\nREGRAS:\n- score: 0 a 100\n- recomendacao: apenas ASSINAR, NEGOCIAR ou RECUSAR\n- risco: apenas alto, medio ou baixo\n- tipo: apenas INCLUIR, REMOVER, NEGOCIAR ou ATENCAO\n- prioridade: apenas urgente, importante ou sugerido\n- Analise CADA clausula individualmente\n- Verifique: Codigo Civil, CDC, CLT, LGPD e leis do setor\n- parecer_final: minimo 5 paragrafos com fundamentacao legal` }
           ]
         }]
       })
@@ -113,51 +40,10 @@ REGRAS:
 
     const data = await response.json();
 
-    // Salva no histórico
-    const tipoContrato = (() => {
-      try {
-        const texto = data.content[0].text;
-        const json = JSON.parse(texto.replace(/```json|```/g, '').trim());
-        return json.identificacao?.tipo_contrato || 'Contrato';
-      } catch { return 'Contrato'; }
-    })();
-
-    await fetch(`${SUPABASE_URL}/rest/v1/historico`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({
-        token,
-        cliente_nome: cliente.nome,
-        tipo_contrato: tipoContrato,
-        plano: cliente.plano,
-        data_analise: new Date().toISOString()
-      })
-    });
-
-    // Incrementa análises usadas
-    await fetch(`${SUPABASE_URL}/rest/v1/tokens?token=eq.${token}`, {
-      method: 'PATCH',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ analises_usadas: cliente.analises_usadas + 1 })
-    });
-
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({
-        ...data,
-        analises_restantes: cliente.analises_limite - cliente.analises_usadas - 1,
-        plano: cliente.plano
-      })
+      body: JSON.stringify(data)
     };
 
   } catch (err) {
