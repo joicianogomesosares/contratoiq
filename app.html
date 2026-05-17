@@ -369,7 +369,16 @@ async function iniciarAnalise() {
       body: JSON.stringify({ base64, mediaType: 'application/pdf', token: tokenAtivo })
     });
 
-    const data = await response.json();
+    const responseText = await response.text();
+    console.log('Status:', response.status);
+    console.log('Resposta raw:', responseText);
+
+    if (!response.ok) {
+      alert('Erro do servidor (' + response.status + '): ' + responseText.substring(0, 200));
+      return;
+    }
+
+    const data = JSON.parse(responseText);
 
     if (data.error) {
       alert(data.error);
@@ -412,8 +421,8 @@ async function iniciarAnalise() {
     }
 
   } catch(err) {
-    alert('Erro na análise. Verifique sua conexão e tente novamente.');
-    console.error(err);
+    alert('Erro: ' + err.message);
+    console.error('Erro completo:', err);
   } finally {
     btn.textContent = 'Analisar contrato →';
     btn.disabled = false;
