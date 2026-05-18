@@ -157,7 +157,7 @@
     <div class="form-title">Solicitar acesso antecipado</div>
     <div class="form-sub">Preencha os dados abaixo. Nossa equipe entrará em contato via WhatsApp em até 24 horas.</div>
 
-    <form name="acesso-antecipado" method="POST" data-netlify="true" action="/obrigado">
+    <form name="acesso-antecipado" id="form-antecipado" method="POST" data-netlify="true">
       <input type="hidden" name="form-name" value="acesso-antecipado">
 
       <div class="section-label-form">Dados pessoais</div>
@@ -273,9 +273,30 @@
     input.checked = el.classList.contains('ativo');
   }
 
-  // Aceite visual feedback
   document.getElementById('aceite').addEventListener('change', function() {
     this.closest('.terms').style.borderColor = this.checked ? 'var(--gold)' : 'rgba(201,168,76,0.2)';
+  });
+
+  document.getElementById('form-antecipado').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.submit-btn');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    const formData = new FormData(this);
+
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
+      });
+      window.location.href = '/obrigado.html';
+    } catch(err) {
+      btn.textContent = 'Solicitar 30 dias grátis →';
+      btn.disabled = false;
+      alert('Erro ao enviar. Tente novamente ou entre em contato pelo WhatsApp (85) 99232-3262.');
+    }
   });
 </script>
 </body>
