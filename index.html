@@ -121,14 +121,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .toggle-btn{width:52px;height:28px;background:var(--ink);border-radius:14px;position:relative;cursor:pointer;flex-shrink:0}
 .toggle-dot{width:22px;height:22px;background:var(--gold);border-radius:50%;position:absolute;top:3px;left:3px;transition:transform .3s}
 .economy-badge{background:rgba(30,125,90,0.1);color:var(--green);font-family:'DM Mono',monospace;font-size:9px;padding:3px 10px;letter-spacing:1px;margin-left:8px}
-.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--rule)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr) !important;gap:2px;background:var(--rule)}
 .price-card{background:var(--cream);padding:36px 28px;position:relative;transition:transform .25s}
 .price-card:hover{transform:translateY(-4px);z-index:1;box-shadow:0 16px 48px rgba(13,13,13,0.12)}
 .price-card.featured{background:var(--ink);color:var(--cream)}
 .price-badge{position:absolute;top:-1px;left:28px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;background:var(--gold);color:var(--ink);padding:4px 12px;font-weight:700}
 .price-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:8px}
 .price-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:20px;letter-spacing:-0.5px}
-.price-amount{font-family:'Playfair Display',serif;font-size:40px;font-weight:900;letter-spacing:-2px;line-height:1;margin-bottom:4px}
+.price-amount{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;letter-spacing:-2px;line-height:1;margin-bottom:4px}
 .price-period{font-family:'DM Mono',monospace;font-size:10px;opacity:.4;margin-bottom:4px;letter-spacing:0.5px}
 .price-economy{font-family:'DM Mono',monospace;font-size:9px;color:var(--green);margin-bottom:20px;display:none;letter-spacing:0.5px}
 .price-divider{height:1px;background:var(--rule);margin:20px 0}
@@ -222,17 +222,20 @@ footer{padding:40px 48px;border-top:1px solid var(--rule);display:flex;align-ite
   .logo{font-size:17px}
   .hero{grid-template-columns:1fr;padding:90px 16px 48px;gap:32px}
   .hero-right{display:none}
-  .hero-title{font-size:clamp(32px,8vw,48px);letter-spacing:-1px}
+  .hero-title{font-size:clamp(28px,8vw,42px);letter-spacing:-1px}
   .hero-sub{font-size:14px}
   .hero-actions{flex-direction:column;gap:10px}
   .hero-actions a,.hero-actions button{width:100%;text-align:center;padding:14px 20px;font-size:13px}
-  .hero-trust{gap:12px}
+  .hero-trust{gap:12px;flex-wrap:wrap}
   .metrics{grid-template-columns:1fr 1fr;gap:2px}
   .metric-num{font-size:28px}
   .ba,.how-steps,.entrega-grid{grid-template-columns:1fr}
-  .pricing-grid{grid-template-columns:1fr !important}
+  .pricing-grid{grid-template-columns:1fr !important;background:transparent;gap:12px}
+  .price-card{padding:28px 20px}
+  .price-amount{font-size:32px}
   .ba{padding:40px 16px}
   .how,.entrega,.pricing,.cta-final{padding:48px 16px}
+  .pricing{padding:48px 16px}
   .exemplo-section{padding:48px 16px}
   footer{padding:24px 16px;flex-direction:column;gap:20px;text-align:center}
   .footer-links{flex-wrap:wrap;justify-content:center;gap:16px}
@@ -244,9 +247,9 @@ footer{padding:40px 48px;border-top:1px solid var(--rule);display:flex;align-ite
   .ex-download{flex-direction:column;align-items:stretch}
   .ex-download-btn{justify-content:center}
   .canais{grid-template-columns:1fr}
-  .price-card{margin-bottom:4px}
-  .toggle-wrap{gap:10px}
-  .pricing-title{font-size:clamp(24px,6vw,36px)}
+  .toggle-wrap{gap:8px}
+  .toggle-label{font-size:9px}
+  .pricing-title{font-size:clamp(22px,6vw,32px)}
   .cta-final-title{font-size:clamp(24px,6vw,36px)}
 }
 
@@ -259,24 +262,23 @@ footer{padding:40px 48px;border-top:1px solid var(--rule);display:flex;align-ite
   .hero-actions a{width:100%;text-align:center;padding:14px 24px}
   .metrics{grid-template-columns:1fr 1fr}
   .ba,.how-steps,.entrega-grid{grid-template-columns:1fr}
-  .pricing-grid{grid-template-columns:1fr !important}
+  .pricing-grid{grid-template-columns:1fr !important;background:transparent;gap:12px}
+  .price-card{padding:32px 24px}
   .ba{padding:48px 24px}
   .how,.entrega,.pricing,.cta-final{padding:60px 24px}
+  .pricing{padding:60px 24px}
   .exemplo-section{padding:60px 24px}
   footer{padding:32px 24px}
   .divider{margin:0 24px}
   .ex-grid{grid-template-columns:1fr}
   .ex-leis{grid-column:span 1}
-  .ex-header{flex-direction:column;gap:16px}
-  .ex-score{font-size:40px}
-  .ex-download{flex-direction:column;align-items:flex-start}
-  .canais{grid-template-columns:1fr}
   h1{font-size:clamp(28px,7vw,48px)}
-  .price-card{margin-bottom:8px}
 }
 
-@media(min-width:901px) and (max-width:1200px){
+@media(min-width:901px) and (max-width:1100px){
   .pricing-grid{grid-template-columns:repeat(3,1fr) !important}
+  .price-card{padding:28px 20px}
+  .price-amount{font-size:28px}
   .hero{padding:120px 32px 80px;gap:40px}
   .how,.entrega,.pricing,.cta-final{padding:80px 32px}
 }
