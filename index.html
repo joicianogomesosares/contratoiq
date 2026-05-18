@@ -216,13 +216,50 @@ footer{padding:40px 48px;border-top:1px solid var(--rule);display:flex;align-ite
 .ex-expand-btn.open .ex-expand-icon{transform:rotate(180deg)}
 
 /* ── RESPONSIVE ── */
-@media(max-width:900px){
+@media(max-width:600px){
+  nav{padding:14px 16px}
+  .nav-links{display:none}
+  .logo{font-size:17px}
+  .hero{grid-template-columns:1fr;padding:90px 16px 48px;gap:32px}
+  .hero-right{display:none}
+  .hero-title{font-size:clamp(32px,8vw,48px);letter-spacing:-1px}
+  .hero-sub{font-size:14px}
+  .hero-actions{flex-direction:column;gap:10px}
+  .hero-actions a,.hero-actions button{width:100%;text-align:center;padding:14px 20px;font-size:13px}
+  .hero-trust{gap:12px}
+  .metrics{grid-template-columns:1fr 1fr;gap:2px}
+  .metric-num{font-size:28px}
+  .ba,.how-steps,.entrega-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr !important}
+  .ba{padding:40px 16px}
+  .how,.entrega,.pricing,.cta-final{padding:48px 16px}
+  .exemplo-section{padding:48px 16px}
+  footer{padding:24px 16px;flex-direction:column;gap:20px;text-align:center}
+  .footer-links{flex-wrap:wrap;justify-content:center;gap:16px}
+  .divider{margin:0 16px}
+  .ex-grid{grid-template-columns:1fr}
+  .ex-leis{grid-column:span 1}
+  .ex-header{flex-direction:column;gap:12px}
+  .ex-score{font-size:36px}
+  .ex-download{flex-direction:column;align-items:stretch}
+  .ex-download-btn{justify-content:center}
+  .canais{grid-template-columns:1fr}
+  .price-card{margin-bottom:4px}
+  .toggle-wrap{gap:10px}
+  .pricing-title{font-size:clamp(24px,6vw,36px)}
+  .cta-final-title{font-size:clamp(24px,6vw,36px)}
+}
+
+@media(min-width:601px) and (max-width:900px){
   nav{padding:16px 24px}
   .nav-links{display:none}
   .hero{grid-template-columns:1fr;padding:100px 24px 60px;gap:48px}
   .hero-right{display:none}
+  .hero-actions{flex-direction:column;gap:12px}
+  .hero-actions a{width:100%;text-align:center;padding:14px 24px}
   .metrics{grid-template-columns:1fr 1fr}
-  .ba,.how-steps,.entrega-grid,.pricing-grid{grid-template-columns:1fr}
+  .ba,.how-steps,.entrega-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr !important}
   .ba{padding:48px 24px}
   .how,.entrega,.pricing,.cta-final{padding:60px 24px}
   .exemplo-section{padding:60px 24px}
@@ -230,6 +267,18 @@ footer{padding:40px 48px;border-top:1px solid var(--rule);display:flex;align-ite
   .divider{margin:0 24px}
   .ex-grid{grid-template-columns:1fr}
   .ex-leis{grid-column:span 1}
+  .ex-header{flex-direction:column;gap:16px}
+  .ex-score{font-size:40px}
+  .ex-download{flex-direction:column;align-items:flex-start}
+  .canais{grid-template-columns:1fr}
+  h1{font-size:clamp(28px,7vw,48px)}
+  .price-card{margin-bottom:8px}
+}
+
+@media(min-width:901px) and (max-width:1200px){
+  .pricing-grid{grid-template-columns:repeat(3,1fr) !important}
+  .hero{padding:120px 32px 80px;gap:40px}
+  .how,.entrega,.pricing,.cta-final{padding:80px 32px}
 }
 </style>
 </head>
@@ -260,6 +309,7 @@ footer{padding:40px 48px;border-top:1px solid var(--rule);display:flex;align-ite
     <div class="hero-actions">
       <a href="#planos" class="btn-primary">Ver planos e preços</a>
       <a href="#como-funciona" class="btn-secondary">Como funciona</a>
+      <a href="/obrigado.html" class="btn-secondary" style="border:1px solid var(--gold);color:var(--gold)">Solicitar 30 dias grátis</a>
     </div>
     <div class="hero-trust">
       <div class="trust-item">🔒 LGPD Compliance</div>
@@ -993,9 +1043,9 @@ Recomendação: NEGOCIAR as cláusulas 5 e 8, incluir SLA, limitação de respon
     <div class="price-card">
       <div class="price-tag">Entrada</div>
       <div class="price-name">Lite</div>
-      <div class="price-amount" id="p-lite">R$1.090</div>
+      <div class="price-amount" id="p-lite">R$1.790</div>
       <div class="price-period" id="per-lite">por mês</div>
-      <div class="price-economy" id="eco-lite">Economia de R$1.308/ano</div>
+      <div class="price-economy" id="eco-lite" style="display:none">Economia de R$2.148/ano</div>
       <div class="price-divider"></div>
       <div class="price-features">
         <div class="price-feature">300 análises por mês</div>
@@ -1010,9 +1060,9 @@ Recomendação: NEGOCIAR as cláusulas 5 e 8, incluir SLA, limitação de respon
       <div class="price-badge">Mais escolhido</div>
       <div class="price-tag" style="opacity:.4;color:var(--cream)">Escritório</div>
       <div class="price-name">Starter</div>
-      <div class="price-amount" id="p-starter">R$3.490</div>
+      <div class="price-amount" id="p-starter">R$5.970</div>
       <div class="price-period" id="per-starter" style="opacity:.4;color:var(--cream)">por mês</div>
-      <div class="price-economy" id="eco-starter" style="color:var(--gold)">Economia de R$4.188/ano</div>
+      <div class="price-economy" id="eco-starter" style="display:none;color:var(--gold)">Economia de R$7.164/ano</div>
       <div class="price-divider"></div>
       <div class="price-features">
         <div class="price-feature">1.000 análises por mês</div>
@@ -1026,9 +1076,9 @@ Recomendação: NEGOCIAR as cláusulas 5 e 8, incluir SLA, limitação de respon
     <div class="price-card">
       <div class="price-tag">Crescimento</div>
       <div class="price-name">Advanced</div>
-      <div class="price-amount" id="p-advanced" style="font-size:28px;letter-spacing:-1px">R$10.490</div>
+      <div class="price-amount" id="p-advanced" style="font-size:28px;letter-spacing:-1px">R$16.900</div>
       <div class="price-period" id="per-advanced">por mês</div>
-      <div class="price-economy" id="eco-advanced">Economia de R$12.588/ano</div>
+      <div class="price-economy" id="eco-advanced" style="display:none">Economia de R$20.280/ano</div>
       <div class="price-divider"></div>
       <div class="price-features">
         <div class="price-feature">3.000 análises por mês</div>
@@ -1042,9 +1092,9 @@ Recomendação: NEGOCIAR as cláusulas 5 e 8, incluir SLA, limitação de respon
     <div class="price-card">
       <div class="price-tag">Corporativo</div>
       <div class="price-name">Enterprise</div>
-      <div class="price-amount" id="p-enterprise" style="font-size:28px;letter-spacing:-1px">R$34.900</div>
+      <div class="price-amount" id="p-enterprise" style="font-size:28px;letter-spacing:-1px">R$60.000</div>
       <div class="price-period" id="per-enterprise">por mês</div>
-      <div class="price-economy" id="eco-enterprise">Economia de R$41.880/ano</div>
+      <div class="price-economy" id="eco-enterprise" style="display:none">Economia de R$72.000/ano</div>
       <div class="price-divider"></div>
       <div class="price-features">
         <div class="price-feature">10.000 análises por mês</div>
@@ -1055,21 +1105,21 @@ Recomendação: NEGOCIAR as cláusulas 5 e 8, incluir SLA, limitação de respon
       </div>
       <button class="price-cta" onclick="window.open('#','_blank')">Assinar agora</button>
     </div>
-    <div class="price-card">
-      <div class="price-tag">Sem limites</div>
-      <div class="price-name">Infinity</div>
-      <div class="price-amount" id="p-infinity" style="font-size:28px;letter-spacing:-1px">R$64.900</div>
-      <div class="price-period" id="per-infinity">por mês</div>
-      <div class="price-economy" id="eco-infinity">Economia de R$77.880/ano</div>
-      <div class="price-divider"></div>
+    <div class="price-card" style="background:var(--ink);color:var(--cream)">
+      <div class="price-tag" style="color:var(--gold);opacity:1">Sem limites</div>
+      <div class="price-name" style="color:var(--cream)">Infinity</div>
+      <div class="price-amount" id="p-infinity" style="font-size:28px;letter-spacing:-1px;color:var(--gold)">Sob consulta</div>
+      <div class="price-period" id="per-infinity" style="opacity:.4;color:var(--cream)">análises ilimitadas</div>
+      <div class="price-economy" id="eco-infinity" style="display:none;color:var(--gold)">Condições especiais anuais</div>
+      <div class="price-divider" style="border-color:rgba(245,240,232,0.1)"></div>
       <div class="price-features">
-        <div class="price-feature">Análises ilimitadas</div>
-        <div class="price-feature">Tudo do Enterprise</div>
-        <div class="price-feature">Infraestrutura dedicada</div>
-        <div class="price-feature">Gerente de conta exclusivo</div>
-        <div class="price-feature">SLA premium 99,99%</div>
+        <div class="price-feature" style="color:var(--cream);opacity:.7">Análises ilimitadas</div>
+        <div class="price-feature" style="color:var(--cream);opacity:.7">Tudo do Enterprise</div>
+        <div class="price-feature" style="color:var(--cream);opacity:.7">Infraestrutura dedicada</div>
+        <div class="price-feature" style="color:var(--cream);opacity:.7">Gerente de conta exclusivo</div>
+        <div class="price-feature" style="color:var(--cream);opacity:.7">SLA premium 99,99%</div>
       </div>
-      <button class="price-cta" onclick="window.location.href='/formulario'">Falar com especialista</button>
+      <button class="price-cta" style="background:var(--gold);color:var(--ink);border:none" onclick="window.location.href='/enterprise'">Falar com especialista</button>
     </div>
   </div>
 </section>
@@ -1096,6 +1146,8 @@ Recomendação: NEGOCIAR as cláusulas 5 e 8, incluir SLA, limitação de respon
 </footer>
 
 <script>
+let anual = false;
+
 function expandirExemplo() {
   const body = document.getElementById('exBody');
   const btn = document.getElementById('exBtn');
@@ -1119,17 +1171,20 @@ function togglePlanos() {
   document.getElementById('lbl-mensal').style.opacity = anual ? '0.4' : '1';
 
   const planos = [
-    { id:'lite',       m:'R$1.090',  a:'R$981',    eco:'Economia de R$1.308/ano',  pera:'/mês · R$11.772/ano' },
-    { id:'starter',    m:'R$3.490',  a:'R$3.141',  eco:'Economia de R$4.188/ano',  pera:'/mês · R$37.692/ano' },
-    { id:'advanced',   m:'R$10.490', a:'R$9.441',  eco:'Economia de R$12.588/ano', pera:'/mês · R$113.292/ano' },
-    { id:'enterprise', m:'R$34.900', a:'R$31.410', eco:'Economia de R$41.880/ano', pera:'/mês · R$376.920/ano' },
-    { id:'infinity',   m:'R$64.900', a:'R$58.410', eco:'Economia de R$77.880/ano', pera:'/mês · R$701.520/ano' },
+    { id:'lite',       m:'R$1.790',  a:'R$1.611',  eco:'Economia de R$2.148/ano',  pera:'/mês · R$19.332/ano' },
+    { id:'starter',    m:'R$5.970',  a:'R$5.373',  eco:'Economia de R$7.164/ano',  pera:'/mês · R$64.476/ano' },
+    { id:'advanced',   m:'R$16.900', a:'R$15.210', eco:'Economia de R$20.280/ano', pera:'/mês · R$182.520/ano' },
+    { id:'enterprise', m:'R$60.000', a:'R$54.000', eco:'Economia de R$72.000/ano', pera:'/mês · R$648.000/ano' },
+    { id:'infinity',   m:'Sob consulta', a:'Sob consulta', eco:'Condições especiais anuais', pera:'análises ilimitadas' },
   ];
 
   planos.forEach(p => {
-    document.getElementById('p-'+p.id).textContent = anual ? p.a : p.m;
-    document.getElementById('per-'+p.id).textContent = anual ? p.pera : 'por mês';
-    document.getElementById('eco-'+p.id).style.display = anual ? 'block' : 'none';
+    const el = document.getElementById('p-'+p.id);
+    if (el) el.textContent = anual ? p.a : p.m;
+    const per = document.getElementById('per-'+p.id);
+    if (per) per.textContent = anual ? p.pera : (p.id === 'infinity' ? 'análises ilimitadas' : 'por mês');
+    const eco = document.getElementById('eco-'+p.id);
+    if (eco) eco.style.display = anual ? 'block' : 'none';
   });
 }
 </script>
