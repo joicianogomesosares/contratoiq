@@ -284,13 +284,32 @@
     btn.disabled = true;
 
     const formData = new FormData(this);
+    const dados = {
+      nome: formData.get('nome'),
+      email: formData.get('email'),
+      whatsapp: formData.get('whatsapp') || formData.get('telefone') || '',
+      escritorio: formData.get('escritorio') || formData.get('empresa') || '',
+      segmento: formData.get('segmento') || '',
+      mensagem: formData.get('mensagem') || '',
+      tipo: 'teste_gratis',
+      data: new Date().toISOString()
+    };
 
     try {
+      // Envia para Make.com
+      await fetch('https://hook.us2.make.com/xpskkcdopnqxpc8sglvuybtqh0aq96gh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados)
+      });
+
+      // Envia também para Netlify Forms
       await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(formData).toString()
       });
+
       window.location.href = '/obrigado.html';
     } catch(err) {
       btn.textContent = 'Solicitar 30 dias grátis →';
