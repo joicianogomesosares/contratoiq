@@ -112,6 +112,7 @@
     .field-group { grid-template-columns: 1fr; }
   }
 </style>
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 </head>
 <body>
 
@@ -214,14 +215,16 @@
           </select>
         </div>
         <div class="field">
-          <label>Contratos por mês *</label>
-          <select name="volume" required>
-            <option value="" disabled selected>Selecione...</option>
-            <option>1 – 20</option>
-            <option>20 – 100</option>
-            <option>100 – 500</option>
-            <option>500+</option>
+          <label>Qual melhor descreve o volume de contratos do seu escritório? *</label>
+          <select name="volume_contratos" required onchange="identificarPlano(this.value)">
+            <option value="" disabled selected>Selecione a opção mais próxima...</option>
+            <option value="ate50">Menos de 50 contratos/mês — escritório boutique ou individual</option>
+            <option value="50a150">50 a 150 contratos/mês — escritório em crescimento</option>
+            <option value="150a500">150 a 500 contratos/mês — escritório médio ou departamento jurídico</option>
+            <option value="500a1000">500 a 1.000 contratos/mês — escritório grande ou grupo empresarial</option>
+            <option value="acima1000">Acima de 1.000 contratos/mês — operação de alta demanda</option>
           </select>
+          <div id="plano-sugerido" style="display:none;margin-top:8px;padding:10px 14px;background:rgba(201,168,76,0.08);border-left:2px solid var(--gold);font-size:12px;line-height:1.7;color:var(--ink);opacity:.8"></div>
         </div>
       </div>
 
@@ -267,6 +270,32 @@
 
 </div>
 <script>
+  function identificarPlano(volume) {
+    const el = document.getElementById('plano-sugerido');
+    const planos = {
+      'ate50': { plano: 'Lite', descricao: 'O plano <strong>Lite (300 análises/mês)</strong> atende com folga seu volume atual, com espaço para crescer. Valor: <strong>R$1.790/mês</strong>.', campo: 'lite' },
+      '50a150': { plano: 'Lite', descricao: 'O plano <strong>Lite (300 análises/mês)</strong> é o ideal para seu volume. Cobre cada contrato com margem para revisões e retrabalho. Valor: <strong>R$1.790/mês</strong>.', campo: 'lite' },
+      '150a500': { plano: 'Starter', descricao: 'O plano <strong>Starter (1.000 análises/mês)</strong> foi feito para escritórios no seu estágio — volume relevante, time enxuto, ritmo acelerado. Valor: <strong>R$5.970/mês</strong>.', campo: 'starter' },
+      '500a1000': { plano: 'Advanced', descricao: 'O plano <strong>Advanced (3.000 análises/mês)</strong> suporta operações de alta demanda com múltiplos usuários e API dedicada. Valor: <strong>R$16.900/mês</strong>.', campo: 'advanced' },
+      'acima1000': { plano: 'Advanced ou personalizado', descricao: 'Para sua operação, recomendamos o plano <strong>Advanced (3.000 análises/mês)</strong> ou uma solução personalizada. Nossa equipe vai entrar em contato para entender melhor o seu caso.', campo: 'advanced' }
+    };
+    if (planos[volume]) {
+      const p = planos[volume];
+      el.innerHTML = '✦ Plano sugerido: ' + p.descricao;
+      el.style.display = 'block';
+      // Adiciona campo oculto com plano sugerido
+      let hidden = document.getElementById('plano-hidden');
+      if (!hidden) {
+        hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.id = 'plano-hidden';
+        hidden.name = 'plano_sugerido';
+        document.getElementById('form-antecipado').appendChild(hidden);
+      }
+      hidden.value = p.campo;
+    }
+  }
+
   function toggleCb(el) {
     el.classList.toggle('ativo');
     const input = el.querySelector('input[type="checkbox"]');
@@ -290,6 +319,8 @@
       whatsapp: formData.get('whatsapp') || formData.get('telefone') || '',
       escritorio: formData.get('escritorio') || formData.get('empresa') || '',
       segmento: formData.get('segmento') || '',
+      volume_contratos: formData.get('volume_contratos') || '',
+      plano_sugerido: formData.get('plano_sugerido') || 'lite',
       mensagem: formData.get('mensagem') || '',
       tipo: 'teste_gratis',
       data: new Date().toISOString()
