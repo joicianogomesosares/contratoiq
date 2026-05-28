@@ -387,20 +387,24 @@ async function iniciarAnalise() {
       return;
     }
 
-    if (!data.content || !data.content[0] || !data.content[0].text) {
+    let resultado;
+
+    // Suporte ao formato Anthropic (data.content[0].text) e ao formato Gemini (JSON direto)
+    if (data.content && data.content[0] && data.content[0].text) {
+      try {
+        const texto = data.content[0].text;
+        const limpo = texto.replace(/```json|```/g, '').trim();
+        resultado = JSON.parse(limpo);
+      } catch(parseErr) {
+        alert('Erro ao processar o resultado. Tente novamente com um PDF menor.');
+        console.error('Parse error:', parseErr);
+        return;
+      }
+    } else if (data.score !== undefined || data.recomendacao !== undefined) {
+      resultado = data;
+    } else {
       alert('Erro na análise: resposta inválida da IA. Tente novamente.');
       console.error('Resposta inválida:', data);
-      return;
-    }
-
-    let resultado;
-    try {
-      const texto = data.content[0].text;
-      const limpo = texto.replace(/```json|```/g, '').trim();
-      resultado = JSON.parse(limpo);
-    } catch(parseErr) {
-      alert('Erro ao processar o resultado. Tente novamente com um PDF menor.');
-      console.error('Parse error:', parseErr);
       return;
     }
 
