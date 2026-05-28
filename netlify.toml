@@ -3,4 +3,7 @@
   node_bundler = "esbuild"
 
 [functions.analisar]
-  timeout = 900
+  timeout = 26
+
+[functions.teste_gemini]
+  timeout = 26
