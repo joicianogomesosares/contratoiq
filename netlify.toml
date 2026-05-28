@@ -1,2 +1,6 @@
 [functions]
   directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[functions.analisar]
+  timeout = 900
