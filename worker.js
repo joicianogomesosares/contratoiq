@@ -73,6 +73,13 @@ export default {
       try {
         const GEMINI_MODEL = 'gemini-2.5-pro';
         const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${env.GOOGLE_API_KEY}`;
+        
+        // Debug: testa se o endpoint está acessível
+        const testResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${env.GOOGLE_API_KEY}`);
+        if (!testResponse.ok) {
+          const testErr = await testResponse.text();
+          return new Response(JSON.stringify({ error: `Endpoint inacessível: ${testResponse.status} - ${testErr.substring(0, 200)}` }), { status: 500, headers: CORS });
+        }
 
         const response = await fetch(geminiUrl, {
           method: 'POST',
