@@ -320,8 +320,26 @@ LEGISLAÇÃO PARA VERIFICAR SEMPRE:
       });
 
       const geminiData = await geminiResponse.json();
-      const rawText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      
+      // Tenta extrair o texto da resposta em múltiplos formatos
+      const candidate = geminiData?.candidates?.[0];
+      const part = candidate?.content?.parts?.[0];
+      
+      let rawText = '';
+      if (part?.text) {
+        rawText = part.text;
+      } else if (typeof part === 'string') {
+        rawText = part;
+      } else if (geminiData?.text) {
+        rawText = geminiData.text;
+      }
+
+      // Remove markdown se houver
       const cleanText = rawText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+      if (!cleanText) {
+        throw new Error(`Gemini retornou resposta vazia. Status: ${geminiResponse.status}. Raw: ${JSON.stringify(geminiData).substring(0, 300)}`);
+      }
 
       try {
         resultado = JSON.parse(cleanText);
