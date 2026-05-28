@@ -1,16 +1,4 @@
 exports.handler = async (event) => {
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS'
-      },
-      body: ''
-    };
-  }
-
   const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
   try {
@@ -27,12 +15,11 @@ exports.handler = async (event) => {
     );
 
     const data = await response.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'sem resposta';
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ ok: true, resposta: text, status: response.status })
+      body: JSON.stringify({ ok: true, data: data })
     };
 
   } catch (err) {
