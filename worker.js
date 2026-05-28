@@ -71,7 +71,7 @@ export default {
       let resultado;
 
       try {
-        const GEMINI_MODEL = 'gemini-2.5-pro-preview-05-06';
+        const GEMINI_MODEL = 'gemini-2.5-pro';
         const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${env.GOOGLE_API_KEY}`;
 
         const response = await fetch(geminiUrl, {
