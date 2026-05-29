@@ -5,10 +5,47 @@ export default {
       return new Response(null, {
         headers: {
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
           'Access-Control-Allow-Headers': 'Content-Type',
         }
       });
+    }
+
+    const CORS = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    };
+
+    // GET — testa conexão com Gemini
+    if (request.method === 'GET') {
+      try {
+        const inicio = Date.now();
+        const testRes = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${env.GOOGLE_API_KEY}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: 'Diga apenas: ola' }] }],
+              generationConfig: { maxOutputTokens: 500, temperature: 0 }
+            })
+          }
+        );
+        const tempo = Date.now() - inicio;
+        const data = await testRes.json();
+        const texto = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        const finish = data?.candidates?.[0]?.finishReason || '';
+        return new Response(JSON.stringify({
+          ok: testRes.ok,
+          status_gemini: testRes.status,
+          tempo_ms: tempo,
+          texto,
+          finish,
+          has_key: !!env.GOOGLE_API_KEY
+        }), { headers: CORS });
+      } catch(e) {
+        return new Response(JSON.stringify({ ok: false, erro: e.message }), { status: 500, headers: CORS });
+      }
     }
 
     if (request.method !== 'POST') {
