@@ -69,7 +69,7 @@ export default {
       let resultado;
 
       try {
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GOOGLE_API_KEY}`;
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${GOOGLE_API_KEY}`;
 
         const geminiResponse = await fetch(geminiUrl, {
           method: 'POST',
@@ -127,7 +127,7 @@ REGRAS: score 0-100, recomendacao apenas ASSINAR/NEGOCIAR/RECUSAR, risco apenas 
             }],
             generationConfig: {
               temperature: 0.1,
-              maxOutputTokens: 8192
+              maxOutputTokens: 16384
             }
           })
         });
