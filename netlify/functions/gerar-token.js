@@ -1,87 +1,64 @@
-// ══════════════════════════════════════════════════
-// Esta função é chamada automaticamente pelo Make.com
-// após um pagamento confirmado no Mercado Pago.
-// Gera o token, salva no Supabase e retorna para o Make.com
-// que envia por email ao cliente.
-// ══════════════════════════════════════════════════
-
-const LIMITES = {
-  starter: 100,
-  advanced: 300,
-  enterprise_lite: 1000,
-  enterprise_pro: 3000
+const CORS = {
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*'
 };
 
-function gerarToken(plano) {
-  const prefixo = 'CIQ';
-  const ano = new Date().getFullYear();
-  const tipo = plano.toUpperCase().replace('_', '').slice(0, 3);
-  const aleatorio = Math.random().toString(36).substring(2, 8).toUpperCase();
-  return `${prefixo}-${ano}-${tipo}-${aleatorio}`;
-}
+const LIMITES = {
+  teste: 5,
+  lite: 300,
+  starter: 1000,
+  advanced: 3000,
+  enterprise: 10000
+};
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+    return { statusCode: 405, headers: CORS, body: 'Method Not Allowed' };
   }
+
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_KEY;
 
   try {
     const { nome, email, plano, pagamento_id } = JSON.parse(event.body);
 
     if (!nome || !email || !plano) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: 'nome, email e plano são obrigatórios' })
-      };
+      return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'nome, email e plano são obrigatórios.' }) };
     }
 
-    const token = gerarToken(plano);
-    const limite = LIMITES[plano] || 100;
+    const ts = new Date().toISOString().replace(/[-:.TZ]/g, '').substring(0, 14);
+    const token = `CIQ-${ts}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    const limite = LIMITES[plano] || LIMITES.teste;
 
-    // Salva no Supabase
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_KEY;
-
-    const res = await fetch(`${supabaseUrl}/rest/v1/tokens`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/tokens`, {
       method: 'POST',
       headers: {
-        'apikey': supabaseKey,
-        'Authorization': `Bearer ${supabaseKey}`,
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
         'Content-Type': 'application/json',
         'Prefer': 'return=representation'
       },
       body: JSON.stringify({
-        token,
-        nome,
-        email,
-        plano,
+        token, nome, email, plano,
         analises_limite: limite,
         analises_usadas: 0,
         ativo: true,
-        pagamento_id: pagamento_id || null,
-        criado_em: new Date().toISOString()
+        pagamento_id: pagamento_id || null
       })
     });
 
-    const salvo = await res.json();
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(`Supabase: ${err}`);
+    }
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        sucesso: true,
-        token,
-        nome,
-        email,
-        plano,
-        analises_limite: limite,
-        mensagem: `Token gerado com sucesso para ${nome}`
-      })
+      headers: CORS,
+      body: JSON.stringify({ sucesso: true, token, nome, email, plano, analises_limite: limite })
     };
 
   } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err.message })
-    };
+    return { statusCode: 500, headers: CORS, body: JSON.stringify({ error: err.message }) };
   }
 };
