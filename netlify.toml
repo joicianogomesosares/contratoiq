@@ -1,3 +1,6 @@
+[build]
+  publish = "."
+
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
@@ -5,5 +8,14 @@
 [functions.analisar]
   timeout = 26
 
+[functions.historico]
+  timeout = 10
+
+[functions.gerar-token]
+  timeout = 10
+
+[functions.teste]
+  timeout = 10
+
 [functions.teste_gemini]
-  timeout = 26
+  timeout = 15
