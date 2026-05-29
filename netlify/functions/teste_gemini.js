@@ -10,8 +10,8 @@ exports.handler = async (event) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: 'Responda apenas: {"ok":true,"modelo":"gemini-2.5-pro"}' }] }],
-          generationConfig: { maxOutputTokens: 100, temperature: 0 }
+          contents: [{ parts: [{ text: 'Diga apenas: ola' }] }],
+          generationConfig: { maxOutputTokens: 4096, temperature: 0 }
         })
       }
     );
@@ -20,6 +20,7 @@ exports.handler = async (event) => {
     const data = await res.json();
     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
     const finish = data?.candidates?.[0]?.finishReason || '';
+    const usage = data?.usageMetadata || {};
 
     return {
       statusCode: 200,
@@ -29,6 +30,8 @@ exports.handler = async (event) => {
         tempo_ms: tempo,
         texto: text,
         finish_reason: finish,
+        thinking_tokens: usage.thoughtsTokenCount || 0,
+        output_tokens: usage.candidatesTokenCount || 0,
         status_gemini: res.status
       })
     };
