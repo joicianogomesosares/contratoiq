@@ -370,7 +370,7 @@ async function iniciarAnalise() {
   });
 
   try {
-    var response = await fetch('/.netlify/functions/analisar', {
+    var response = await fetch('https://contratoiq-analisar.gomesjoiciano.workers.dev', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ base64: base64, mediaType: 'application/pdf', token: tokenAtivo })
