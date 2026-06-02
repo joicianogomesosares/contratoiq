@@ -175,7 +175,17 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
 .comp-v1{background:rgba(192,57,43,0.04);border-left:2px solid var(--red)}
 .comp-v2{background:rgba(30,125,90,0.04);border-left:2px solid var(--green)}
 .comp-vlabel{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;opacity:.5;margin-bottom:4px}
-/* PARECER */
+/* PROGRESSO */
+.progresso-wrap{background:var(--paper);border:1px solid var(--rule);padding:32px;text-align:center;margin-bottom:2px}
+.progresso-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:16px}
+.progresso-etapa{font-size:14px;font-weight:500;margin-bottom:20px}
+.progresso-bar-wrap{background:rgba(13,13,13,0.08);height:6px;margin-bottom:8px}
+.progresso-bar{background:var(--gold);height:6px;transition:width .5s ease}
+.progresso-pct{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold)}
+.progresso-steps{display:flex;justify-content:space-between;margin-top:20px;flex-wrap:wrap;gap:8px}
+.progresso-step{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;opacity:.3;transition:opacity .3s}
+.progresso-step.ativo{opacity:1;color:var(--gold)}
+.progresso-step.feito{opacity:.6;color:var(--green)}
 .parecer-box{background:var(--ink);color:var(--cream);padding:40px;margin-bottom:2px}
 .parecer-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:16px}
 .parecer-text{font-size:14px;line-height:1.9;opacity:.85;white-space:pre-line}
@@ -530,8 +540,7 @@ async function iniciarAnalise(){
   }
 
   var btn=document.getElementById('btnAnalisar');
-  btn.textContent='Analisando...'; btn.disabled=true;
-  document.getElementById('resultado').innerHTML='<div style="padding:40px;text-align:center;font-family:\'DM Mono\',monospace;font-size:11px;opacity:.4;letter-spacing:1px;">Processando contrato... pode levar até 2 minutos para contratos longos.</div>';
+  btn.textContent='Enviando...'; btn.disabled=true;
 
   var base64=await toBase64(file);
 
@@ -542,39 +551,99 @@ async function iniciarAnalise(){
       body:JSON.stringify({base64,mediaType:'application/pdf',token:tokenAtivo,modo:'analise',foco})
     });
 
-    // Lê a resposta completa (streaming transparente)
-    var text = await res.text();
-    var data;
-    try{
-      data = JSON.parse(text);
-    }catch(e){
-      alert('Resposta inválida do servidor. Tente novamente.');
-      return;
-    }
+    var data=await res.json();
 
     if(data.error){
       alert(data.error);
+      btn.textContent='Analisar contrato →'; btn.disabled=false;
       return;
     }
 
-    if(data.analises_restantes!==undefined)
-      document.getElementById('app-analises').textContent=data.analises_restantes+' análises restantes';
+    // Job criado — inicia polling com barra de progresso
+    mostrarProgresso(0, 'Recebendo contrato');
+    btn.textContent='Analisando...';
+    pollJob(data.job_id, file.name);
 
-    renderResultado(data);
-    historicoCache.unshift({
-      arquivo_nome:data.nome_arquivo_sugerido||file.name,
-      tipo_contrato:data.identificacao&&data.identificacao.tipo_contrato||'Contrato',
-      score:data.score||0,
-      recomendacao:data.recomendacao||'',
-      modo:'analise',foco,
-      criado_em:new Date().toISOString(),
-      resultado_json:JSON.stringify(data)
-    });
   }catch(e){
     alert('Erro de conexão: '+e.message);
-    document.getElementById('resultado').innerHTML='';
+    btn.textContent='Analisar contrato →'; btn.disabled=false;
   }
-  finally{btn.textContent='Analisar contrato →';btn.disabled=false;}
+}
+
+var pollingInterval = null;
+
+function mostrarProgresso(pct, etapa){
+  var div=document.getElementById('resultado');
+  var steps=[
+    {pct:0,  label:'Recebendo contrato'},
+    {pct:10, label:'Lendo contrato'},
+    {pct:50, label:'Analisando cláusulas'},
+    {pct:75, label:'Elaborando parecer'},
+    {pct:90, label:'Finalizando'},
+    {pct:100,label:'Concluído'}
+  ];
+  var stepsHtml='';
+  steps.forEach(function(s){
+    var cls=pct>=s.pct+1?'feito':pct>=s.pct?'ativo':'';
+    stepsHtml+='<div class="progresso-step '+cls+'">'+s.label+'</div>';
+  });
+  div.innerHTML='<div class="progresso-wrap">'
+    +'<div class="progresso-label">Análise em andamento</div>'
+    +'<div class="progresso-etapa">'+etapa+'</div>'
+    +'<div class="progresso-bar-wrap"><div class="progresso-bar" style="width:'+pct+'%"></div></div>'
+    +'<div class="progresso-pct">'+pct+'%</div>'
+    +'<div class="progresso-steps">'+stepsHtml+'</div>'
+    +'</div>';
+}
+
+function pollJob(jobId, nomeArquivo){
+  if(pollingInterval) clearInterval(pollingInterval);
+
+  pollingInterval=setInterval(async function(){
+    try{
+      var res=await fetch(ENDPOINT+'?job_id='+encodeURIComponent(jobId));
+      var data=await res.json();
+
+      // Atualiza progresso
+      if(data.progresso!==undefined){
+        mostrarProgresso(data.progresso, data.etapa||'Processando');
+      }
+
+      if(data.status==='concluido' && data.resultado){
+        clearInterval(pollingInterval);
+        pollingInterval=null;
+        var r=data.resultado;
+        if(r.analises_restantes!==undefined)
+          document.getElementById('app-analises').textContent=r.analises_restantes+' análises restantes';
+        renderResultado(r);
+        if(!Array.isArray(historicoCache)) historicoCache=[];
+        historicoCache.unshift({
+          arquivo_nome:r.nome_arquivo_sugerido||nomeArquivo,
+          tipo_contrato:r.identificacao&&r.identificacao.tipo_contrato||'Contrato',
+          score:r.score||0,
+          recomendacao:r.recomendacao||'',
+          modo:'analise',
+          criado_em:new Date().toISOString(),
+          resultado_json:JSON.stringify(r)
+        });
+        var btn=document.getElementById('btnAnalisar');
+        btn.textContent='Analisar contrato →'; btn.disabled=false;
+      }
+
+      if(data.status==='erro'){
+        clearInterval(pollingInterval);
+        pollingInterval=null;
+        alert('Erro na análise: '+(data.erro||'Tente novamente.'));
+        document.getElementById('resultado').innerHTML='';
+        var btn=document.getElementById('btnAnalisar');
+        btn.textContent='Analisar contrato →'; btn.disabled=false;
+      }
+
+    }catch(e){
+      // Ignora erros de polling temporários
+      console.warn('Polling error:', e.message);
+    }
+  }, 3000); // Consulta a cada 3 segundos
 }
 
 // ── COMPARAÇÃO ──
