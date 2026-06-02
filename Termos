@@ -44,6 +44,7 @@ p{font-size:14px;line-height:1.9;opacity:.7;margin-bottom:16px}
 @media(max-width:600px){nav{padding:14px 16px}.nav-links{display:none}.page-hero{padding:100px 16px 48px}.content{padding:48px 16px}footer{padding:24px 16px;flex-direction:column;gap:16px;text-align:center}.footer-links{flex-wrap:wrap;justify-content:center}}
 
 </style>
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 </head>
 <body>
 <nav>
@@ -134,7 +135,7 @@ p{font-size:14px;line-height:1.9;opacity:.7;margin-bottom:16px}
     <h2>Uso do Token</h2>
     <p>Após a contratação, o Cliente recebe um token único de acesso por email. O token é pessoal e intransferível. O compartilhamento do token com terceiros é vedado e constitui violação destes Termos.</p>
     <p>A ContratoIQ não se responsabiliza por uso indevido do token decorrente de negligência do Cliente na guarda das suas credenciais.</p>
-    <p>Tokens de teste grátis têm validade de 30 dias e limite de 5 análises, não sendo convertidos automaticamente em assinatura paga.</p>
+    <p>Tokens de teste grátis têm validade de 7 dias e limite de 10 análises, não sendo convertidos automaticamente em assinatura paga.</p>
   </div>
 
   <div class="divider"></div>
