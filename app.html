@@ -124,26 +124,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
 .clausula-resumo{font-size:12px;opacity:.7;line-height:1.6;margin-bottom:4px}
 .clausula-legal{font-size:11px;color:var(--gold);opacity:.8}
 .clausula-consequencia{font-family:'DM Mono',monospace;font-size:10px;opacity:.5;margin-top:4px}
-/* OBRIGAÇÕES */
-.obrig-col{margin-bottom:0}
-.obrig-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;opacity:.35;margin-bottom:8px}
-.obrig-item{font-size:12px;opacity:.7;padding:6px 0;border-bottom:1px solid var(--rule);display:flex;gap:8px}
-.prazo-item,.risco-item{display:flex;justify-content:space-between;align-items:flex-start;padding:12px;margin-bottom:6px;gap:12px}
-.prazo-item.alto,.risco-item.alto{background:rgba(192,57,43,0.06);border-left:3px solid var(--red)}
-.prazo-item.medio,.risco-item.medio{background:rgba(230,126,34,0.06);border-left:3px solid var(--amber)}
-.prazo-item.baixo,.risco-item.baixo{background:rgba(30,125,90,0.06);border-left:3px solid var(--green)}
-.prazo-info,.risco-info{flex:1}
-.prazo-desc,.risco-desc{font-size:13px;font-weight:500;margin-bottom:4px}
-.prazo-data{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold)}
-.risco-valor{font-family:'DM Mono',monospace;font-size:12px;color:var(--gold);font-weight:700}
-.prazo-consequencia,.risco-condicao{font-size:11px;opacity:.55;margin-top:4px}
-/* AUSENTES */
-.ausente-item{padding:14px;border:1px solid rgba(192,57,43,0.2);background:rgba(192,57,43,0.04);margin-bottom:6px}
-.ausente-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap;gap:8px}
-.ausente-name{font-size:13px;font-weight:500;color:var(--red)}
-.ausente-importancia{font-family:'DM Mono',monospace;font-size:8px;padding:2px 8px;background:rgba(192,57,43,0.1);color:var(--red);letter-spacing:1px}
-.ausente-risco{font-size:12px;opacity:.7;margin-bottom:4px}
-.ausente-sugestao{font-size:11px;color:var(--gold)}
 /* RECOMENDAÇÕES */
 .rec-item{padding:14px;border:1px solid var(--rule);margin-bottom:6px}
 .rec-header{display:flex;gap:8px;align-items:center;margin-bottom:8px}
@@ -158,23 +138,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
 .rec-prio.importante{color:var(--amber);opacity:1}
 .rec-desc{font-size:13px;opacity:.8;margin-bottom:4px}
 .rec-legal{font-size:11px;color:var(--gold)}
-/* GLOSSÁRIO */
-.glossario-item{padding:14px;border-bottom:1px solid var(--rule)}
-.glossario-termo{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:1px;margin-bottom:4px;font-weight:500}
-.glossario-def{font-size:13px;opacity:.8;margin-bottom:4px;line-height:1.6}
-.glossario-exemplo{font-size:11px;opacity:.5;font-style:italic}
-.glossario-relevancia{font-size:11px;color:var(--green);margin-top:4px}
-/* COMPARADOR */
-.comp-mudanca{padding:16px;border:1px solid var(--rule);margin-bottom:8px}
-.comp-mudanca.POSITIVO{border-left:4px solid var(--green)}
-.comp-mudanca.NEGATIVO{border-left:4px solid var(--red)}
-.comp-mudanca.NEUTRO{border-left:4px solid var(--amber)}
-.comp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
-.comp-versoes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
-.comp-v{padding:10px;font-size:12px;line-height:1.6;opacity:.75}
-.comp-v1{background:rgba(192,57,43,0.04);border-left:2px solid var(--red)}
-.comp-v2{background:rgba(30,125,90,0.04);border-left:2px solid var(--green)}
-.comp-vlabel{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;opacity:.5;margin-bottom:4px}
 /* PROGRESSO */
 .progresso-wrap{background:var(--paper);border:1px solid var(--rule);padding:32px;text-align:center;margin-bottom:2px}
 .progresso-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:16px}
@@ -182,10 +145,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
 .progresso-bar-wrap{background:rgba(13,13,13,0.08);height:6px;margin-bottom:8px}
 .progresso-bar{background:var(--gold);height:6px;transition:width .5s ease}
 .progresso-pct{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold)}
-.progresso-steps{display:flex;justify-content:space-between;margin-top:20px;flex-wrap:wrap;gap:8px}
-.progresso-step{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;opacity:.3;transition:opacity .3s}
-.progresso-step.ativo{opacity:1;color:var(--gold)}
-.progresso-step.feito{opacity:.6;color:var(--green)}
 .parecer-box{background:var(--ink);color:var(--cream);padding:40px;margin-bottom:2px}
 .parecer-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:16px}
 .parecer-text{font-size:14px;line-height:1.9;opacity:.85;white-space:pre-line}
@@ -194,10 +153,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
 .rec-ASSINAR{background:rgba(30,125,90,0.2);color:#2ecc71}
 .rec-NEGOCIAR{background:rgba(230,126,34,0.2);color:var(--amber)}
 .rec-RECUSAR{background:rgba(192,57,43,0.2);color:#e74c3c}
-/* DOWNLOAD */
-.download-area{text-align:center;padding:32px;background:var(--paper);border:1px solid var(--rule);margin-bottom:2px}
-.btn-download{background:var(--gold);color:var(--ink);border:none;padding:16px 48px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s}
-.btn-download:hover{background:#b8962a;transform:translateY(-2px)}
 /* HISTÓRICO */
 .historico-section{background:var(--paper);border:1px solid var(--rule);padding:28px}
 .historico-vazio{text-align:center;padding:20px 0;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.5px;opacity:.4}
@@ -214,6 +169,18 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
 .historico-rec.RECUSAR{background:rgba(192,57,43,0.1);color:var(--red)}
 .btn-historico-pdf{background:none;border:1px solid rgba(13,13,13,0.2);padding:6px 14px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;cursor:pointer;transition:all .2s;color:var(--ink)}
 .btn-historico-pdf:hover{background:var(--ink);color:var(--cream)}
+/* NOVO COMPARADOR */
+.comp-mudanca{padding:16px;border:1px solid var(--rule);margin-bottom:8px}
+.comp-mudanca.POSITIVO{border-left:4px solid var(--green)}
+.comp-mudanca.NEGATIVO{border-left:4px solid var(--red)}
+.comp-mudanca.NEUTRO{border-left:4px solid var(--amber)}
+.comp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.comp-versoes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.comp-v{padding:10px;font-size:12px;line-height:1.6;opacity:.75}
+.comp-v1{background:rgba(192,57,43,0.04);border-left:2px solid var(--red)}
+.comp-v2{background:rgba(30,125,90,0.04);border-left:2px solid var(--green)}
+.comp-vlabel{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;opacity:.5;margin-bottom:4px}
+
 @media(max-width:700px){
   nav{padding:16px 20px}
   #app{padding:24px 16px 60px}
@@ -235,7 +202,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
   </div>
 </nav>
 
-<!-- TELA DE ACESSO -->
 <div id="tela-acesso">
   <div class="acesso-label">Plataforma ContratoIQ</div>
   <h1 class="acesso-title">Acesse sua conta</h1>
@@ -254,7 +220,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
   <div class="acesso-footer">Suporte: <a href="mailto:suporte@contratoiq.com">suporte@contratoiq.com</a> · (85) 99232-3262</div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <div class="app-header">
     <div class="app-welcome" id="app-welcome">Bem-vindo</div>
@@ -264,24 +229,21 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
     </div>
   </div>
 
-  <!-- ABAS -->
   <div class="app-tabs">
     <button class="app-tab ativo" onclick="trocarAba('analise')">Analisar Contrato</button>
     <button class="app-tab" onclick="trocarAba('comparador')">Comparar Versões</button>
     <button class="app-tab" onclick="trocarAba('historico')">Histórico</button>
   </div>
 
-  <!-- ABA: ANÁLISE -->
   <div id="aba-analise">
     <div class="aviso">
       <div class="aviso-title">Para melhores resultados</div>
       <div class="aviso-text">
         Análise completa com parecer jurídico, legislação citada e cláusulas abusivas identificadas.<br>
-        <strong>• PDF apenas</strong> · <strong>• Máximo 100 páginas</strong> · <strong>• Um contrato por vez</strong> · <strong>• 1 a 5 minutos</strong>
+        <strong>• PDF apenas</strong> · <strong>• Máximo 100 páginas</strong> · <strong>• Um contrato por vez</strong> · <strong>• 15 a 60 segundos</strong>
       </div>
     </div>
 
-    <!-- FOCO DA ANÁLISE -->
     <div class="foco-wrap">
       <div class="foco-label">Foco da análise — a análise completa sempre é feita, escolha uma área para aprofundamento</div>
       <div class="foco-grid">
@@ -296,7 +258,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
       <input type="text" class="foco-personalizado" id="focoPersonalizado" placeholder="Descreva o foco desejado...">
     </div>
 
-    <!-- UPLOAD -->
     <div class="upload-card">
       <input type="file" id="fileInput" accept=".pdf" style="display:none">
       <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
@@ -313,13 +274,12 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
         <button class="btn-remover" onclick="removerArquivo()">✕</button>
       </div>
       <button class="btn-analisar" id="btnAnalisar" onclick="iniciarAnalise()">Analisar contrato →</button>
-      <div class="analise-hint visible">A análise consome 1 análise do seu plano e pode levar até 5 minutos.</div>
+      <div class="analise-hint visible">A análise consome 1 análise do seu plano e pode levar até 60 segundos.</div>
     </div>
 
     <div id="resultado"></div>
   </div>
 
-  <!-- ABA: COMPARADOR -->
   <div id="aba-comparador" style="display:none">
     <div class="aviso">
       <div class="aviso-title">Comparador de Versões</div>
@@ -360,7 +320,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
     <div id="resultado-comp"></div>
   </div>
 
-  <!-- ABA: HISTÓRICO -->
   <div id="aba-historico" style="display:none">
     <div class="historico-section" id="historico-section">
       <div class="res-h3" style="margin-bottom:20px">Histórico de Análises</div>
@@ -374,6 +333,8 @@ var tokenAtivo = null;
 var dadosCliente = null;
 var focoAtivo = 'geral';
 var historicoCache = [];
+var cacheUltimoResultado = null; // Armazena o JSON bruto do último relatório estruturado
+var ENDPOINT = 'https://contratoiq-analisar.gomesjoiciano.workers.dev';
 
 // ── STORAGE ──
 function salvarToken(t){try{localStorage.setItem('ciq_token',t)}catch(e){}}
@@ -411,13 +372,12 @@ async function validarToken(silencioso){
   var t = document.getElementById('tokenInput').value.trim().toUpperCase();
   var msg = document.getElementById('acesso-msg');
   var btn = document.getElementById('btnValidar');
-  if(!t){msg.style.color='var(--red)';msg.textContent='Digite seu token.';return;}
+  if(!t){if(!silencioso){msg.style.color='var(--red)';msg.textContent='Digite seu token.';}return;}
 
-  btn.textContent='Validando...'; btn.disabled=true;
+  if(!silencioso) { btn.textContent='Validando...'; btn.disabled=true; }
 
   try{
-    // Valida token e busca histórico pelo Cloudflare Worker
-    var res = await fetch('https://contratoiq-analisar.gomesjoiciano.workers.dev', {
+    var res = await fetch(ENDPOINT, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({token: t, modo: 'validar'})
@@ -432,16 +392,20 @@ async function validarToken(silencioso){
       historicoCache = data.historico || [];
       entrarApp(dadosCliente, historicoCache);
     } else {
-      limparToken();
-      msg.style.color='var(--red)';
-      msg.textContent=(data&&data.error)||'Token inválido. Contate o suporte: (85) 99232-3262';
+      if(!silencioso) {
+        limparToken();
+        msg.style.color='var(--red)';
+        msg.textContent=(data&&data.error)||'Token inválido. Contate o suporte.';
+      }
     }
   }catch(e){
-    limparToken();
-    msg.style.color='var(--red)';
-    msg.textContent='Erro de conexão. Tente novamente.';
+    if(!silencioso) {
+      limparToken();
+      msg.style.color='var(--red)';
+      msg.textContent='Erro de conexão. Tente novamente.';
+    }
   }finally{
-    btn.textContent='Entrar'; btn.disabled=false;
+    if(!silencioso) { btn.textContent='Entrar'; btn.disabled=false; }
   }
 }
 
@@ -459,7 +423,7 @@ function entrarApp(cli, hist){
 }
 
 function sair(){
-  limparToken(); tokenAtivo=null; dadosCliente=null; historicoCache=[];
+  limparToken(); tokenAtivo=null; dadosCliente=null; historicoCache=[]; cacheUltimoResultado=null;
   document.getElementById('tela-acesso').style.display='block';
   document.getElementById('app').style.display='none';
   document.getElementById('tokenInput').value='';
@@ -467,11 +431,13 @@ function sair(){
   document.getElementById('nav-user-info').style.display='none';
   document.getElementById('btnSair').style.display='none';
   document.getElementById('resultado').innerHTML='';
+  document.getElementById('resultado-comp').innerHTML='';
 }
 
 // ── UPLOAD ANÁLISE ──
 var zone = document.getElementById('uploadZone');
 var input = document.getElementById('fileInput');
+
 zone.addEventListener('dragover',function(e){e.preventDefault();zone.classList.add('drag-over')});
 zone.addEventListener('dragleave',function(){zone.classList.remove('drag-over')});
 zone.addEventListener('drop',function(e){e.preventDefault();zone.classList.remove('drag-over');if(e.dataTransfer.files[0])selecionarArquivo(e.dataTransfer.files[0])});
@@ -508,653 +474,339 @@ document.getElementById('fileV2').addEventListener('change',function(e){
     verificarComparador();
   }
 });
+
 function removerV1(){document.getElementById('fileV1').value='';document.getElementById('previewV1').classList.remove('show');verificarComparador();}
 function removerV2(){document.getElementById('fileV2').value='';document.getElementById('previewV2').classList.remove('show');verificarComparador();}
+
 function verificarComparador(){
   var v1=document.getElementById('fileV1').files[0];
   var v2=document.getElementById('fileV2').files[0];
   document.getElementById('btnComparar').style.display=(v1&&v2)?'block':'none';
 }
 
-// ── toBase64 ──
+// ── AUXILIARES ──
 function toBase64(file){
-  return new Promise(function(res){
+  return new Promise(function(res, rej){
     var r=new FileReader();
     r.onload=function(){res(r.result.split(',')[1])};
+    r.onerror=function(e){rej(e)};
     r.readAsDataURL(file);
   });
 }
 
-// ── ENDPOINT ──
-var ENDPOINT = 'https://contratoiq-analisar.gomesjoiciano.workers.dev';
-
-// ── ANÁLISE ──
+// ── IMPLEMENTAÇÃO POLLING (ANÁLISE ASSÍNCRONA) ──
 async function iniciarAnalise(){
   if(!tokenAtivo){alert('Sessão expirada.');return;}
   var file=input.files[0];
   if(!file){alert('Selecione um PDF.');return;}
-
+  
   var foco=focoAtivo;
   if(foco==='personalizado'){
     foco=document.getElementById('focoPersonalizado').value.trim()||'geral';
   }
-
+  
   var btn=document.getElementById('btnAnalisar');
-  btn.textContent='Enviando...'; btn.disabled=true;
+  var containerResultado = document.getElementById('resultado');
+  
+  btn.textContent='Enviando contrato...'; 
+  btn.disabled=true;
+  
+  containerResultado.innerHTML = `
+    <div class="progresso-wrap">
+      <div class="progresso-label">Upload de Ficheiro</div>
+      <div class="progresso-etapa" id="progresso-etapa">Transmitindo documento criptografado...</div>
+      <div class="progresso-bar-wrap"><div class="progresso-bar" id="progresso-barra" style="width: 5%"></div></div>
+      <div class="progresso-pct" id="progresso-texto-pct">5%</div>
+    </div>`;
 
-  var base64=await toBase64(file);
-
-  try{
-    var res=await fetch(ENDPOINT,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({base64,mediaType:'application/pdf',token:tokenAtivo,modo:'analise',foco})
+  try {
+    var base64 = await toBase64(file);
+    
+    // Dispara criação de fila assíncrona no Worker (POST)
+    var res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        token: tokenAtivo,
+        modo: 'analise',
+        foco: foco,
+        filename: file.name,
+        base64: base64,
+        mediaType: 'application/pdf'
+      })
     });
 
-    var data=await res.json();
-
-    if(data.error){
-      alert(data.error);
+    var data = await res.json();
+    
+    if (!res.ok || data.error) {
+      containerResultado.innerHTML = '<div class="aviso"><div class="aviso-title">Erro no Servidor</div><div class="aviso-text">'+(data.error || 'Não foi possível registrar a análise.')+'</div></div>';
       btn.textContent='Analisar contrato →'; btn.disabled=false;
       return;
     }
 
-    // Job criado — inicia polling com barra de progresso
-    mostrarProgresso(0, 'Recebendo contrato');
-    btn.textContent='Analisando...';
-    pollJob(data.job_id, file.name);
+    // Se o JobId foi criado com sucesso, inicia o monitoramento de progresso
+    if (data.job_id) {
+      checarStatusDoJob(data.job_id, 'analise');
+    } else {
+      containerResultado.innerHTML = '<div class="aviso"><div class="aviso-title">Erro de Pipeline</div><div class="aviso-text">Servidor não instanciou um ID de monitoramento válido.</div></div>';
+      btn.textContent='Analisar contrato →'; btn.disabled=false;
+    }
 
-  }catch(e){
-    alert('Erro de conexão: '+e.message);
+  } catch(e) {
+    containerResultado.innerHTML = '<div class="aviso"><div class="aviso-title">Erro de Rede</div><div class="aviso-text">Falha de comunicação. Verifique se o tamanho do PDF não excede o limite.</div></div>';
     btn.textContent='Analisar contrato →'; btn.disabled=false;
   }
 }
 
-var pollingInterval = null;
-
-function mostrarProgresso(pct, etapa){
-  var div=document.getElementById('resultado');
-  var steps=[
-    {pct:0,  label:'Recebendo contrato'},
-    {pct:10, label:'Lendo contrato'},
-    {pct:50, label:'Analisando cláusulas'},
-    {pct:75, label:'Elaborando parecer'},
-    {pct:90, label:'Finalizando'},
-    {pct:100,label:'Concluído'}
-  ];
-  var stepsHtml='';
-  steps.forEach(function(s){
-    var cls=pct>=s.pct+1?'feito':pct>=s.pct?'ativo':'';
-    stepsHtml+='<div class="progresso-step '+cls+'">'+s.label+'</div>';
-  });
-  div.innerHTML='<div class="progresso-wrap">'
-    +'<div class="progresso-label">Análise em andamento</div>'
-    +'<div class="progresso-etapa">'+etapa+'</div>'
-    +'<div class="progresso-bar-wrap"><div class="progresso-bar" style="width:'+pct+'%"></div></div>'
-    +'<div class="progresso-pct">'+pct+'%</div>'
-    +'<div class="progresso-steps">'+stepsHtml+'</div>'
-    +'</div>';
-}
-
-function pollJob(jobId, nomeArquivo){
-  if(pollingInterval) clearInterval(pollingInterval);
-
-  pollingInterval=setInterval(async function(){
-    try{
-      var res=await fetch(ENDPOINT+'?job_id='+encodeURIComponent(jobId));
-      var data=await res.json();
-
-      // Atualiza progresso
-      if(data.progresso!==undefined){
-        mostrarProgresso(data.progresso, data.etapa||'Processando');
-      }
-
-      if(data.status==='concluido' && data.resultado){
-        clearInterval(pollingInterval);
-        pollingInterval=null;
-        var r=data.resultado;
-        if(r.analises_restantes!==undefined)
-          document.getElementById('app-analises').textContent=r.analises_restantes+' análises restantes';
-        renderResultado(r);
-        if(!Array.isArray(historicoCache)) historicoCache=[];
-        historicoCache.unshift({
-          arquivo_nome:r.nome_arquivo_sugerido||nomeArquivo,
-          tipo_contrato:r.identificacao&&r.identificacao.tipo_contrato||'Contrato',
-          score:r.score||0,
-          recomendacao:r.recomendacao||'',
-          modo:'analise',
-          criado_em:new Date().toISOString(),
-          resultado_json:JSON.stringify(r)
-        });
-        var btn=document.getElementById('btnAnalisar');
-        btn.textContent='Analisar contrato →'; btn.disabled=false;
-      }
-
-      if(data.status==='erro'){
-        clearInterval(pollingInterval);
-        pollingInterval=null;
-        alert('Erro na análise: '+(data.erro||'Tente novamente.'));
-        document.getElementById('resultado').innerHTML='';
-        var btn=document.getElementById('btnAnalisar');
-        btn.textContent='Analisar contrato →'; btn.disabled=false;
-      }
-
-    }catch(e){
-      // Ignora erros de polling temporários
-      console.warn('Polling error:', e.message);
-    }
-  }, 3000); // Consulta a cada 3 segundos
-}
-
-// ── COMPARAÇÃO ──
+// ── IMPLEMENTAÇÃO POLLING (COMPARADOR ASSÍNCRONO) ──
 async function iniciarComparacao(){
   if(!tokenAtivo){alert('Sessão expirada.');return;}
-  var v1=document.getElementById('fileV1').files[0];
-  var v2=document.getElementById('fileV2').files[0];
-  if(!v1||!v2){alert('Selecione os dois PDFs.');return;}
+  var v1 = document.getElementById('fileV1').files[0];
+  var v2 = document.getElementById('fileV2').files[0];
+  if(!v1 || !v2){alert('Selecione ambas as versões.');return;}
 
-  var btn=document.getElementById('btnComparar');
-  btn.textContent='Comparando versões...'; btn.disabled=true;
+  var btn = document.getElementById('btnComparar');
+  var containerComp = document.getElementById('resultado-comp');
+  btn.textContent='Enviando versões...'; btn.disabled=true;
+  
+  containerComp.innerHTML = `
+    <div class="progresso-wrap">
+      <div class="progresso-label">Processando Comparador</div>
+      <div class="progresso-etapa" id="comp-etapa">Carregando versões de contrato no servidor...</div>
+      <div class="progresso-bar-wrap"><div class="progresso-bar" id="comp-barra" style="width: 5%"></div></div>
+      <div class="progresso-pct" id="comp-texto-pct">5%</div>
+    </div>`;
 
-  var base64_v1=await toBase64(v1);
-  var base64_v2=await toBase64(v2);
+  try {
+    var b64_1 = await toBase64(v1);
+    var b64_2 = await toBase64(v2);
 
-  try{
-    var res=await fetch(ENDPOINT,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        token:tokenAtivo,modo:'comparador',
-        base64_v1,mediaType_v1:'application/pdf',
-        base64_v2,mediaType_v2:'application/pdf'
+    var res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        token: tokenAtivo,
+        modo: 'comparador',
+        filenameV1: v1.name,
+        filenameV2: v2.name,
+        base64V1: b64_1,
+        mediaType_v1: 'application/pdf',
+        base64V2: b64_2,
+        mediaType_v2: 'application/pdf'
       })
     });
-    var text=await res.text();
-    var data;
-    try{data=JSON.parse(text);}catch(e){alert('Resposta inválida. Tente novamente.');return;}
-    if(data.error){alert(data.error);return;}
-    if(data.analises_restantes!==undefined)
-      document.getElementById('app-analises').textContent=data.analises_restantes+' análises restantes';
-    renderComparador(data);
-  }catch(e){alert('Erro: '+e.message);}
-  finally{btn.textContent='Comparar versões →';btn.disabled=false;}
-}
 
-// ── HISTÓRICO ──
-async function carregarHistorico(){
-  if(!tokenAtivo)return;
-  var lista=document.getElementById('historico-lista');
-  lista.innerHTML='<div class="historico-vazio">Carregando...</div>';
-  try{
-    var res=await fetch('https://contratoiq-analisar.gomesjoiciano.workers.dev',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({token:tokenAtivo,modo:'historico'})
-    });
-    var data=await res.json();
-    historicoCache=Array.isArray(data.historico)?data.historico:[];
-    renderHistorico(historicoCache);
-  }catch(e){
-    lista.innerHTML='<div class="historico-vazio">Erro ao carregar histórico.</div>';
-  }
-}
-
-function renderHistorico(hist){
-  var lista=document.getElementById('historico-lista');
-  if(!hist||hist.length===0){
-    lista.innerHTML='<div class="historico-vazio">Nenhuma análise realizada ainda.</div>';
-    return;
-  }
-  var html='';
-  hist.forEach(function(h,i){
-    var d=new Date(h.criado_em||h.data_analise);
-    var dataStr=isNaN(d)?'—':d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-    var recClass=h.recomendacao||'';
-    html+='<div class="historico-item">';
-    html+='<div class="historico-info">';
-    html+='<div class="historico-nome">'+(h.arquivo_nome||h.tipo_contrato||'Contrato')+'</div>';
-    html+='<div class="historico-meta">';
-    html+='<span class="historico-data">'+dataStr+'</span>';
-    if(h.score) html+='<span class="historico-score">Score: '+h.score+'/100</span>';
-    if(h.recomendacao) html+='<span class="historico-rec '+recClass+'">'+recClass+'</span>';
-    if(h.modo==='comparador') html+='<span class="historico-rec" style="background:rgba(201,168,76,0.1);color:var(--gold)">COMPARAÇÃO</span>';
-    html+='</div></div>';
-    if(h.resultado_json){
-      html+='<button class="btn-historico-pdf" onclick="baixarHistoricoItem('+i+')">⬇ Baixar PDF</button>';
+    var data = await res.json();
+    if(res.ok && !data.error && data.job_id){
+      checarStatusDoJob(data.job_id, 'comparador');
+    } else {
+      containerComp.innerHTML = '<div class="aviso"><div class="aviso-title">Erro na Comparação</div><div class="aviso-text">'+(data.error||'Erro ao inicializar pipeline de comparação.')+'</div></div>';
+      btn.textContent='Comparar versões →'; btn.disabled=false;
     }
-    html+='</div>';
-  });
-  lista.innerHTML=html;
-}
-
-function baixarHistoricoItem(idx){
-  var h=historicoCache[idx];
-  if(!h||!h.resultado_json)return;
-  try{
-    var r=JSON.parse(h.resultado_json);
-    var modo=h.modo||'analise';
-    if(modo==='comparador') renderComparadorParaDownload(r,h.arquivo_nome);
-    else renderResultadoParaDownload(r,h.arquivo_nome);
-  }catch(e){alert('Erro ao gerar PDF.');}
-}
-
-// ── HELPERS ──
-function s(v){return v==null?'':String(v)}
-function arr(v){return Array.isArray(v)?v:[]}
-function obj(v){return v&&typeof v==='object'?v:{}}
-function badgeRisco(r){return '<span class="badge badge-'+s(r)+'">'+s(r)+'</span>'}
-
-// ── RENDER RESULTADO ──
-function renderResultado(r){
-  var div=document.getElementById('resultado');
-  div.innerHTML=gerarHTMLResultado(r);
-  div.scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function gerarHTMLResultado(r){
-  var ident=obj(r.identificacao);
-  var eq=obj(r.analise_equilibrio_contratual);
-  var dash=obj(r.dashboard_resumo);
-  var scoreColor=r.score>=70?'var(--green)':r.score>=40?'var(--amber)':'var(--red)';
-  var rec=r.recomendacao||'NEGOCIAR';
-  var html='';
-
-  // HEADER + SCORE
-  html+='<div class="res-section" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px;">';
-  html+='<div>';
-  html+='<div class="res-label">Parecer ContratoIQ</div>';
-  html+='<div style="font-family:\'Playfair Display\',serif;font-size:22px;font-weight:900;">'+(r.nome_arquivo_sugerido||s(ident.tipo_contrato)||'Análise de Contrato')+'</div>';
-  html+='<div style="font-size:12px;opacity:.45;margin-top:4px;">'+s(ident.natureza_juridica)+'</div>';
-  if(r.foco&&r.foco!=='geral') html+='<div style="font-family:\'DM Mono\',monospace;font-size:9px;letter-spacing:1.5px;color:var(--gold);margin-top:8px;">FOCO: '+r.foco.toUpperCase().replace('_',' ')+'</div>';
-  html+='</div>';
-  html+='<div style="text-align:right;">';
-  html+='<div style="font-family:\'Playfair Display\',serif;font-size:72px;font-weight:900;line-height:1;color:'+scoreColor+';">'+s(r.score)+'</div>';
-  html+='<div style="font-family:\'DM Mono\',monospace;font-size:10px;opacity:.4;">/100 — SCORE DE RISCO</div>';
-  html+='<div style="margin-top:12px;display:inline-block;padding:10px 24px;font-family:\'DM Mono\',monospace;font-size:13px;letter-spacing:2px;font-weight:700;" class="rec-'+rec+'">'+rec+'</div>';
-  html+='</div></div>';
-
-  // DASHBOARD
-  if(dash.total_clausulas){
-    html+='<div class="res-section"><div class="res-label">Dashboard de Riscos</div>';
-    html+='<div class="dashboard-grid">';
-    html+='<div class="dashboard-card"><div class="dashboard-num gold">'+s(dash.total_clausulas)+'</div><div class="dashboard-desc">CLÁUSULAS ANALISADAS</div></div>';
-    html+='<div class="dashboard-card"><div class="dashboard-num alto">'+s(dash.alto_risco)+'</div><div class="dashboard-desc">ALTO RISCO</div></div>';
-    html+='<div class="dashboard-card"><div class="dashboard-num medio">'+s(dash.medio_risco)+'</div><div class="dashboard-desc">MÉDIO RISCO</div></div>';
-    html+='<div class="dashboard-card"><div class="dashboard-num baixo">'+s(dash.baixo_risco)+'</div><div class="dashboard-desc">BAIXO RISCO</div></div>';
-    html+='<div class="dashboard-card"><div class="dashboard-num alto">'+s(dash.clausulas_abusivas)+'</div><div class="dashboard-desc">ABUSIVAS</div></div>';
-    html+='<div class="dashboard-card"><div class="dashboard-num alto">'+s(dash.clausulas_ausentes_criticas)+'</div><div class="dashboard-desc">AUSENTES CRÍTICAS</div></div>';
-    html+='</div>';
-    if(dash.principal_ponto_atencao) html+='<div style="padding:14px;background:rgba(192,57,43,0.06);border-left:3px solid var(--red);margin-top:12px;font-size:13px;">⚠ '+s(dash.principal_ponto_atencao)+'</div>';
-    if(dash.riscos_financeiros_total) html+='<div style="font-family:\'DM Mono\',monospace;font-size:11px;color:var(--amber);margin-top:10px;">Risco financeiro total estimado: '+s(dash.riscos_financeiros_total)+'</div>';
-    html+='</div>';
+  } catch(e) {
+    containerComp.innerHTML = '<div class="aviso"><div class="aviso-title">Erro Estrutural</div><div class="aviso-text">Falha ao transmitir os arquivos para o barramento.</div></div>';
+    btn.textContent='Comparar versões →'; btn.disabled=false;
   }
+}
 
-  // RESUMO EXECUTIVO
-  if(r.resumo_executivo){
-    html+='<div class="res-section"><div class="res-h3">Resumo Executivo</div><div class="res-text" style="white-space:pre-line;">'+s(r.resumo_executivo)+'</div></div>';
-  }
+// ── MAQUINA DE ESTADO DO POLLING (GET) ──
+function checarStatusDoJob(jobId, tipoAba) {
+  var prefixoId = tipoAba === 'analise' ? 'progresso-' : 'comp-';
+  var idContainerContainer = tipoAba === 'analise' ? 'resultado' : 'resultado-comp';
+  var idBotao = tipoAba === 'analise' ? 'btnAnalisar' : 'btnComparar';
+  var textoBotaoPadrao = tipoAba === 'analise' ? 'Analisar contrato →' : 'Comparar versões →';
 
-  // IDENTIFICAÇÃO
-  html+='<div class="res-section"><div class="res-h3">Identificação do Contrato</div><div class="res-grid">';
-  var campos=[['Tipo','tipo_contrato'],['Modalidade','modalidade'],['Data de assinatura','data_assinatura'],['Vigência','vigencia_inicio'],['Término','vigencia_fim'],['Valor total','valor_total'],['Valor mensal','valor_mensal'],['Forma de pagamento','forma_pagamento'],['Reajuste','indice_reajuste'],['Foro','foro'],['Renovação automática','renovacao_automatica'],['Prazo aviso não renovação','prazo_aviso_nao_renovacao']];
-  campos.forEach(function(c){
-    var v=ident[c[1]];
-    if(v!==undefined&&v!==''&&v!==false){
-      html+='<div class="res-field"><div class="res-field-label">'+c[0]+'</div><div class="res-field-value">'+String(v)+'</div></div>';
+  var intervalo = setInterval(async function() {
+    try {
+      var res = await fetch(ENDPOINT + '?job_id=' + jobId, { method: 'GET' });
+      var data = await res.json();
+
+      if (res.ok) {
+        var barra = document.getElementById(prefixoId + 'barra');
+        var textoEtapa = document.getElementById(prefixoId + 'etapa');
+        var textoPct = document.getElementById(prefixoId + 'texto-pct');
+
+        if (barra) barra.style.width = data.progresso + '%';
+        if (textoEtapa) textoEtapa.textContent = data.etapa;
+        if (textoPct) textoPct.textContent = data.progresso + '%';
+
+        if (data.status === 'concluido') {
+          clearInterval(intervalo);
+          
+          var analiseObjeto = typeof data.resultado === 'string' ? JSON.parse(data.resultado) : data.resultado;
+          cacheUltimoResultado = analiseObjeto; // Salva para download posterior
+          
+          var containerHTML = document.getElementById(idContainerContainer);
+          if (tipoAba === 'analise') {
+            containerHTML.innerHTML = construirLayoutAnalise(analiseObjeto);
+          } else {
+            containerHTML.innerHTML = construirLayoutComparador(analiseObjeto);
+          }
+          
+          var btn = document.getElementById(idBotao);
+          btn.textContent = textoBotaoPadrao; btn.disabled = false;
+          validarToken(true); // Atualiza os contadores de análises usadas no topo
+        } 
+        else if (data.status === 'erro') {
+          clearInterval(intervalo);
+          document.getElementById(idContainerContainer).innerHTML = '<div class="aviso"><div class="aviso-title">Falha de Processamento</div><div class="aviso-text">' + (data.erro || 'Ocorreu um erro inesperado dentro da IA.') + '</div></div>';
+          var btn = document.getElementById(idBotao);
+          btn.textContent = textoBotaoPadrao; btn.disabled = false;
+        }
+      }
+    } catch (err) {
+      console.log("Aguardando estabilização da rede para leitura do Job...");
     }
-  });
-  if(arr(ident.leis_aplicaveis).length){
-    html+='<div class="leis-wrap">';
-    arr(ident.leis_aplicaveis).forEach(function(l){html+='<span class="lei-badge">'+s(l)+'</span>'});
-    html+='</div>';
-  }
-  html+='</div></div>';
-
-  // PARTES
-  if(arr(r.partes).length){
-    html+='<div class="res-section"><div class="res-h3">Partes</div><div class="res-grid">';
-    arr(r.partes).forEach(function(p){
-      html+='<div style="padding:14px;border:1px solid var(--rule);">';
-      html+='<div style="font-family:\'DM Mono\',monospace;font-size:9px;letter-spacing:1.5px;opacity:.4;margin-bottom:6px;">'+s(p.papel).toUpperCase()+'</div>';
-      html+='<div style="font-size:14px;font-weight:600;margin-bottom:6px;">'+s(p.nome)+'</div>';
-      if(p.cnpj_cpf) html+='<div style="font-size:12px;opacity:.55;">CNPJ/CPF: '+s(p.cnpj_cpf)+'</div>';
-      if(p.representante_legal) html+='<div style="font-size:12px;opacity:.55;">Rep.: '+s(p.representante_legal)+'</div>';
-      if(p.tem_poderes_suficientes===false) html+='<div style="font-size:11px;color:var(--red);margin-top:6px;">⚠ Poderes insuficientes: '+s(p.observacao_poderes)+'</div>';
-      html+='</div>';
-    });
-    html+='</div></div>';
-  }
-
-  // CLÁUSULAS
-  if(arr(r.clausulas).length){
-    html+='<div class="res-section"><div class="res-h3">Análise de Cláusulas</div>';
-    arr(r.clausulas).forEach(function(c){
-      var risco=s(c.risco)||'baixo';
-      html+='<div class="clausula-item '+risco+'">';
-      html+='<div class="clausula-header"><div class="clausula-title">'+(c.numero?'Cláusula '+c.numero+' — ':'')+s(c.titulo)+'</div>';
-      html+='<div class="clausula-badges">';
-      if(c.nula_de_pleno_direito) html+='<span class="badge badge-abusiva">NULA</span>';
-      if(c.abusiva) html+='<span class="badge badge-abusiva">ABUSIVA</span>';
-      html+=badgeRisco(risco)+'</div></div>';
-      if(c.transcricao_resumida) html+='<div class="clausula-resumo">'+s(c.transcricao_resumida)+'</div>';
-      if(c.analise_detalhada) html+='<div class="clausula-consequencia" style="margin-top:6px;">'+s(c.analise_detalhada)+'</div>';
-      if(c.recomendacao_especifica) html+='<div class="clausula-consequencia">Recomendação: '+s(c.recomendacao_especifica)+'</div>';
-      if(arr(c.artigos_violados).length) html+='<div class="clausula-legal">⚖ '+c.artigos_violados.join(' · ')+'</div>';
-      if(c.jurisprudencia_relevante) html+='<div class="clausula-legal" style="opacity:.6;">📋 '+s(c.jurisprudencia_relevante)+'</div>';
-      if(c.impacto_financeiro_estimado) html+='<div style="font-size:11px;color:var(--amber);margin-top:4px;">💰 '+s(c.impacto_financeiro_estimado)+'</div>';
-      html+='</div>';
-    });
-    html+='</div>';
-  }
-
-  // CLÁUSULAS ABUSIVAS
-  if(arr(r.clausulas_abusivas).length){
-    html+='<div class="res-section"><div class="res-h3">Cláusulas Abusivas</div>';
-    arr(r.clausulas_abusivas).forEach(function(c){
-      html+='<div class="ausente-item">';
-      html+='<div class="ausente-header"><div class="ausente-name">'+s(c.clausula)+'</div>';
-      if(c.e_nula_de_pleno_direito) html+='<span class="ausente-importancia">NULA DE PLENO DIREITO</span>';
-      html+='</div>';
-      html+='<div class="ausente-risco">'+s(c.descricao_abuso)+'</div>';
-      if(c.fundamento_legal) html+='<div class="clausula-legal">⚖ '+s(c.artigo_especifico)+' — '+s(c.fundamento_legal)+'</div>';
-      if(c.como_renegociar) html+='<div class="ausente-sugestao">→ Como renegociar: '+s(c.como_renegociar)+'</div>';
-      html+='</div>';
-    });
-    html+='</div>';
-  }
-
-  // CLÁUSULAS AUSENTES
-  if(arr(r.clausulas_ausentes).length){
-    html+='<div class="res-section"><div class="res-h3">Cláusulas Ausentes</div>';
-    arr(r.clausulas_ausentes).forEach(function(c){
-      html+='<div class="ausente-item">';
-      html+='<div class="ausente-header"><div class="ausente-name">'+s(c.clausula)+'</div>';
-      html+='<span class="ausente-importancia">'+s(c.importancia).toUpperCase()+'</span></div>';
-      html+='<div class="ausente-risco">'+s(c.risco_ausencia)+'</div>';
-      if(c.sugestao_redacao) html+='<div class="ausente-sugestao">Sugestão: '+s(c.sugestao_redacao)+'</div>';
-      html+='</div>';
-    });
-    html+='</div>';
-  }
-
-  // OBRIGAÇÕES
-  var ob=obj(r.obrigacoes);
-  if(arr(ob.contratante).length||arr(ob.contratada).length){
-    html+='<div class="res-section"><div class="res-h3">Obrigações</div><div class="res-grid">';
-    ['contratante','contratada'].forEach(function(p){
-      html+='<div class="obrig-col"><div class="obrig-title">'+p.toUpperCase()+'</div>';
-      arr(ob[p]).forEach(function(o){
-        var txt=typeof o==='object'?(o.descricao||''):String(o);
-        html+='<div class="obrig-item"><span style="color:var(--gold);flex-shrink:0">→</span>'+txt+'</div>';
-      });
-      html+='</div>';
-    });
-    html+='</div></div>';
-  }
-
-  // PRAZOS
-  if(arr(r.prazos_criticos).length){
-    html+='<div class="res-section"><div class="res-h3">Prazos Críticos</div>';
-    arr(r.prazos_criticos).forEach(function(p){
-      var risco=s(p.risco)||'baixo';
-      html+='<div class="prazo-item '+risco+'"><div class="prazo-info">';
-      html+='<div class="prazo-desc">'+s(p.descricao)+'</div>';
-      html+='<div class="prazo-data">'+s(p.data_ou_prazo)+'</div>';
-      if(p.consequencia_perda) html+='<div class="prazo-consequencia">'+s(p.consequencia_perda)+'</div>';
-      html+='</div>'+badgeRisco(risco)+'</div>';
-    });
-    html+='</div>';
-  }
-
-  // RISCOS FINANCEIROS
-  if(arr(r.riscos_financeiros).length){
-    html+='<div class="res-section"><div class="res-h3">Riscos Financeiros</div>';
-    arr(r.riscos_financeiros).forEach(function(rf){
-      var risco=s(rf.risco)||'medio';
-      html+='<div class="risco-item '+risco+'"><div class="risco-info">';
-      html+='<div class="risco-desc">'+s(rf.descricao)+'</div>';
-      if(rf.condicao_acionamento) html+='<div class="risco-condicao">'+s(rf.condicao_acionamento)+'</div>';
-      if(rf.mitigacao_possivel) html+='<div class="risco-condicao" style="color:var(--green)">Mitigação: '+s(rf.mitigacao_possivel)+'</div>';
-      html+='</div>';
-      if(rf.valor_ou_percentual) html+='<div class="risco-valor">'+s(rf.valor_ou_percentual)+'</div>';
-      html+='</div>';
-    });
-    html+='</div>';
-  }
-
-  // LGPD
-  var lgpd=obj(r.analise_lgpd);
-  if(lgpd.contrato_envolve_dados_pessoais){
-    html+='<div class="res-section"><div class="res-h3">Análise LGPD</div>';
-    html+='<div class="res-grid">';
-    html+='<div class="res-field"><div class="res-field-label">Papel da empresa</div><div class="res-field-value">'+s(lgpd.papel_empresa)+'</div></div>';
-    html+='<div class="res-field"><div class="res-field-label">Base legal</div><div class="res-field-value">'+s(lgpd.base_legal_tratamento)+'</div></div>';
-    html+='<div class="res-field"><div class="res-field-label">DPA presente</div><div class="res-field-value">'+(lgpd.tem_dpa?'Sim':'Não')+'</div></div>';
-    if(lgpd.multa_potencial_anpd) html+='<div class="res-field"><div class="res-field-label">Multa potencial ANPD</div><div class="res-field-value" style="color:var(--red);">'+s(lgpd.multa_potencial_anpd)+'</div></div>';
-    html+='</div>';
-    if(arr(lgpd.riscos_lgpd).length){
-      html+='<div style="margin-top:12px;">';
-      arr(lgpd.riscos_lgpd).forEach(function(r){html+='<div style="font-size:12px;padding:6px 0;border-bottom:1px solid var(--rule);opacity:.7;">⚠ '+s(r)+'</div>'});
-      html+='</div>';
-    }
-    html+='</div>';
-  }
-
-  // PI
-  var pi=obj(r.analise_propriedade_intelectual);
-  if(pi.ha_cessao_de_pi||pi.risco_licencas_opensource){
-    html+='<div class="res-section"><div class="res-h3">Propriedade Intelectual</div>';
-    if(pi.escopo_cessao) html+='<div class="res-text">'+s(pi.escopo_cessao)+'</div>';
-    if(pi.risco_licencas_opensource) html+='<div style="color:var(--amber);font-size:13px;margin-top:8px;">⚠ Risco com licenças open source identificado.</div>';
-    if(pi.recomendacao) html+='<div style="color:var(--gold);font-size:12px;margin-top:8px;">→ '+s(pi.recomendacao)+'</div>';
-    html+='</div>';
-  }
-
-  // PASSIVO TRABALHISTA
-  var pt=obj(r.passivo_trabalhista);
-  if(pt.risco_vinculo_empregaticio){
-    html+='<div class="res-section"><div class="res-h3">Risco Trabalhista</div>';
-    html+='<div style="background:rgba(192,57,43,0.06);border-left:3px solid var(--red);padding:16px;">';
-    html+='<div style="font-size:13px;font-weight:500;color:var(--red);margin-bottom:8px;">⚠ Risco de Vínculo Empregatício</div>';
-    html+='<div style="font-size:12px;opacity:.75;">'+s(pt.fundamento)+'</div>';
-    if(pt.estimativa_passivo) html+='<div style="font-family:\'DM Mono\',monospace;font-size:11px;color:var(--amber);margin-top:8px;">Passivo estimado: '+s(pt.estimativa_passivo)+'</div>';
-    html+='</div></div>';
-  }
-
-  // EQUILÍBRIO
-  if(eq.score_equilibrio!==undefined){
-    var eqC=eq.score_equilibrio>=40&&eq.score_equilibrio<=60?'var(--green)':eq.score_equilibrio<40?'var(--red)':'var(--amber)';
-    html+='<div class="res-section"><div class="res-h3">Equilíbrio Contratual</div>';
-    html+='<div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">';
-    html+='<div style="font-family:\'Playfair Display\',serif;font-size:48px;font-weight:900;color:'+eqC+';">'+eq.score_equilibrio+'<span style="font-size:18px;opacity:.3">/100</span></div>';
-    html+='<div>';
-    if(eq.parte_mais_favorecida) html+='<div style="font-size:12px;opacity:.5;margin-bottom:4px;">Parte mais favorecida</div><div style="font-size:14px;font-weight:500;">'+s(eq.parte_mais_favorecida)+'</div>';
-    if(eq.caracteriza_contrato_adesao) html+='<div style="margin-top:6px;font-size:11px;color:var(--amber);">⚠ Caracteriza contrato de adesão</div>';
-    html+='</div></div></div>';
-  }
-
-  // GLOSSÁRIO
-  if(arr(r.glossario_juridico).length){
-    html+='<div class="res-section"><div class="res-h3">Glossário Jurídico</div>';
-    html+='<div style="font-size:12px;opacity:.5;margin-bottom:16px;">Termos técnicos do contrato explicados em linguagem simples.</div>';
-    arr(r.glossario_juridico).forEach(function(g){
-      html+='<div class="glossario-item">';
-      html+='<div class="glossario-termo">'+s(g.termo)+'</div>';
-      html+='<div class="glossario-def">'+(s(g.definicao_simples)||s(g.definicao))+'</div>';
-      if(g.exemplo_pratico) html+='<div class="glossario-exemplo">Ex: '+s(g.exemplo_pratico)+'</div>';
-      if(g.relevancia_para_este_contrato) html+='<div class="glossario-relevancia">→ '+s(g.relevancia_para_este_contrato)+'</div>';
-      html+='</div>';
-    });
-    html+='</div>';
-  }
-
-  // RECOMENDAÇÕES
-  if(arr(r.recomendacoes_praticas).length){
-    html+='<div class="res-section"><div class="res-h3">Recomendações Práticas</div>';
-    arr(r.recomendacoes_praticas).forEach(function(rc){
-      html+='<div class="rec-item">';
-      html+='<div class="rec-header"><span class="rec-tipo '+s(rc.tipo)+'">'+s(rc.tipo)+'</span>';
-      html+='<span class="rec-prio '+s(rc.prioridade)+'">'+s(rc.prioridade)+'</span></div>';
-      html+='<div class="rec-desc">'+s(rc.descricao)+'</div>';
-      if(rc.texto_sugerido) html+='<div style="font-size:11px;background:rgba(201,168,76,0.06);padding:8px;margin-top:6px;font-style:italic;">Sugestão: '+s(rc.texto_sugerido)+'</div>';
-      if(rc.justificativa_legal) html+='<div class="rec-legal">⚖ '+s(rc.justificativa_legal)+'</div>';
-      if(rc.impacto_se_ignorado) html+='<div style="font-size:11px;color:var(--red);margin-top:4px;">Se ignorado: '+s(rc.impacto_se_ignorado)+'</div>';
-      html+='</div>';
-    });
-    html+='</div>';
-  }
-
-  // CHECKLIST
-  if(arr(r.checklist_antes_assinar).length){
-    html+='<div class="res-section"><div class="res-h3">Checklist Antes de Assinar</div>';
-    arr(r.checklist_antes_assinar).forEach(function(c){
-      html+='<div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--rule);">';
-      html+='<span style="color:var(--amber);font-size:16px;flex-shrink:0;">○</span>';
-      html+='<div><div style="font-size:13px;font-weight:500;">'+s(c.item)+'</div>';
-      if(c.observacao) html+='<div style="font-size:11px;opacity:.5;margin-top:2px;">'+s(c.observacao)+'</div>';
-      html+='</div></div>';
-    });
-    html+='</div>';
-  }
-
-  // PARECER FINAL
-  html+='<div class="parecer-box">';
-  html+='<div class="parecer-label">Parecer Jurídico Final</div>';
-  html+='<div class="parecer-text">'+s(r.parecer_final)+'</div>';
-  html+='<div class="parecer-footer">';
-  html+='<div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:900;">Contrato<span style="color:var(--gold)">IQ</span></div>';
-  html+='<div class="rec-final-badge rec-'+rec+'">'+rec+'</div>';
-  html+='</div></div>';
-
-  // DOWNLOAD
-  html+='<div class="download-area">';
-  html+='<button class="btn-download" onclick="baixarPDF()">⬇ Baixar Parecer em PDF</button>';
-  html+='</div>';
-
-  return html;
+  }, 2500);
 }
 
-// ── RENDER COMPARADOR ──
-function renderComparador(r){
-  var div=document.getElementById('resultado-comp');
-  div.innerHTML=gerarHTMLComparador(r);
-  div.scrollIntoView({behavior:'smooth',block:'start'});
+// ── RENDERIZADOR DINÂMICO DA ANÁLISE ──
+function construirLayoutAnalise(res) {
+  if (!res) return '<div class="aviso"><div class="aviso-title">Erro</div><div class="aviso-text">Nenhum dado estruturado retornado.</div></div>';
+  
+  var leisBadges = (res.identificacao?.leis_aplicaveis || []).map(l => `<span class="lei-badge">${l}</span>`).join('');
+  
+  var clausulasHtml = (res.clausulas || []).map(c => `
+    <div class="clausula-item ${c.risco || 'baixo'}">
+      <div class="clausula-header">
+        <div class="clausula-title">Cláusula ${c.numero || ''}: ${c.titulo || 'Sem título'}</div>
+        <div class="clausula-badges">
+          <span class="badge badge-${c.risco || 'baixo'}">Risco ${c.risco || 'baixo'}</span>
+          ${c.abusiva ? '<span class="badge badge-abusiva">Abusiva</span>' : ''}
+          ${c.nula_de_pleno_direito ? '<span class="badge badge-abusiva">Nula</span>' : ''}
+        </div>
+      </div>
+      <div class="clausula-resumo"><strong>Resumo:</strong> ${c.transcricao_resumida || ''}</div>
+      <div class="clausula-resumo"><strong>Análise Crítica:</strong> ${c.analise_detalhada || ''}</div>
+      ${c.recomendacao_especifica ? `<div class="clausula-resumo" style="color:var(--amber)"><strong>Ação Recomendada:</strong> ${c.recomendacao_especifica}</div>` : ''}
+      ${c.jurisprudencia_relevante ? `<div class="clausula-legal">⚖️ ${c.jurisprudencia_relevante}</div>` : ''}
+    </div>
+  `).join('');
+
+  var recomendacoesHtml = (res.recomendacoes_praticas || []).map(r => `
+    <div class="rec-item">
+      <div class="rec-header">
+        <span class="rec-tipo ${r.tipo}">${r.tipo}</span>
+        <span class="rec-prio ${r.prioridade}">${r.prioridade.toUpperCase()}</span>
+      </div>
+      <div class="rec-desc">${r.descricao}</div>
+      ${r.texto_sugerido ? `<div class="comp-v comp-v2" style="margin-top:8px"><strong>Minuta Sugerida:</strong><br>${r.texto_sugerido}</div>` : ''}
+      <div class="clausula-legal" style="margin-top:4px">Fundamentação: ${r.justificativa_legal || 'N/A'}</div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="dashboard-grid">
+      <div class="dashboard-card"><div class="dashboard-num gold">${res.score || 0}</div><div class="dashboard-desc">Score do Contrato</div></div>
+      <div class="dashboard-card"><div class="dashboard-num alto">${res.dashboard_resumo?.alto_risco || 0}</div><div class="dashboard-desc">Risco Alto</div></div>
+      <div class="dashboard-card"><div class="dashboard-num medio">${res.dashboard_resumo?.medio_risco || 0}</div><div class="dashboard-desc">Risco Médio</div></div>
+      <div class="dashboard-card"><div class="dashboard-num baixo">${res.dashboard_resumo?.baixo_risco || 0}</div><div class="dashboard-desc">Risco Baixo</div></div>
+    </div>
+    
+    <div class="res-section">
+      <div class="res-label">Identificação e Metadados</div>
+      <h3 class="res-h3">${res.identificacao?.tipo_contrato || 'Contrato Mapeado'}</h3>
+      <div class="res-grid">
+        <div class="res-field"><div class="res-field-label">Modalidade / Natureza</div><div class="res-field-value">${res.identificacao?.natureza_juridica || 'Não Explicitada'} (${res.identificacao?.modalidade || 'Geral'})</div></div>
+        <div class="res-field"><div class="res-field-label">Vigência Temporal</div><div class="res-field-value">${res.identificacao?.vigencia_inicio || 'N/A'} até ${res.identificacao?.vigencia_fim || 'Indeterminado'}</div></div>
+        <div class="res-field"><div class="res-field-label">Valores e Condições</div><div class="res-field-value">Total: ${res.identificacao?.valor_total || 'Mensal'} | Reajuste: ${res.identificacao?.indice_reajuste || 'Não fixado'}</div></div>
+        <div class="res-field"><div class="res-field-label">Foro Arbitragem</div><div class="res-field-value">${res.identificacao?.foro || 'Não definido'} ${res.identificacao?.arbitragem ? '[Possui Cláusula Arbitral]' : ''}</div></div>
+        <div class="leis-wrap">${leisBadges}</div>
+      </div>
+    </div>
+
+    <div class="res-section">
+      <div class="res-label">Resumo Executivo do Negócio</div>
+      <p class="res-text" style="white-space: pre-line;">${res.resumo_executivo || 'Resumo indisponível.'}</p>
+    </div>
+
+    ${recomendacoesHtml ? `
+    <div class="res-section">
+      <div class="res-label">Plano de Ação e Recomendações</div>
+      <div>${recomendacoesHtml}</div>
+    </div>` : ''}
+
+    <div class="res-section">
+      <div class="res-label">Cláusulas Analisadas</div>
+      <div>${clausulasHtml}</div>
+    </div>
+
+    <div class="parecer-box">
+      <div class="parecer-label">Parecer Jurídico de Fechamento</div>
+      <div class="parecer-text">${res.parecer_final || 'Parecer final não gerado.'}</div>
+      <div class="parecer-footer">
+        <span class="rec-final-badge rec-${res.recomendacao || 'NEGOCIAR'}">${res.recomendacao || 'NEGOCIAR'}</span>
+        <button class="btn-download" onclick="baixarPDF()">Baixar Relatório</button>
+      </div>
+    </div>`;
 }
 
-function gerarHTMLComparador(r){
-  var html='';
-  var impacto=r.impacto_geral||'NEUTRO';
-  var impColor={MELHOROU:'var(--green)',PIOROU:'var(--red)',NEUTRO:'var(--amber)'};
-  var recFinal=r.recomendacao_final||'NEGOCIAR';
+// ── RENDERIZADOR DINÂMICO DO COMPARADOR ──
+function construirLayoutComparador(res) {
+  if (!res) return '<div class="aviso"><div class="aviso-title">Erro</div><div class="aviso-text">Nenhum dado comparativo disponível.</div></div>';
 
-  html+='<div class="res-section">';
-  html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px;">';
-  html+='<div><div class="res-label">Resultado da Comparação</div>';
-  html+='<div style="font-family:\'Playfair Display\',serif;font-size:22px;font-weight:900;">Análise Comparativa de Versões</div></div>';
-  html+='<div style="text-align:right;">';
-  html+='<div style="font-family:\'Playfair Display\',serif;font-size:36px;font-weight:900;color:'+impColor[impacto]+';">'+impacto+'</div>';
-  html+='<div style="font-family:\'DM Mono\',monospace;font-size:10px;opacity:.4;">IMPACTO GERAL</div>';
-  html+='</div></div>';
-  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;">';
-  html+='<div style="padding:16px;background:rgba(192,57,43,0.06);border-left:3px solid var(--red);"><div class="res-field-label">VERSÃO 1</div>';
-  html+='<div style="font-family:\'Playfair Display\',serif;font-size:32px;font-weight:900;color:var(--red);">'+s(r.score_v1)+'<span style="font-size:14px;opacity:.4">/100</span></div></div>';
-  html+='<div style="padding:16px;background:rgba(30,125,90,0.06);border-left:3px solid var(--green);"><div class="res-field-label">VERSÃO 2</div>';
-  html+='<div style="font-family:\'Playfair Display\',serif;font-size:32px;font-weight:900;color:var(--green);">'+s(r.score_v2)+'<span style="font-size:14px;opacity:.4">/100</span></div></div>';
-  html+='</div>';
-  var variacao=r.variacao_score||0;
-  var varColor=variacao>0?'var(--green)':variacao<0?'var(--red)':'var(--amber)';
-  html+='<div style="margin-top:12px;font-family:\'DM Mono\',monospace;font-size:12px;color:'+varColor+';">';
-  html+=(variacao>0?'▲ Melhora de '+variacao+' pontos':variacao<0?'▼ Piora de '+Math.abs(variacao)+' pontos':'Sem variação no score')+'</div>';
-  html+='</div>';
+  var mudancasHtml = (res.mudancas || []).map(m => `
+    <div class="comp-mudanca ${m.impacto || 'NEUTRO'}">
+      <div class="comp-header">
+        <strong>Cláusula / Tópico: ${m.clausula || 'Alterada'}</strong>
+        <span class="badge badge-${m.risco_v2 === 'alto'?'alto':'medio'}">Risco Atual: ${m.risco_v2}</span>
+      </div>
+      <div class="clausula-resumo"><strong>Impacto da Alteração:</strong> ${m.analise_juridica || ''}</div>
+      <div class="comp-versoes">
+        <div class="comp-v comp-v1"><div class="comp-vlabel">Versão Antiga (V1)</div>${m.descricao_v1}</div>
+        <div class="comp-v comp-v2"><div class="comp-vlabel">Nova Versão (V2)</div>${m.descricao_v2}</div>
+      </div>
+      <div class="clausula-legal" style="margin-top:6px">💡 <strong>Recomendação de ajuste:</strong> ${m.recomendacao || 'N/A'}</div>
+    </div>
+  `).join('');
 
-  if(r.resumo_comparativo){
-    html+='<div class="res-section"><div class="res-h3">Resumo Comparativo</div>';
-    html+='<div class="res-text" style="white-space:pre-line;">'+s(r.resumo_comparativo)+'</div></div>';
-  }
+  return `
+    <div class="dashboard-grid">
+      <div class="dashboard-card"><div class="dashboard-num gold">${res.score_v1 || 0}</div><div class="dashboard-desc">Score V1</div></div>
+      <div class="dashboard-card"><div class="dashboard-num gold">${res.score_v2 || 0}</div><div class="dashboard-desc">Score V2</div></div>
+      <div class="dashboard-card"><div class="dashboard-num ${res.impacto_general==='PIOROU'?'alto':'baixo'}">${res.variacao_score >= 0 ? '+' + res.variacao_score : res.variacao_score}</div><div class="dashboard-desc">Variação de Risco</div></div>
+    </div>
 
-  if(arr(r.mudancas).length){
-    html+='<div class="res-section"><div class="res-h3">Mudanças Identificadas</div>';
-    arr(r.mudancas).forEach(function(m){
-      var imp=s(m.impacto)||'NEUTRO';
-      html+='<div class="comp-mudanca '+imp+'">';
-      html+='<div class="comp-header">';
-      html+='<div style="font-size:13px;font-weight:500;">'+s(m.clausula)+'</div>';
-      html+='<div style="display:flex;gap:8px;">';
-      html+='<span class="badge badge-'+(imp==='POSITIVO'?'baixo':imp==='NEGATIVO'?'alto':'medio')+'">'+imp+'</span>';
-      html+='<span class="badge" style="background:rgba(13,13,13,0.06);">'+s(m.tipo_mudanca)+'</span>';
-      html+='</div></div>';
-      if(m.analise_juridica) html+='<div style="font-size:12px;opacity:.7;margin-bottom:8px;">'+s(m.analise_juridica)+'</div>';
-      html+='<div class="comp-versoes">';
-      html+='<div class="comp-v comp-v1"><div class="comp-vlabel">V1 — ANTES</div>'+s(m.descricao_v1)+'</div>';
-      html+='<div class="comp-v comp-v2"><div class="comp-vlabel">V2 — DEPOIS</div>'+s(m.descricao_v2)+'</div>';
-      html+='</div>';
-      if(arr(m.artigos_relevantes).length) html+='<div class="clausula-legal" style="margin-top:8px;">⚖ '+m.artigos_relevantes.join(' · ')+'</div>';
-      if(m.recomendacao) html+='<div style="font-size:11px;color:var(--gold);margin-top:6px;">→ '+s(m.recomendacao)+'</div>';
-      html+='</div>';
-    });
-    html+='</div>';
-  }
+    <div class="res-section">
+      <div class="res-label">Balanço Comparativo</div>
+      <h3 class="res-h3">Impacto Geral: ${res.impacto_geral || 'Mapeado'}</h3>
+      <p class="res-text">${res.resumo_comparativo || ''}</p>
+    </div>
 
-  if(arr(r.clausulas_adicionadas).length){
-    html+='<div class="res-section"><div class="res-h3">Cláusulas Adicionadas na V2</div>';
-    arr(r.clausulas_adicionadas).forEach(function(c){
-      html+='<div class="clausula-item '+s(c.risco)+'">';
-      html+='<div class="clausula-title">'+s(c.clausula)+'</div>';
-      html+='<div class="clausula-resumo">'+s(c.texto)+'</div>';
-      if(c.analise) html+='<div class="clausula-consequencia">'+s(c.analise)+'</div>';
-      html+='</div>';
-    });
-    html+='</div>';
-  }
+    <div class="res-section">
+      <div class="res-label">Mapeamento de Mudanças entre as Minutas</div>
+      <div>${mudancasHtml}</div>
+    </div>
 
-  if(arr(r.clausulas_removidas).length){
-    html+='<div class="res-section"><div class="res-h3">Cláusulas Removidas na V2</div>';
-    arr(r.clausulas_removidas).forEach(function(c){
-      html+='<div style="padding:14px;border-left:3px solid var(--amber);background:rgba(230,126,34,0.06);margin-bottom:6px;">';
-      html+='<div class="clausula-title">'+s(c.clausula)+'</div>';
-      html+='<div class="clausula-resumo">'+s(c.texto)+'</div>';
-      if(c.impacto) html+='<div style="font-size:11px;color:'+(c.se_removida_e_prejudicial?'var(--red)':'var(--green)')+';">'+s(c.impacto)+'</div>';
-      html+='</div>';
-    });
-    html+='</div>';
-  }
-
-  html+='<div class="parecer-box">';
-  html+='<div class="parecer-label">Parecer Comparativo</div>';
-  html+='<div class="parecer-text">'+s(r.parecer_comparativo)+'</div>';
-  html+='<div class="parecer-footer">';
-  html+='<div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:900;">Contrato<span style="color:var(--gold)">IQ</span></div>';
-  html+='<div class="rec-final-badge" style="background:rgba(201,168,76,0.2);color:var(--gold);">'+recFinal.replace('_',' ')+'</div>';
-  html+='</div></div>';
-
-  html+='<div class="download-area">';
-  html+='<button class="btn-download" onclick="baixarPDFComp()">⬇ Baixar Comparativo em PDF</button>';
-  html+='</div>';
-
-  return html;
+    <div class="parecer-box">
+      <div class="parecer-label">Diretriz da Mesa de Negociação</div>
+      <div class="parecer-text">${res.parecer_comparativo || ''}</div>
+      <div class="parecer-footer">
+        <span class="rec-final-badge rec-NEGOCIAR">${res.recomendacao_final || 'DECIDIR'}</span>
+        <button class="btn-download" onclick="baixarPDFComp()">Baixar Comparativo</button>
+      </div>
+    </div>`;
 }
 
-// ── DOWNLOAD PDF ──
-function gerarPDFBlob(conteudo, titulo){
-  var data=new Date().toLocaleDateString('pt-BR');
-  var hora=new Date().toLocaleTimeString('pt-BR');
-  var html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>'+titulo+'</title>'
-    +'<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">'
-    +'<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:"DM Sans",sans-serif;background:#FAF7F2;color:#0D0D0D}'
-    +'.header{background:#0D0D0D;color:#F5F0E8;padding:28px 40px;display:flex;justify-content:space-between;align-items:center}'
-    +'.logo{font-family:"Playfair Display",serif;font-size:22px;font-weight:900}.logo span{color:#C9A84C}'
-    +'.data{font-size:11px;opacity:.4;font-family:"DM Mono",monospace}'
-    +'.body{padding:32px}'
-    +'</style></head><body>'
-    +'<div class="header"><div class="logo">Contrato<span>IQ</span></div><div class="data">'+data+' às '+hora+'</div></div>'
-    +'<div class="body">'+conteudo+'</div></body></html>';
-  return new Blob([html],{type:'text/html'});
+// ── EXPORTAÇÃO E DOWNLOAD ──
+function gerarHTMLResultado(conteudoHtml) {
+  var data = new Date().toLocaleDateString('pt-BR');
+  var hora = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+  return '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório ContratoIQ</title>'
+    +'<style>body{font-family:sans-serif;padding:40px;color:#0D0D0D;background:#FAF7F2;line-height:1.6;}'
+    +'.header{border-bottom:2px solid #C9A84C;padding-bottom:12px;margin-bottom:24px;}'
+    +'.title{font-size:24px;font-weight:bold;color:#0D0D0D;}'
+    +'.data{font-size:11px;color:#666;margin-top:4px;}</style></head><body>'
+    +'<div class="header"><div class="title">ContratoIQ — Documento Oficial de Análise</div>'
+    +'<div class="data">'+data+' às '+hora+'</div></div>'
+    +'<div class="body">'+conteudoHtml+'</div></body></html>';
 }
 
 function baixarPDF(){
   var r=document.getElementById('resultado');
-  if(!r)return;
-  var blob=gerarPDFBlob(r.innerHTML,'Parecer ContratoIQ');
+  if(!r || !r.innerHTML) return;
+  var htmlCompleto = gerarHTMLResultado(r.innerHTML);
+  var blob=new Blob([htmlCompleto], {type: 'text/html'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
   a.href=url; a.download='parecer-contratoiq-'+Date.now()+'.html'; a.click();
@@ -1163,30 +815,56 @@ function baixarPDF(){
 
 function baixarPDFComp(){
   var r=document.getElementById('resultado-comp');
-  if(!r)return;
-  var blob=gerarPDFBlob(r.innerHTML,'Comparativo ContratoIQ');
+  if(!r || !r.innerHTML) return;
+  var htmlCompleto = gerarHTMLResultado(r.innerHTML);
+  var blob=new Blob([htmlCompleto], {type: 'text/html'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
   a.href=url; a.download='comparativo-contratoiq-'+Date.now()+'.html'; a.click();
   URL.revokeObjectURL(url);
 }
 
-function renderResultadoParaDownload(r, nome){
-  var html=gerarHTMLResultado(r);
-  var blob=gerarPDFBlob(html,'Parecer — '+(nome||'ContratoIQ'));
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url; a.download='parecer-'+Date.now()+'.html'; a.click();
-  URL.revokeObjectURL(url);
+// ── HISTÓRICO ──
+function carregarHistorico(){
+  var lista = document.getElementById('historico-lista');
+  if(!historicoCache || historicoCache.length === 0){
+    lista.innerHTML = '<div class="historico-vazio">Nenhuma análise encontrada neste token.</div>';
+    return;
+  }
+
+  var html = '';
+  historicoCache.forEach(function(item){
+    var dataFormatada = new Date(item.criado_em || item.data).toLocaleDateString('pt-BR') + ' ' + new Date(item.criado_em || item.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+    var badgeClass = item.recomendacao === 'ASSINAR' ? 'ASSINAR' : (item.recomendacao === 'RECUSAR' ? 'RECUSAR' : 'NEGOCIAR');
+    
+    html += '<div class="historico-item">'
+         +    '<div class="historico-info">'
+         +       '<div class="historico-nome">' + (item.arquivo_nome || 'Contrato sem nome') + '</div>'
+         +       '<div class="historico-meta">'
+         +          '<span class="historico-data">' + dataFormatada + '</span>'
+         +          '<span class="historico-score">Score: ' + (item.score || '0') + '/100</span>'
+         +          '<span class="historico-rec ' + badgeClass + '">' + (item.recomendacao || 'ANÁLISE') + '</span>'
+         +       '</div>'
+         +    '</div>'
+         +    '<button class="btn-historico-pdf" onclick="visualizarItemHist(' + item.id + ')">Visualizar</button>'
+         + '</div>';
+  });
+  lista.innerHTML = html;
 }
 
-function renderComparadorParaDownload(r, nome){
-  var html=gerarHTMLComparador(r);
-  var blob=gerarPDFBlob(html,'Comparativo — '+(nome||'ContratoIQ'));
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url; a.download='comparativo-'+Date.now()+'.html'; a.click();
-  URL.revokeObjectURL(url);
+function visualizarItemHist(idAnalise) {
+  var item = historicoCache.find(h => h.id == idAnalise);
+  if(item && item.resultado_json) {
+    try {
+      var objeto = typeof item.resultado_json === 'string' ? JSON.parse(item.resultado_json) : item.resultado_json;
+      trocarAba('analise');
+      document.getElementById('resultado').innerHTML = construirLayoutAnalise(objeto);
+    } catch(e) {
+      alert('Erro ao processar estrutura do histórico.');
+    }
+  } else {
+    alert('Relatório indisponível no buffer.');
+  }
 }
 </script>
 </body>
