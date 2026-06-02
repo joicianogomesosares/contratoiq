@@ -406,24 +406,25 @@ async function validarToken(silencioso){
   btn.textContent='Validando...'; btn.disabled=true;
 
   try{
-    var res = await fetch('/.netlify/functions/historico?token='+encodeURIComponent(t));
+    // Valida token e busca histórico pelo Cloudflare Worker
+    var res = await fetch('https://contratoiq-analisar.gomesjoiciano.workers.dev', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({token: t, modo: 'validar'})
+    });
+
     var data = await res.json();
 
-    if(res.ok && Array.isArray(data)){
-      // Token válido — busca dados do token no Supabase via função
-      var resToken = await fetch('/.netlify/functions/gerar-token?token='+encodeURIComponent(t)+'&validar=1');
-      var cli = {};
-      try{cli = await resToken.json();}catch(e){}
-
+    if(res.ok && !data.error){
       tokenAtivo = t;
-      dadosCliente = cli;
+      dadosCliente = data.cliente || {};
       if(document.getElementById('manterConectado').checked) salvarToken(t);
-      historicoCache = data;
-      entrarApp(cli, data);
+      historicoCache = data.historico || [];
+      entrarApp(dadosCliente, historicoCache);
     } else {
       limparToken();
       msg.style.color='var(--red)';
-      msg.textContent=(data&&data.error)||'Token inválido. (85) 99232-3262';
+      msg.textContent=(data&&data.error)||'Token inválido. Contate o suporte: (85) 99232-3262';
     }
   }catch(e){
     limparToken();
@@ -515,7 +516,7 @@ function toBase64(file){
 }
 
 // ── ENDPOINT ──
-var ENDPOINT = '/.netlify/functions/analisar';
+var ENDPOINT = 'https://contratoiq-analisar.gomesjoiciano.workers.dev';
 
 // ── ANÁLISE ──
 async function iniciarAnalise(){
@@ -596,9 +597,13 @@ async function carregarHistorico(){
   var lista=document.getElementById('historico-lista');
   lista.innerHTML='<div class="historico-vazio">Carregando...</div>';
   try{
-    var res=await fetch('/.netlify/functions/historico?token='+encodeURIComponent(tokenAtivo));
+    var res=await fetch('https://contratoiq-analisar.gomesjoiciano.workers.dev',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({token:tokenAtivo,modo:'historico'})
+    });
     var data=await res.json();
-    historicoCache=Array.isArray(data)?data:[];
+    historicoCache=Array.isArray(data.historico)?data.historico:[];
     renderHistorico(historicoCache);
   }catch(e){
     lista.innerHTML='<div class="historico-vazio">Erro ao carregar histórico.</div>';
