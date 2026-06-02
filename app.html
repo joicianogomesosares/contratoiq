@@ -530,7 +530,8 @@ async function iniciarAnalise(){
   }
 
   var btn=document.getElementById('btnAnalisar');
-  btn.textContent='Analisando contrato...'; btn.disabled=true;
+  btn.textContent='Analisando...'; btn.disabled=true;
+  document.getElementById('resultado').innerHTML='<div style="padding:40px;text-align:center;font-family:\'DM Mono\',monospace;font-size:11px;opacity:.4;letter-spacing:1px;">Processando contrato... pode levar até 2 minutos para contratos longos.</div>';
 
   var base64=await toBase64(file);
 
@@ -540,12 +541,26 @@ async function iniciarAnalise(){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({base64,mediaType:'application/pdf',token:tokenAtivo,modo:'analise',foco})
     });
-    var data=await res.json();
-    if(!res.ok||data.error){alert(data.error||'Erro na análise.');return;}
+
+    // Lê a resposta completa (streaming transparente)
+    var text = await res.text();
+    var data;
+    try{
+      data = JSON.parse(text);
+    }catch(e){
+      alert('Resposta inválida do servidor. Tente novamente.');
+      return;
+    }
+
+    if(data.error){
+      alert(data.error);
+      return;
+    }
+
     if(data.analises_restantes!==undefined)
       document.getElementById('app-analises').textContent=data.analises_restantes+' análises restantes';
+
     renderResultado(data);
-    // Adiciona ao histórico cache
     historicoCache.unshift({
       arquivo_nome:data.nome_arquivo_sugerido||file.name,
       tipo_contrato:data.identificacao&&data.identificacao.tipo_contrato||'Contrato',
@@ -555,7 +570,10 @@ async function iniciarAnalise(){
       criado_em:new Date().toISOString(),
       resultado_json:JSON.stringify(data)
     });
-  }catch(e){alert('Erro: '+e.message);}
+  }catch(e){
+    alert('Erro de conexão: '+e.message);
+    document.getElementById('resultado').innerHTML='';
+  }
   finally{btn.textContent='Analisar contrato →';btn.disabled=false;}
 }
 
@@ -582,8 +600,10 @@ async function iniciarComparacao(){
         base64_v2,mediaType_v2:'application/pdf'
       })
     });
-    var data=await res.json();
-    if(!res.ok||data.error){alert(data.error||'Erro na comparação.');return;}
+    var text=await res.text();
+    var data;
+    try{data=JSON.parse(text);}catch(e){alert('Resposta inválida. Tente novamente.');return;}
+    if(data.error){alert(data.error);return;}
     if(data.analises_restantes!==undefined)
       document.getElementById('app-analises').textContent=data.analises_restantes+' análises restantes';
     renderComparador(data);
