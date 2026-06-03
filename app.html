@@ -535,37 +535,52 @@ async function iniciarAnalise(){
   if(!file){alert('Selecione um PDF.');return;}
 
   var foco=focoAtivo;
-  if(foco==='personalizado'){
-    foco=document.getElementById('focoPersonalizado').value.trim()||'geral';
-  }
+  if(foco==='personalizado') foco=document.getElementById('focoPersonalizado').value.trim()||'geral';
 
   var btn=document.getElementById('btnAnalisar');
-  btn.textContent='Enviando...'; btn.disabled=true;
+  btn.textContent='Analisando...'; btn.disabled=true;
 
-  var base64=await toBase64(file);
+  // Progresso simulado enquanto aguarda o Gemini
+  var passos=[
+    {pct:5,label:'Enviando contrato'},
+    {pct:20,label:'Lendo o documento'},
+    {pct:45,label:'Identificando cláusulas'},
+    {pct:65,label:'Avaliando riscos'},
+    {pct:80,label:'Elaborando parecer'},
+    {pct:92,label:'Finalizando análise'}
+  ];
+  var pi=0;
+  mostrarProgresso(passos[0].pct, passos[0].label, 'resultado');
+  var timer=setInterval(function(){
+    pi++; if(pi<passos.length) mostrarProgresso(passos[pi].pct,passos[pi].label,'resultado');
+  }, 8000);
 
   try{
+    var base64=await toBase64(file);
     var res=await fetch(ENDPOINT,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({base64,mediaType:'application/pdf',token:tokenAtivo,modo:'analise',foco})
     });
-
+    clearInterval(timer);
+    mostrarProgresso(98,'Processando resultado','resultado');
     var data=await res.json();
-
-    if(data.error){
-      alert(data.error);
-      btn.textContent='Analisar contrato →'; btn.disabled=false;
-      return;
-    }
-
-    // Job criado — inicia polling com barra de progresso
-    mostrarProgresso(0, 'Recebendo contrato');
-    btn.textContent='Analisando...';
-    pollJob(data.job_id, file.name);
-
+    if(data.error){alert(data.error);document.getElementById('resultado').innerHTML='';return;}
+    if(data.analises_restantes!==undefined)
+      document.getElementById('app-analises').textContent=data.analises_restantes+' análises restantes';
+    if(!Array.isArray(historicoCache)) historicoCache=[];
+    historicoCache.unshift({
+      arquivo_nome:data.nome_arquivo_sugerido||file.name,
+      tipo_contrato:data.identificacao&&data.identificacao.tipo_contrato||'Contrato',
+      score:data.score||0,recomendacao:data.recomendacao||'',
+      modo:'analise',criado_em:new Date().toISOString(),resultado_json:JSON.stringify(data)
+    });
+    renderResultado(data);
   }catch(e){
-    alert('Erro de conexão: '+e.message);
+    clearInterval(timer);
+    alert('Erro: '+e.message);
+    document.getElementById('resultado').innerHTML='';
+  }finally{
     btn.textContent='Analisar contrato →'; btn.disabled=false;
   }
 }
