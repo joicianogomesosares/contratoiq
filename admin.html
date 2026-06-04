@@ -124,6 +124,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
 
     <!-- DASHBOARD -->
     <div id="panel-dashboard" class="panel ativo">
+      <div id="erroAdmin" style="color:var(--red);font-family:DM Mono,monospace;font-size:12px;padding:0 0 12px;display:block"></div>
       <div class="stats-grid" id="dashStats"><div class="loading">Carregando...</div></div>
       <div class="dash-grid">
         <div>
@@ -332,17 +333,21 @@ async function api(path, method, body){
 }
 
 async function carregarTudo(){
-  var data = await api('dashboard');
-  dbTokens = data.tokens||[];
-  dbHistorico = data.historico||[];
-  dbFeedback = data.feedback||[];
-  dbLeads = await api('leads').then(function(d){return Array.isArray(d)?d:[];}).catch(function(){return[];});
-  renderDashboard();
-  renderTokens();
-  renderLeads();
-  renderHistorico();
-  renderFeedback();
-  renderTickets();
+  try {
+    var data = await api("dashboard");
+    if(data && data.error){ mostrarErro("Erro do servidor: "+data.error); return; }
+    dbTokens = (data&&data.tokens)||[];
+    dbHistorico = (data&&data.historico)||[];
+    dbFeedback = (data&&data.feedback)||[];
+    dbLeads = await api("leads").then(function(d){return Array.isArray(d)?d:[];}).catch(function(){return[];});
+    renderDashboard(); renderTokens(); renderLeads(); renderHistorico(); renderFeedback(); renderTickets();
+  } catch(e) {
+    mostrarErro("Falha ao conectar: "+e.message+". Publique o worker.js com a correcao de CORS no Cloudflare.");
+  }
+}
+function mostrarErro(msg){
+  var el=document.getElementById("erroAdmin");
+  if(el) el.innerHTML=msg;
 }
 
 function esc(t){ return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
