@@ -408,7 +408,7 @@ function setFoco(btn, foco){
 
 // ── VALIDAR TOKEN ──
 async function validarToken(silencioso){
-  var t = document.getElementById('tokenInput').value.trim();
+  var t = document.getElementById('tokenInput').value.trim().toUpperCase();
   var msg = document.getElementById('acesso-msg');
   var btn = document.getElementById('btnValidar');
   if(!t){msg.style.color='var(--red)';msg.textContent='Digite seu token.';return;}
