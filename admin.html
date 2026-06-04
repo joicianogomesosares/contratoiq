@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContratoIQ — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#0D0D0D;--cream:#F5F0E8;--gold:#C9A84C;--paper:#FAF7F2;--rule:rgba(13,13,13,0.1);--red:#C0392B;--green:#1E7D5A;--amber:#E67E22;--blue:#2471A3}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh}
+
+/* LOGIN */
+#tela-login{max-width:400px;margin:120px auto;padding:0 24px}
+.login-card{background:var(--paper);border:1px solid var(--rule);padding:40px}
+.login-logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;text-align:center;margin-bottom:6px}
+.login-logo span{color:var(--gold)}
+.login-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;text-align:center;margin-bottom:32px}
+.login-input{width:100%;padding:14px 16px;border:1px solid rgba(13,13,13,0.15);background:var(--cream);font-family:'DM Mono',monospace;font-size:14px;letter-spacing:2px;outline:none;margin-bottom:12px}
+.login-input:focus{border-color:var(--gold)}
+.login-btn{width:100%;padding:14px;background:var(--ink);color:var(--cream);border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer}
+.login-btn:hover{background:#2a2a2a}
+.login-err{color:var(--red);font-size:12px;margin-top:8px;display:none}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:var(--ink);position:sticky;top:0;z-index:100}
+.logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--cream)}
+.logo span{color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:16px}
+.nav-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--gold);background:rgba(201,168,76,0.15);padding:4px 10px}
+.nav-logout{font-family:'DM Mono',monospace;font-size:10px;color:rgba(245,240,232,0.4);background:none;border:none;cursor:pointer;letter-spacing:.5px}
+.nav-logout:hover{color:var(--cream)}
+
+/* TABS */
+.tabs-bar{display:flex;border-bottom:1px solid var(--rule);background:var(--paper);padding:0 32px;overflow-x:auto}
+.tab{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:14px 20px;cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;opacity:.4;color:var(--ink);white-space:nowrap}
+.tab.ativo{opacity:1;border-bottom-color:var(--gold);color:var(--gold)}
+
+/* CONTAINER */
+.container{max-width:1200px;margin:0 auto;padding:32px 24px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:32px}
+.stat{background:var(--paper);border:1px solid var(--rule);padding:20px;text-align:center}
+.stat-num{font-family:'Playfair Display',serif;font-size:40px;font-weight:900;line-height:1}
+.stat-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;opacity:.4;margin-top:6px;text-transform:uppercase}
+
+/* SECTION HEADER */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.sec-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700}
+.sec-search{padding:10px 16px;border:1px solid rgba(13,13,13,0.15);background:var(--paper);font-family:'DM Mono',monospace;font-size:11px;outline:none;min-width:220px}
+.sec-search:focus{border-color:var(--gold)}
+
+/* TABLE */
+.table-wrap{background:var(--paper);border:1px solid var(--rule);overflow-x:auto;margin-bottom:24px}
+table{width:100%;border-collapse:collapse}
+th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;padding:12px 16px;text-align:left;border-bottom:1px solid var(--rule);white-space:nowrap;background:var(--paper)}
+td{padding:12px 16px;border-bottom:1px solid var(--rule);font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(201,168,76,0.03)}
+.mono{font-family:'DM Mono',monospace;font-size:11px}
+.muted{opacity:.5;font-size:12px}
+
+/* BADGES */
+.badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:3px 10px;text-transform:uppercase;display:inline-block}
+.badge-ativo{background:rgba(30,125,90,0.1);color:var(--green)}
+.badge-inativo{background:rgba(192,57,43,0.1);color:var(--red)}
+.badge-lite{background:rgba(201,168,76,0.1);color:#8B6914}
+.badge-advanced{background:rgba(13,13,13,0.08);color:var(--ink)}
+.badge-trial{background:rgba(36,113,163,0.1);color:var(--blue)}
+.badge-novo{background:rgba(36,113,163,0.1);color:var(--blue)}
+.badge-form{background:rgba(142,68,173,0.1);color:#8E44AD}
+
+/* BTNS */
+.btn-sm{padding:5px 12px;border:1px solid rgba(13,13,13,0.2);background:none;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;cursor:pointer;color:var(--ink);text-transform:uppercase;transition:all .2s}
+.btn-sm:hover{background:var(--ink);color:var(--cream)}
+.btn-sm.danger{border-color:var(--red);color:var(--red)}
+.btn-sm.danger:hover{background:var(--red);color:var(--cream)}
+.btn-sm.success{border-color:var(--green);color:var(--green)}
+.btn-sm.success:hover{background:var(--green);color:var(--cream)}
+.btn-primary{padding:10px 20px;background:var(--ink);color:var(--cream);border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(13,13,13,0.7);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--paper);border:1px solid var(--rule);padding:32px;width:90%;max-width:520px;max-height:85vh;overflow-y:auto}
+.modal-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:20px}
+.modal-close{float:right;background:none;border:none;font-size:20px;cursor:pointer;opacity:.4;margin-top:-4px}
+.form-row{margin-bottom:16px}
+.form-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:6px;display:block}
+.form-input{width:100%;padding:10px 14px;border:1px solid rgba(13,13,13,0.15);background:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
+.form-input:focus{border-color:var(--gold)}
+.form-select{width:100%;padding:10px 14px;border:1px solid rgba(13,13,13,0.15);background:var(--cream);font-family:'DM Mono',monospace;font-size:11px;outline:none;cursor:pointer}
+.btn-save{width:100%;padding:14px;background:var(--ink);color:var(--cream);border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:8px}
+
+/* LOADING */
+.loading{text-align:center;padding:40px;font-family:'DM Mono',monospace;font-size:11px;opacity:.3;letter-spacing:1px}
+.empty{text-align:center;padding:40px;font-family:'DM Mono',monospace;font-size:11px;opacity:.3;letter-spacing:1px}
+
+/* TICKET */
+.ticket{background:var(--paper);border:1px solid var(--rule);padding:20px;margin-bottom:8px}
+.ticket-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:12px}
+.ticket-nome{font-weight:500;font-size:14px}
+.ticket-email{font-family:'DM Mono',monospace;font-size:11px;opacity:.5}
+.ticket-msg{font-size:13px;line-height:1.7;opacity:.75;white-space:pre-wrap}
+.ticket-data{font-family:'DM Mono',monospace;font-size:10px;opacity:.35}
+
+/* PANEL */
+.panel{display:none}
+.panel.ativo{display:block}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="tela-login">
+  <div class="login-card">
+    <div class="login-logo">Contrato<span>IQ</span></div>
+    <div class="login-sub">Área Administrativa</div>
+    <input type="password" class="login-input" id="senhaInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')entrar()">
+    <button class="login-btn" onclick="entrar()">Entrar</button>
+    <div class="login-err" id="loginErr">Senha incorreta.</div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin" style="display:none">
+  <nav>
+    <div class="logo">Contrato<span>IQ</span></div>
+    <div class="nav-right">
+      <span class="nav-badge">ADMIN</span>
+      <button class="nav-logout" onclick="sair()">Sair</button>
+    </div>
+  </nav>
+
+  <div class="tabs-bar">
+    <button class="tab ativo" onclick="trocarTab('dashboard',this)">Dashboard</button>
+    <button class="tab" onclick="trocarTab('tokens',this)">Tokens & Clientes</button>
+    <button class="tab" onclick="trocarTab('leads',this)">Leads (Formulário)</button>
+    <button class="tab" onclick="trocarTab('historico',this)">Histórico de Análises</button>
+    <button class="tab" onclick="trocarTab('suporte',this)">Suporte</button>
+  </div>
+
+  <div class="container">
+
+    <!-- DASHBOARD -->
+    <div id="panel-dashboard" class="panel ativo">
+      <div class="stats-grid" id="dashStats">
+        <div class="loading">Carregando...</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;flex-wrap:wrap">
+        <div>
+          <div class="sec-header"><div class="sec-title">Clientes Recentes</div></div>
+          <div class="table-wrap" id="dashClientes"><div class="loading">Carregando...</div></div>
+        </div>
+        <div>
+          <div class="sec-header"><div class="sec-title">Últimas Análises</div></div>
+          <div class="table-wrap" id="dashAnalises"><div class="loading">Carregando...</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOKENS -->
+    <div id="panel-tokens" class="panel">
+      <div class="sec-header">
+        <div class="sec-title">Tokens & Clientes</div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input class="sec-search" id="buscaTokens" placeholder="Buscar nome ou email..." oninput="renderTokens()">
+          <button class="btn-primary" onclick="abrirModalToken()">+ Novo Token</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Token</th><th>Nome</th><th>Email</th><th>Plano</th>
+            <th>Análises</th><th>Status</th><th>Criado</th><th>Ações</th>
+          </tr></thead>
+          <tbody id="tabelaTokens"><tr><td colspan="8"><div class="loading">Carregando...</div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LEADS FORMULÁRIO -->
+    <div id="panel-leads" class="panel">
+      <div class="sec-header">
+        <div class="sec-title">Leads do Formulário</div>
+        <input class="sec-search" id="buscaLeads" placeholder="Buscar..." oninput="renderLeads()">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Nome</th><th>Email</th><th>Escritório</th><th>WhatsApp</th><th>Segmento</th><th>Recebido</th>
+          </tr></thead>
+          <tbody id="tabelaLeads"><tr><td colspan="6"><div class="loading">Carregando...</div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- HISTÓRICO -->
+    <div id="panel-historico" class="panel">
+      <div class="sec-header">
+        <div class="sec-title">Histórico de Análises</div>
+        <input class="sec-search" id="buscaHistorico" placeholder="Buscar token ou arquivo..." oninput="renderHistorico()">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Token</th><th>Cliente</th><th>Arquivo</th><th>Tipo</th><th>Score</th><th>Recomendação</th><th>Data</th>
+          </tr></thead>
+          <tbody id="tabelaHistorico"><tr><td colspan="7"><div class="loading">Carregando...</div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SUPORTE -->
+    <div id="panel-suporte" class="panel">
+      <div class="sec-header">
+        <div class="sec-title">Atendimento ao Cliente</div>
+        <button class="btn-primary" onclick="abrirModalSuporte()">+ Novo Atendimento</button>
+      </div>
+      <div id="listaTickets"><div class="loading">Carregando...</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL TOKEN -->
+<div class="modal-overlay" id="modalToken">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModal('modalToken')">✕</button>
+    <div class="modal-title" id="modalTokenTitle">Novo Token</div>
+    <input type="hidden" id="tokenEditId">
+    <div class="form-row"><label class="form-label">Nome do cliente</label><input class="form-input" id="tNome"></div>
+    <div class="form-row"><label class="form-label">Email</label><input class="form-input" id="tEmail" type="email"></div>
+    <div class="form-row">
+      <label class="form-label">Plano</label>
+      <select class="form-select" id="tPlano" onchange="atualizarLimite()">
+        <option value="trial">Trial (10 análises)</option>
+        <option value="lite">Lite (300 análises)</option>
+        <option value="advanced">Advanced (1000 análises)</option>
+      </select>
+    </div>
+    <div class="form-row"><label class="form-label">Limite de análises</label><input class="form-input" id="tLimite" type="number"></div>
+    <div class="form-row">
+      <label class="form-label">Status</label>
+      <select class="form-select" id="tAtivo">
+        <option value="true">Ativo</option>
+        <option value="false">Inativo</option>
+      </select>
+    </div>
+    <button class="btn-save" onclick="salvarToken()">Salvar</button>
+  </div>
+</div>
+
+<!-- MODAL SUPORTE -->
+<div class="modal-overlay" id="modalSuporte">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModal('modalSuporte')">✕</button>
+    <div class="modal-title">Registrar Atendimento</div>
+    <div class="form-row"><label class="form-label">Nome do cliente</label><input class="form-input" id="sNome"></div>
+    <div class="form-row"><label class="form-label">Email</label><input class="form-input" id="sEmail"></div>
+    <div class="form-row"><label class="form-label">Assunto</label><input class="form-input" id="sAssunto"></div>
+    <div class="form-row"><label class="form-label">Descrição</label><textarea class="form-input" id="sDescricao" style="min-height:100px"></textarea></div>
+    <div class="form-row">
+      <label class="form-label">Status</label>
+      <select class="form-select" id="sStatus">
+        <option value="aberto">Aberto</option>
+        <option value="em_andamento">Em andamento</option>
+        <option value="resolvido">Resolvido</option>
+      </select>
+    </div>
+    <button class="btn-save" onclick="salvarTicket()">Salvar Atendimento</button>
+  </div>
+</div>
+
+<script>
+var SB_URL = 'https://xgevgxhrdycvpdhdobti.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnZXZneGhyZHljdnBkaGRvYnRpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODg4OTAxMCwiZXhwIjoyMDk0NDY1MDEwfQ.FlyxreY1nmrC2coKaPDC2cOkZ01pjU9kJtXKTqjBAvY';
+var ADMIN_SENHA = 'CIQ@admin2026';
+var TICKETS_KEY = 'ciq_admin_tickets';
+
+var dbTokens = [];
+var dbLeads = [];
+var dbHistorico = [];
+
+// AUTH
+function entrar(){
+  var s = document.getElementById('senhaInput').value;
+  if(s === ADMIN_SENHA){
+    document.getElementById('tela-login').style.display='none';
+    document.getElementById('admin').style.display='block';
+    carregarTudo();
+  } else {
+    document.getElementById('loginErr').style.display='block';
+  }
+}
+function sair(){
+  document.getElementById('tela-login').style.display='block';
+  document.getElementById('admin').style.display='none';
+  document.getElementById('senhaInput').value='';
+}
+
+// TABS
+function trocarTab(id,btn){
+  document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('ativo');});
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('ativo');});
+  btn.classList.add('ativo');
+  document.getElementById('panel-'+id).classList.add('ativo');
+}
+
+// SUPABASE
+async function sbGet(path){
+  var r = await fetch(SB_URL+'/rest/v1/'+path,{
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'}
+  });
+  return r.json();
+}
+async function sbPatch(path,body){
+  var r = await fetch(SB_URL+'/rest/v1/'+path,{
+    method:'PATCH',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(body)
+  });
+  return r;
+}
+async function sbPost(path,body){
+  var r = await fetch(SB_URL+'/rest/v1/'+path,{
+    method:'POST',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
+    body:JSON.stringify(body)
+  });
+  return r.json();
+}
+
+// CARREGAR
+async function carregarTudo(){
+  dbTokens = await sbGet('tokens?order=criado_em.desc&select=*') || [];
+  dbHistorico = await sbGet('historico?order=criado_em.desc&limit=200&select=*') || [];
+  dbLeads = await sbGet('formulario_leads?order=criado_em.desc&select=*').catch(()=>[]) || [];
+  renderDashboard();
+  renderTokens();
+  renderLeads();
+  renderHistorico();
+  renderTickets();
+}
+
+// ESC
+function esc(t){ return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmt(d){ return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }
+
+// DASHBOARD
+function renderDashboard(){
+  var ativos = dbTokens.filter(function(t){return t.ativo;}).length;
+  var convertidos = dbTokens.filter(function(t){return t.ativo && (t.plano==='lite'||t.plano==='advanced');}).length;
+  var trials = dbTokens.filter(function(t){return t.ativo && t.plano==='trial';}).length;
+  var totalAnalises = dbHistorico.length;
+
+  document.getElementById('dashStats').innerHTML=
+    '<div class="stat"><div class="stat-num" style="color:var(--gold)">'+ativos+'</div><div class="stat-label">Tokens Ativos</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--green)">'+convertidos+'</div><div class="stat-label">Clientes Pagantes</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--blue)">'+trials+'</div><div class="stat-label">Em Trial</div></div>'+
+    '<div class="stat"><div class="stat-num">'+totalAnalises+'</div><div class="stat-label">Análises Realizadas</div></div>';
+
+  // Clientes recentes
+  var rows = dbTokens.slice(0,5).map(function(t){
+    return '<tr><td><div style="font-weight:500;font-size:13px">'+esc(t.nome||'—')+'</div><div class="muted">'+esc(t.email||'')+'</div></td>'+
+      '<td><span class="badge badge-'+esc(t.plano||'trial')+'">'+esc(t.plano||'trial')+'</span></td>'+
+      '<td class="mono">'+(t.analises_usadas||0)+'/'+(t.analises_limite||0)+'</td></tr>';
+  }).join('');
+  document.getElementById('dashClientes').innerHTML='<table><thead><tr><th>Cliente</th><th>Plano</th><th>Uso</th></tr></thead><tbody>'+rows+'</tbody></table>';
+
+  // Últimas análises
+  var rows2 = dbHistorico.slice(0,5).map(function(h){
+    return '<tr><td style="font-size:12px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(h.arquivo_nome||'—')+'</td>'+
+      '<td><span style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--gold)">'+(h.score||'—')+'</span></td>'+
+      '<td class="muted">'+fmt(h.criado_em)+'</td></tr>';
+  }).join('');
+  document.getElementById('dashAnalises').innerHTML='<table><thead><tr><th>Arquivo</th><th>Score</th><th>Data</th></tr></thead><tbody>'+rows2+'</tbody></table>';
+}
+
+// TOKENS
+function renderTokens(){
+  var busca = (document.getElementById('buscaTokens').value||'').toLowerCase();
+  var lista = dbTokens.filter(function(t){
+    return !busca || (t.nome||'').toLowerCase().includes(busca) || (t.email||'').toLowerCase().includes(busca) || (t.token||'').toLowerCase().includes(busca);
+  });
+  if(!lista.length){
+    document.getElementById('tabelaTokens').innerHTML='<tr><td colspan="8"><div class="empty">Nenhum token encontrado</div></td></tr>';
+    return;
+  }
+  document.getElementById('tabelaTokens').innerHTML = lista.map(function(t,i){
+    var idx = dbTokens.indexOf(t);
+    var uso = (t.analises_usadas||0)+'/'+(t.analises_limite||0);
+    var pct = t.analises_limite ? Math.round((t.analises_usadas||0)/t.analises_limite*100) : 0;
+    return '<tr>'+
+      '<td class="mono" style="font-size:11px">'+esc(t.token||'')+'</td>'+
+      '<td style="font-weight:500">'+esc(t.nome||'—')+'</td>'+
+      '<td class="muted">'+esc(t.email||'')+'</td>'+
+      '<td><span class="badge badge-'+(t.plano||'trial')+'">'+esc(t.plano||'trial')+'</span></td>'+
+      '<td class="mono">'+uso+' <span style="opacity:.4">('+pct+'%)</span></td>'+
+      '<td><span class="badge '+(t.ativo?'badge-ativo':'badge-inativo')+'">'+(t.ativo?'Ativo':'Inativo')+'</span></td>'+
+      '<td class="muted">'+fmt(t.criado_em)+'</td>'+
+      '<td><div style="display:flex;gap:6px">'+
+        '<button class="btn-sm" onclick="editarToken('+idx+')">Editar</button>'+
+        (t.ativo
+          ? '<button class="btn-sm danger" onclick="toggleToken('+idx+',false)">Desativar</button>'
+          : '<button class="btn-sm success" onclick="toggleToken('+idx+',true)">Ativar</button>')+
+      '</div></td>'+
+    '</tr>';
+  }).join('');
+}
+
+async function toggleToken(idx,ativo){
+  var t = dbTokens[idx];
+  await sbPatch('tokens?token=eq.'+encodeURIComponent(t.token),{ativo:ativo});
+  dbTokens[idx].ativo = ativo;
+  renderTokens();
+  renderDashboard();
+}
+
+function abrirModalToken(){
+  document.getElementById('modalTokenTitle').textContent='Novo Token';
+  document.getElementById('tokenEditId').value='';
+  document.getElementById('tNome').value='';
+  document.getElementById('tEmail').value='';
+  document.getElementById('tPlano').value='trial';
+  document.getElementById('tLimite').value='10';
+  document.getElementById('tAtivo').value='true';
+  document.getElementById('modalToken').classList.add('show');
+}
+
+function editarToken(idx){
+  var t = dbTokens[idx];
+  document.getElementById('modalTokenTitle').textContent='Editar Token';
+  document.getElementById('tokenEditId').value=t.token;
+  document.getElementById('tNome').value=t.nome||'';
+  document.getElementById('tEmail').value=t.email||'';
+  document.getElementById('tPlano').value=t.plano||'trial';
+  document.getElementById('tLimite').value=t.analises_limite||10;
+  document.getElementById('tAtivo').value=String(t.ativo!==false);
+  document.getElementById('modalToken').classList.add('show');
+}
+
+function atualizarLimite(){
+  var plano = document.getElementById('tPlano').value;
+  var m={trial:10,lite:300,advanced:1000};
+  document.getElementById('tLimite').value=m[plano]||10;
+}
+
+async function salvarToken(){
+  var id = document.getElementById('tokenEditId').value;
+  var body={
+    nome:document.getElementById('tNome').value.trim(),
+    email:document.getElementById('tEmail').value.trim(),
+    plano:document.getElementById('tPlano').value,
+    analises_limite:parseInt(document.getElementById('tLimite').value)||10,
+    ativo:document.getElementById('tAtivo').value==='true'
+  };
+  if(id){
+    await sbPatch('tokens?token=eq.'+encodeURIComponent(id),body);
+    var idx = dbTokens.findIndex(function(t){return t.token===id;});
+    if(idx>=0) Object.assign(dbTokens[idx],body);
+  } else {
+    var now = new Date();
+    var token = 'CIQ-'+now.getFullYear()+(String(now.getMonth()+1).padStart(2,'0'))+(String(now.getDate()).padStart(2,'0'))+'-'+(String(now.getHours()).padStart(2,'0'))+(String(now.getMinutes()).padStart(2,'0'))+(String(now.getSeconds()).padStart(2,'0'));
+    body.token=token; body.analises_usadas=0; body.criado_em=now.toISOString();
+    var res = await sbPost('tokens',body);
+    if(Array.isArray(res)&&res[0]) dbTokens.unshift(res[0]);
+  }
+  fecharModal('modalToken');
+  renderTokens();
+  renderDashboard();
+}
+
+// LEADS
+function renderLeads(){
+  var busca = (document.getElementById('buscaLeads').value||'').toLowerCase();
+  var lista = dbLeads.filter(function(l){
+    return !busca || JSON.stringify(l).toLowerCase().includes(busca);
+  });
+  if(!lista.length){
+    document.getElementById('tabelaLeads').innerHTML='<tr><td colspan="6"><div class="empty">Nenhum lead encontrado</div></td></tr>';
+    return;
+  }
+  document.getElementById('tabelaLeads').innerHTML = lista.map(function(l){
+    return '<tr>'+
+      '<td style="font-weight:500">'+esc(l.nome||l.name||'—')+'</td>'+
+      '<td class="muted mono">'+esc(l.email||'')+'</td>'+
+      '<td>'+esc(l.escritorio||l.company||'')+'</td>'+
+      '<td class="mono muted">'+esc(l.whatsapp||l.phone||'')+'</td>'+
+      '<td>'+esc(l.segmento||l.segment||'')+'</td>'+
+      '<td class="muted">'+fmt(l.criado_em||l.created_at)+'</td>'+
+    '</tr>';
+  }).join('');
+}
+
+// HISTÓRICO
+function renderHistorico(){
+  var busca = (document.getElementById('buscaHistorico').value||'').toLowerCase();
+  var lista = dbHistorico.filter(function(h){
+    return !busca || (h.token||'').toLowerCase().includes(busca) || (h.arquivo_nome||'').toLowerCase().includes(busca) || (h.cliente_nome||'').toLowerCase().includes(busca);
+  });
+  if(!lista.length){
+    document.getElementById('tabelaHistorico').innerHTML='<tr><td colspan="7"><div class="empty">Nenhum registro encontrado</div></td></tr>';
+    return;
+  }
+  var corRec={ASSINAR:'var(--green)',NEGOCIAR:'var(--amber)',RECUSAR:'var(--red)'};
+  document.getElementById('tabelaHistorico').innerHTML = lista.map(function(h){
+    return '<tr>'+
+      '<td class="mono" style="font-size:11px">'+esc(h.token||'')+'</td>'+
+      '<td style="font-size:13px">'+esc(h.cliente_nome||'—')+'</td>'+
+      '<td style="font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(h.arquivo_nome||'—')+'</td>'+
+      '<td class="muted">'+esc(h.tipo_contrato||'')+'</td>'+
+      '<td><span style="font-family:\'DM Mono\',monospace;font-size:11px;color:var(--gold)">'+(h.score||'—')+'</span></td>'+
+      '<td><span style="font-size:11px;color:'+(corRec[h.recomendacao]||'inherit')+'">'+esc(h.recomendacao||'—')+'</span></td>'+
+      '<td class="muted">'+fmt(h.criado_em)+'</td>'+
+    '</tr>';
+  }).join('');
+}
+
+// TICKETS (localStorage)
+function carregarTickets(){ try{return JSON.parse(localStorage.getItem(TICKETS_KEY)||'[]');}catch(e){return[];} }
+function salvarTickets(t){ try{localStorage.setItem(TICKETS_KEY,JSON.stringify(t));}catch(e){} }
+
+function renderTickets(){
+  var tickets = carregarTickets();
+  if(!tickets.length){
+    document.getElementById('listaTickets').innerHTML='<div class="empty">Nenhum atendimento registrado</div>';
+    return;
+  }
+  var cores={aberto:'var(--amber)',em_andamento:'var(--blue)',resolvido:'var(--green)'};
+  document.getElementById('listaTickets').innerHTML = tickets.map(function(t,i){
+    return '<div class="ticket">'+
+      '<div class="ticket-header">'+
+        '<div><div class="ticket-nome">'+esc(t.nome)+'</div><div class="ticket-email">'+esc(t.email)+'</div></div>'+
+        '<div style="display:flex;gap:8px;align-items:center">'+
+          '<span style="font-family:\'DM Mono\',monospace;font-size:9px;letter-spacing:1px;color:'+cores[t.status]+';text-transform:uppercase">'+t.status.replace('_',' ')+'</span>'+
+          '<button class="btn-sm" onclick="mudarTicket('+i+')">'+((t.status==='resolvido')?'Reabrir':'Resolver')+'</button>'+
+          '<button class="btn-sm danger" onclick="excluirTicket('+i+')">Del</button>'+
+        '</div>'+
+      '</div>'+
+      '<div style="font-weight:500;font-size:13px;margin-bottom:6px">'+esc(t.assunto)+'</div>'+
+      '<div class="ticket-msg">'+esc(t.descricao)+'</div>'+
+      '<div class="ticket-data" style="margin-top:8px">'+fmt(t.data)+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+function abrirModalSuporte(){
+  ['sNome','sEmail','sAssunto','sDescricao'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('sStatus').value='aberto';
+  document.getElementById('modalSuporte').classList.add('show');
+}
+
+function salvarTicket(){
+  var t={
+    nome:document.getElementById('sNome').value.trim(),
+    email:document.getElementById('sEmail').value.trim(),
+    assunto:document.getElementById('sAssunto').value.trim(),
+    descricao:document.getElementById('sDescricao').value.trim(),
+    status:document.getElementById('sStatus').value,
+    data:new Date().toISOString()
+  };
+  if(!t.assunto){alert('Assunto é obrigatório.');return;}
+  var tickets=carregarTickets();
+  tickets.unshift(t);
+  salvarTickets(tickets);
+  fecharModal('modalSuporte');
+  renderTickets();
+}
+
+function mudarTicket(i){
+  var tickets=carregarTickets();
+  tickets[i].status = tickets[i].status==='resolvido' ? 'aberto' : 'resolvido';
+  salvarTickets(tickets);
+  renderTickets();
+}
+
+function excluirTicket(i){
+  if(!confirm('Remover este atendimento?'))return;
+  var tickets=carregarTickets();
+  tickets.splice(i,1);
+  salvarTickets(tickets);
+  renderTickets();
+}
+
+function fecharModal(id){document.getElementById(id).classList.remove('show');}
+document.querySelectorAll('.modal-overlay').forEach(function(m){
+  m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('show');});
+});
+document.getElementById('senhaInput').addEventListener('keydown',function(e){if(e.key==='Enter')entrar();});
+</script>
+</body>
+</html>
