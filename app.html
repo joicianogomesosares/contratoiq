@@ -894,18 +894,27 @@ function gerarHTMLResultado(r){
 
   // OBRIGAÇÕES
   var ob=obj(r.obrigacoes);
-  if(arr(ob.contratante).length||arr(ob.contratada).length){
-    html+='<div class="res-section"><div class="res-h3">Obrigações</div><div class="res-grid">';
-    ['contratante','contratada'].forEach(function(p){
-      html+='<div class="obrig-col"><div class="obrig-title">'+p.toUpperCase()+'</div>';
-      arr(ob[p]).forEach(function(o){
-        var txt=typeof o==='object'?(o.descricao||''):String(o);
-        html+='<div class="obrig-item"><span style="color:var(--gold);flex-shrink:0">→</span>'+txt+'</div>';
+  html+='<div class="res-section"><div class="res-h3">Obrigações</div><div class="res-grid">';
+  ['contratante','contratada'].forEach(function(p){
+    var itens=arr(ob[p]);
+    html+='<div class="obrig-col"><div class="obrig-title">'+p.toUpperCase()+' <span style="opacity:.4;font-weight:300">('+itens.length+')</span></div>';
+    if(itens.length===0){
+      html+='<div class="obrig-item" style="opacity:.35;font-style:italic">Não identificadas no contrato</div>';
+    } else {
+      itens.forEach(function(o){
+        var txt=typeof o==='object'?(o.descricao||JSON.stringify(o)):String(o);
+        var risco=typeof o==='object'?(o.risco||''):'' ;
+        var cor=risco==='alto'?'var(--red)':risco==='medio'?'var(--amber)':'var(--gold)';
+        html+='<div class="obrig-item"><span style="color:'+cor+';flex-shrink:0">→</span><div><div>'+txt+'</div>';
+        if(typeof o==='object'&&o.penalidade_descumprimento){
+          html+='<div style="font-size:11px;opacity:.5;margin-top:3px">Penalidade: '+o.penalidade_descumprimento+'</div>';
+        }
+        html+='</div></div>';
       });
-      html+='</div>';
-    });
-    html+='</div></div>';
-  }
+    }
+    html+='</div>';
+  });
+  html+='</div></div>';
 
   // PRAZOS
   if(arr(r.prazos_criticos).length){
