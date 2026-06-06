@@ -1262,17 +1262,25 @@ function renderMonitoramento(){
 }
 
 function editarMonit(btn){
-  var servico=btn.dataset.servico;
-  var m=dbMonit.find(function(x){return x.servico===servico;})||{};
-  var custo = prompt('Custo mensal (R$):', dados.custo_mensal||0);
+  var servico = btn.dataset.servico;
+  var m = dbMonit.find(function(x){return x.servico===servico;})||{};
+  var custo = prompt('Custo mensal (R$) — ex: 59:', m.custo_mensal||0);
   if(custo===null) return;
-  var consumo = prompt('Consumo atual:', dados.consumo_atual||'');
+  var consumo = prompt('Consumo atual — ex: 3.200 ops:', m.consumo_atual||'');
   if(consumo===null) return;
-  var pct = prompt('% de uso (0-100):', dados.percentual_uso||0);
+  var pct = prompt('% de uso (0-100):', m.percentual_uso||0);
   if(pct===null) return;
-  var status = prompt('Status (OK/Atenção/Crítico):', dados.status||'OK');
+  var status = prompt('Status (OK/Atenção/Crítico):', m.status||'OK');
   if(status===null) return;
-  api('monitoramento/'+encodeURIComponent(servico),'PATCH',{custo_mensal:parseFloat(custo),consumo_atual:consumo,percentual_uso:parseFloat(pct),status:status}).then(carregarMonitoramento);
+  var notas = prompt('Notas/observações:', m.notas||'');
+  if(notas===null) return;
+  api('monitoramento/'+encodeURIComponent(servico),'PATCH',{
+    custo_mensal: parseFloat(custo)||0,
+    consumo_atual: consumo,
+    percentual_uso: parseFloat(pct)||0,
+    status: status,
+    notas: notas
+  }).then(function(){ carregarMonitoramento(); });
 }
 
 async function perguntarCFO(){
@@ -1282,20 +1290,36 @@ async function perguntarCFO(){
   resEl.style.display='block';
   resEl.textContent='Analisando...';
 
-  var ctx = JSON.stringify(dbMonit.map(function(m){
-    return {servico:m.servico,plano:m.plano,custo:m.custo_mensal,consumo:m.consumo_atual,pct:m.percentual_uso,status:m.status};
-  }));
+  var custoTotal = dbMonit.reduce(function(s,m){return s+(m.custo_mensal||0);},0);
+  var mrrTotal = dbTokens.filter(function(t){return t.ativo&&t.plano==='lite';}).length*1790 +
+                 dbTokens.filter(function(t){return t.ativo&&t.plano==='advanced';}).length*5970;
+  var ctx = JSON.stringify({
+    servicos: dbMonit.map(function(m){
+      return {servico:m.servico,plano:m.plano,custo:m.custo_mensal,consumo:m.consumo_atual,pct:m.percentual_uso,status:m.status,notas:m.notas};
+    }),
+    custo_fixo_total: custoTotal,
+    mrr_atual: mrrTotal,
+    clientes_pagantes: dbTokens.filter(function(t){return t.ativo&&(t.plano==='lite'||t.plano==='advanced');}).length,
+    clientes_trial: dbTokens.filter(function(t){return t.ativo&&t.plano==='trial';}).length,
+    total_analises: dbHistorico.length,
+    leads_prospeccao: dbProsp ? dbProsp.length : 0
+  });
 
   try {
     var r = await fetch(WORKER+'/admin/cfo-ia',{
       method:'POST',
-      headers:{'Content-Type':'application/json','X-Admin-Token':ADMIN_TOKEN},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:'Você é o CFO operacional do ContratoIQ, uma startup SaaS jurídica brasileira. Responda em português, de forma direta e objetiva, com base apenas nos dados fornecidos.',messages:[{role:'user',content:'Dados dos serviços: '+ctx+'\n\nPergunta: '+pergunta}]})
+      headers:{'Content-Type':'application/json','X-Admin-Token':ADMIN_SENHA},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:800,
+        system:'Você é o CFO operacional do ContratoIQ, uma startup SaaS jurídica brasileira. Responda em português, de forma direta e objetiva, com análise de margem, custo por cliente, break-even e recomendações práticas quando relevante. Use os dados fornecidos.',
+        messages:[{role:'user',content:'Contexto operacional: '+ctx+'\n\nPergunta: '+pergunta}]
+      })
     });
     var d = await r.json();
-    resEl.textContent = d.content && d.content[0] ? d.content[0].text : 'Erro na resposta.';
+    resEl.textContent = d.content && d.content[0] ? d.content[0].text : (d.error ? 'Erro: '+d.error : 'Erro na resposta.');
   } catch(e) {
-    resEl.textContent = 'Erro ao conectar com a IA.';
+    resEl.textContent = 'Erro ao conectar com a IA: '+e.message;
   }
 }
 
