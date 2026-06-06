@@ -117,7 +117,10 @@ tr:hover td{background:rgba(201,168,76,0.03)}
     <button class="tab" onclick="trocarTab('leads',this)">Leads</button>
     <button class="tab" onclick="trocarTab('historico',this)">Histórico</button>
     <button class="tab" onclick="trocarTab('feedback',this)">Feedback</button>
+    <button class="tab" onclick="trocarTab('prospeccao',this)">Prospecção</button>
+    <button class="tab" onclick="trocarTab('monitoramento',this)">Monitoramento</button>
     <button class="tab" onclick="trocarTab('suporte',this)">Suporte</button>
+    <button class="tab" onclick="trocarTab('automacao',this)">⚡ Automação</button>
   </div>
 
   <div class="container">
@@ -191,9 +194,199 @@ tr:hover td{background:rgba(201,168,76,0.03)}
       </div>
       <div id="listaFeedback"><div class="loading">Carregando...</div></div>
     </div>
+    <!-- PROSPECÇÃO -->
+    <div id="panel-prospeccao" class="panel">
+      <div class="sec-header">
+        <div class="sec-title">Prospecção Automática</div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input class="sec-search" id="buscaProsp" placeholder="Buscar..." oninput="renderProspeccao()">
+          <button class="btn-primary" id="btnDisparar" onclick="dispararProspeccao()">▶ Disparar Emails</button>
+        </div>
+      </div>
+      
+      <!-- GOOGLE MAPS DISCOVERY -->
+      <div style="background:var(--paper);border:1px solid var(--rule);padding:24px;margin-bottom:20px">
+        <div class="sec-header" style="margin-bottom:16px">
+          <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700">Descoberta de Leads</div>
+          <span class="badge badge-novo">Multi-fonte</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+          <div>
+            <label class="form-label" style="display:block;margin-bottom:6px">Setor</label>
+            <select class="form-select" id="mapsSetor">
+              <option value="advocacia">Escritórios de Advocacia</option>
+              <option value="construção">Construtoras e Incorporadoras</option>
+              <option value="imobiliária">Imobiliárias</option>
+              <option value="franquias">Franquias</option>
+              <option value="saúde">Saúde e Clínicas</option>
+              <option value="tecnologia">Empresas de Tecnologia</option>
+              <option value="agronegócio">Agronegócio</option>
+              <option value="contabilidade">Contabilidades</option>
+              <option value="indústria">Indústria e Distribuidoras</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label" style="display:block;margin-bottom:6px">Cidade</label>
+            <select class="form-select" id="mapsCidade">
+              <option value="-23.5505,-46.6333">São Paulo, SP</option>
+              <option value="-22.9068,-43.1729">Rio de Janeiro, RJ</option>
+              <option value="-19.9167,-43.9345">Belo Horizonte, MG</option>
+              <option value="-25.4296,-49.2713">Curitiba, PR</option>
+              <option value="-30.0346,-51.2177">Porto Alegre, RS</option>
+              <option value="-15.7801,-47.9292">Brasília, DF</option>
+              <option value="-16.6869,-49.2648">Goiânia, GO</option>
+              <option value="-8.0476,-34.8770">Recife, PE</option>
+              <option value="-3.7172,-38.5433" selected>Fortaleza, CE</option>
+              <option value="-12.9714,-38.5014">Salvador, BA</option>
+              <option value="-3.1190,-60.0217">Manaus, AM</option>
+              <option value="-22.9064,-47.0616">Campinas, SP</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label" style="display:block;margin-bottom:6px">Chave Google Maps API</label>
+            <input class="form-input" id="mapsGoogleKey" placeholder="AIza..." type="password" value="" style="font-family:'DM Mono',monospace;font-size:11px">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <button class="btn-primary" onclick="buscarGoogleMaps()" id="btnMaps">🔍 Buscar Leads no Google Maps</button>
+          <span style="font-size:12px;opacity:.4">Cada busca retorna até 60 empresas. Gratuito até 6.000 buscas/mês.</span>
+        </div>
+        <div id="mapsLog" style="margin-top:12px;font-size:12px;font-family:'DM Mono',monospace;opacity:.5;display:none"></div>
+      </div>
+
+      <div id="statsProsp" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px"></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nome</th><th>Empresa</th><th>Email</th><th>Status</th><th>Score</th><th>Gatilho</th><th>Objeção</th><th>Contato</th><th>Msg</th></tr></thead>
+          <tbody id="tabelaProsp"><tr><td colspan="7"><div class="loading">Carregando...</div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <!-- MONITORAMENTO -->
+    <div id="panel-monitoramento" class="panel">
+      <div class="sec-header">
+        <div class="sec-title">CFO Operacional</div>
+        <button class="btn-primary" onclick="carregarMonitoramento()">↻ Atualizar</button>
+      </div>
+      <div id="statsMonit" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px"></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Serviço</th><th>Plano</th><th>Custo/mês</th><th>Limite</th><th>Consumo</th><th>%</th><th>Status</th><th>Atualizado</th><th>Ação</th></tr></thead>
+          <tbody id="tabelaMonit"><tr><td colspan="9"><div class="loading">Carregando...</div></td></tr></tbody>
+        </table>
+      </div>
+      <div style="background:var(--paper);border:1px solid var(--rule);padding:24px;margin-top:8px">
+        <div class="sec-title" style="font-size:16px;margin-bottom:16px">Perguntar ao CFO IA</div>
+        <div style="display:flex;gap:10px">
+          <input id="cfoPergunta" class="sec-search" style="flex:1;min-width:0" placeholder="Ex: Quanto gasto por mês? Tem algum serviço em risco?">
+          <button class="btn-primary" onclick="perguntarCFO()">Perguntar</button>
+        </div>
+        <div id="cfoResposta" style="margin-top:16px;font-size:13px;line-height:1.7;display:none;background:var(--cream);padding:16px;border-left:3px solid var(--gold)"></div>
+      </div>
+    </div>
 
     <!-- SUPORTE -->
-    <div id="panel-suporte" class="panel">
+
+    <!-- MONITORAMENTO -->
+    <div id="panel-monitoramento" class="panel">
+      <div class="sec-header">
+        <div class="sec-title">CFO Operacional</div>
+        <button class="btn-primary" onclick="carregarMonitoramento()">↻ Atualizar</button>
+      </div>
+      <div id="statsMonit" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px"></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Serviço</th><th>Plano</th><th>Custo/mês</th><th>Limite</th><th>Consumo</th><th>%</th><th>Status</th><th>Atualizado</th><th>Ação</th></tr></thead>
+          <tbody id="tabelaMonit"><tr><td colspan="9"><div class="loading">Carregando...</div></td></tr></tbody>
+        </table>
+      </div>
+      <div style="background:var(--paper);border:1px solid var(--rule);padding:24px;margin-top:8px">
+        <div class="sec-title" style="font-size:16px;margin-bottom:16px">Perguntar ao CFO IA</div>
+        <div style="display:flex;gap:10px">
+          <input id="cfoPergunta" class="sec-search" style="flex:1;min-width:0" placeholder="Ex: Quanto gasto por mês? Tem algum serviço em risco?">
+          <button class="btn-primary" onclick="perguntarCFO()">Perguntar</button>
+        </div>
+        <div id="cfoResposta" style="margin-top:16px;font-size:13px;line-height:1.7;display:none;background:var(--cream);padding:16px;border-left:3px solid var(--gold)"></div>
+      </div>
+    </div>
+
+    <!-- SUPORTE -->
+    
+  <!-- PANEL AUTOMAÇÃO TOTAL -->
+  <div id="panel-automacao" class="panel">
+
+    <!-- MASTER SWITCH -->
+    <div style="background:var(--ink);padding:40px;text-align:center;margin-bottom:20px">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:rgba(245,240,232,0.4);margin-bottom:12px;text-transform:uppercase">Sistema de Automação</div>
+      <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:8px">Automatização Total</div>
+      <div style="font-size:13px;color:rgba(245,240,232,0.5);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto">Prospecção, respostas, follow-up, onboarding e monitoramento — tudo rodando 24h/7d com uma ativação.</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:24px">
+        <div id="autoStatusDot" style="width:12px;height:12px;border-radius:50%;background:var(--red);flex-shrink:0"></div>
+        <div id="autoStatusLabel" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(245,240,232,0.5);letter-spacing:2px">INATIVO</div>
+        <button id="btnAutoToggle" onclick="toggleAutomacao()" style="background:var(--gold);color:var(--ink);border:none;padding:14px 40px;font-weight:600;font-size:15px;cursor:pointer;letter-spacing:1px">
+          ATIVAR AUTOMAÇÃO
+        </button>
+      </div>
+      <div id="autoToggleLog" style="margin-top:16px;font-family:'DM Mono',monospace;font-size:11px;color:rgba(245,240,232,0.4)"></div>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px" id="autoKpis">
+      <div class="stat-card" id="kpiProspeccao">
+        <div class="stat-num" id="kpiProspNum">—</div>
+        <div class="stat-label">Em Prospecção</div>
+      </div>
+      <div class="stat-card" id="kpiRespondeu">
+        <div class="stat-num" id="kpiRespNum">—</div>
+        <div class="stat-label">Responderam</div>
+      </div>
+      <div class="stat-card" id="kpiDemo">
+        <div class="stat-num" id="kpiDemoNum">—</div>
+        <div class="stat-label">Em Demo</div>
+      </div>
+      <div class="stat-card" id="kpiOnboarding">
+        <div class="stat-num" id="kpiOnbNum">—</div>
+        <div class="stat-label">Em Onboarding</div>
+      </div>
+      <div class="stat-card" id="kpiAtivos">
+        <div class="stat-num" id="kpiAtvNum">—</div>
+        <div class="stat-label">Clientes Ativos</div>
+      </div>
+      <div class="stat-card" style="border-color:rgba(192,57,43,0.3)" id="kpiRisco">
+        <div class="stat-num" style="color:var(--red)" id="kpiRiscoNum">—</div>
+        <div class="stat-label">Em Risco</div>
+      </div>
+      <div class="stat-card" id="kpiCortesia">
+        <div class="stat-num" id="kpiCortNum">—</div>
+        <div class="stat-label">Análises Cortesia</div>
+      </div>
+    </div>
+
+    <!-- STATUS DOS CENÁRIOS -->
+    <div style="background:var(--paper);border:1px solid var(--rule);padding:20px;margin-bottom:20px">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;opacity:.4;margin-bottom:14px;text-transform:uppercase">Status dos Cenários Make.com</div>
+      <div id="cenariosStatus" style="display:flex;flex-direction:column;gap:6px">
+        <div class="cenario-row" data-id="5282968" data-nome="Entrega de Token" data-fixo="true"></div>
+        <div class="cenario-row" data-id="5290038" data-nome="Prospecção Automática"></div>
+        <div class="cenario-row" data-id="5290942" data-nome="Respostas de Prospecção (24/7)"></div>
+        <div class="cenario-row" data-id="5293128" data-nome="Follow-up 3 Dias"></div>
+        <div class="cenario-row" data-id="5293136" data-nome="Onboarding Clientes"></div>
+        <div class="cenario-row" data-id="5293138" data-nome="Monitoramento Operacional"></div>
+        <div class="cenario-row" data-id="5293451" data-nome="Descoberta Google Maps" data-manual="true"></div>
+      </div>
+    </div>
+
+    <!-- ANÁLISES CORTESIA -->
+    <div style="background:var(--paper);border:1px solid var(--rule);padding:20px">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;opacity:.4;margin-bottom:14px;text-transform:uppercase">Análises de Cortesia (SLA excedido)</div>
+      <div id="cortesiaLista" style="font-size:12px;opacity:.5">Carregando...</div>
+    </div>
+
+  </div>
+
+  <div id="panel-suporte" class="panel">
       <div class="sec-header">
         <div class="sec-title">Atendimento ao Cliente</div>
         <button class="btn-primary" onclick="abrirModalSuporte()">+ Novo Atendimento</button>
@@ -340,7 +533,7 @@ async function carregarTudo(){
     dbHistorico = (data&&data.historico)||[];
     dbFeedback = (data&&data.feedback)||[];
     dbLeads = await api("leads").then(function(d){return Array.isArray(d)?d:[];}).catch(function(){return[];});
-    renderDashboard(); renderTokens(); renderLeads(); renderHistorico(); renderFeedback(); renderTickets();
+    renderDashboard(); renderTokens(); renderLeads(); renderHistorico(); renderFeedback(); renderTickets(); setTimeout(carregarProspeccao,500); setTimeout(carregarMonitoramento,800); renderProspeccao(); setTimeout(carregarAutomacao, 1000);
   } catch(e) {
     mostrarErro("Falha ao conectar: "+e.message+". Publique o worker.js com a correcao de CORS no Cloudflare.");
   }
@@ -576,6 +769,338 @@ function abrirModalSuporte(){['sNome','sEmail','sAssunto','sDescricao'].forEach(
 function salvarTicket(){var t={nome:document.getElementById('sNome').value.trim(),email:document.getElementById('sEmail').value.trim(),assunto:document.getElementById('sAssunto').value.trim(),descricao:document.getElementById('sDescricao').value.trim(),status:document.getElementById('sStatus').value,data:new Date().toISOString()};if(!t.assunto){alert('Assunto é obrigatório.');return;}var tickets=carregarTickets();tickets.unshift(t);salvarTicketsLS(tickets);fecharModal('modalSuporte');renderTickets();}
 function mudarTicket(i){var tickets=carregarTickets();tickets[i].status=tickets[i].status==='resolvido'?'aberto':'resolvido';salvarTicketsLS(tickets);renderTickets();}
 function excluirTicket(i){if(!confirm('Remover?'))return;var tickets=carregarTickets();tickets.splice(i,1);salvarTicketsLS(tickets);renderTickets();}
+
+
+
+// AUTOMAÇÃO TOTAL
+var autoAtiva = false;
+
+
+async function gerarRoteiro(idx) {
+  var lead = dbProsp[idx];
+  if (!confirm('Gerar roteiro de demo para ' + lead.nome + ' (' + lead.empresa + ')? Será enviado para seu email.')) return;
+  var btn = event.target;
+  btn.textContent = 'Gerando...';
+  btn.disabled = true;
+  try {
+    var r = await api('roteiro', 'POST', { lead: lead });
+    if (r.ok) {
+      btn.textContent = '✓ Enviado';
+      btn.style.color = 'var(--green)';
+    } else {
+      btn.textContent = 'Erro';
+      alert('Erro: ' + (r.error || 'falha'));
+    }
+  } catch(e) {
+    btn.textContent = 'Erro';
+    alert('Erro: ' + e.message);
+  }
+}
+
+async function carregarAutomacao() {
+  try {
+    var cfg = await api('configuracoes');
+    var c = cfg.find(function(x){return x.chave==='automatizacao_ativa';});
+    autoAtiva = c && c.valor === 'true';
+    atualizarBotaoAuto();
+    await carregarKpisAuto();
+    await carregarCortesia();
+    renderCenarios();
+  } catch(e) {}
+}
+
+function atualizarBotaoAuto() {
+  var btn = document.getElementById('btnAutoToggle');
+  var dot = document.getElementById('autoStatusDot');
+  var label = document.getElementById('autoStatusLabel');
+  if (!btn) return;
+  if (autoAtiva) {
+    btn.textContent = 'DESATIVAR AUTOMAÇÃO';
+    btn.style.background = 'rgba(192,57,43,0.8)';
+    btn.style.color = '#fff';
+    dot.style.background = 'var(--green)';
+    dot.style.boxShadow = '0 0 8px rgba(30,125,90,0.5)';
+    label.textContent = 'ATIVO — 24H/7D';
+    label.style.color = 'rgba(30,200,90,0.8)';
+  } else {
+    btn.textContent = 'ATIVAR AUTOMAÇÃO';
+    btn.style.background = 'var(--gold)';
+    btn.style.color = 'var(--ink)';
+    dot.style.background = 'var(--red)';
+    dot.style.boxShadow = 'none';
+    label.textContent = 'INATIVO';
+    label.style.color = 'rgba(245,240,232,0.4)';
+  }
+}
+
+async function toggleAutomacao() {
+  var btn = document.getElementById('btnAutoToggle');
+  var log = document.getElementById('autoToggleLog');
+  btn.disabled = true;
+  btn.textContent = 'Aguarde...';
+  log.textContent = 'Comunicando com Make.com...';
+  try {
+    var r = await api('automatizacao', 'POST', { ativar: !autoAtiva });
+    if (r.ok) {
+      autoAtiva = r.ativar;
+      atualizarBotaoAuto();
+      var ok = r.resultados.filter(function(x){return x.ok;}).length;
+      log.textContent = ok + '/' + r.resultados.length + ' cenários ' + (autoAtiva ? 'ativados' : 'desativados') + ' com sucesso.';
+    } else {
+      log.textContent = 'Erro: ' + (r.error || 'falha desconhecida');
+    }
+  } catch(e) {
+    log.textContent = 'Erro de conexão: ' + e.message;
+  }
+  btn.disabled = false;
+}
+
+async function carregarKpisAuto() {
+  try {
+    var prosp = await api('prospeccao');
+    var tokens = dbTokens || [];
+    var por_status = {};
+    prosp.forEach(function(l){ por_status[l.status] = (por_status[l.status]||0)+1; });
+    var ativos = tokens.filter(function(t){return t.ativo && t.plano !== 'trial';});
+    var semUso = ativos.filter(function(t){return (t.analises_usadas||0) === 0;});
+    el('kpiProspNum', por_status['Abordado']||0);
+    el('kpiRespNum', (por_status['Respondeu']||0) + (por_status['Demo']||0));
+    el('kpiDemoNum', por_status['Demo']||0);
+    el('kpiOnbNum', tokens.filter(function(t){return t.onboarding_step===1;}).length);
+    el('kpiAtvNum', ativos.length);
+    el('kpiRiscoNum', semUso.length);
+  } catch(e) {}
+}
+
+async function carregarCortesia() {
+  try {
+    var data = await api('cortesia');
+    var el2 = document.getElementById('cortesiaLista');
+    if (!data || !data.length) { el2.textContent = 'Nenhuma análise de cortesia registrada.'; return; }
+    el2.innerHTML = '<table style="width:100%;border-collapse:collapse">' +
+      '<tr style="opacity:.4;font-family:DM Mono,monospace;font-size:9px"><th align="left">Token</th><th align="left">Arquivo</th><th align="right">Tempo</th><th align="left">Data</th></tr>' +
+      data.map(function(c){
+        return '<tr style="border-top:1px solid var(--rule)">' +
+          '<td style="padding:6px 8px;font-size:11px;opacity:.6">' + esc(c.token||'') + '</td>' +
+          '<td style="padding:6px 8px;font-size:11px">' + esc(c.arquivo_nome||'') + '</td>' +
+          '<td style="padding:6px 8px;font-size:11px;text-align:right;color:var(--amber)">' + Math.floor((c.tempo_segundos||0)/60) + 'm ' + ((c.tempo_segundos||0)%60) + 's</td>' +
+          '<td style="padding:6px 8px;font-size:11px;opacity:.5">' + fmt(c.criado_em) + '</td>' +
+        '</tr>';
+      }).join('') + '</table>';
+    el('kpiCortNum', data.length);
+  } catch(e) {}
+}
+
+function el(id, val) { var e = document.getElementById(id); if(e) e.textContent = val; }
+
+function renderCenarios() {
+  var rows = document.querySelectorAll('.cenario-row');
+  rows.forEach(function(row) {
+    var nome = row.dataset.nome;
+    var fixo = row.dataset.fixo === 'true';
+    var manual = row.dataset.manual === 'true';
+    var cor = fixo ? 'var(--green)' : (autoAtiva ? 'var(--green)' : 'rgba(192,57,43,0.6)');
+    var status = fixo ? 'Sempre ativo' : (manual ? 'Manual' : (autoAtiva ? 'Rodando' : 'Inativo'));
+    row.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--rule)">' +
+      '<div style="display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:' + cor + ';flex-shrink:0"></div>' +
+      '<span style="font-size:13px">' + esc(nome) + '</span></div>' +
+      '<span style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:1px;color:' + cor + '">' + status + '</span>' +
+    '</div>';
+  });
+}
+
+
+// GOOGLE MAPS DISCOVERY
+var WEBHOOK_MAPS = 'https://hook.us2.make.com/dyjvz4q53bup5k6xnxspe07h5uoax9x2';
+
+var SETOR_QUERIES = {
+  'advocacia': 'escritório de advocacia empresarial',
+  'construção': 'construtora incorporadora',
+  'imobiliária': 'imobiliária consultoria imóveis',
+  'franquias': 'rede de franquias franqueadora',
+  'saúde': 'clínica hospital grupo médico',
+  'tecnologia': 'empresa de tecnologia software SaaS',
+  'agronegócio': 'agronegócio cooperativa agrícola',
+  'contabilidade': 'escritório de contabilidade',
+  'indústria': 'indústria distribuidora atacadista'
+};
+
+async function buscarGoogleMaps(){
+  var googleKey = document.getElementById('mapsGoogleKey').value.trim();
+  if(!googleKey){alert('Insira sua chave da Google Maps API primeiro.');return;}
+  var setor = document.getElementById('mapsSetor').value;
+  var coords = document.getElementById('mapsCidade').value;
+  var query = SETOR_QUERIES[setor] || setor;
+  var btn = document.getElementById('btnMaps');
+  var log = document.getElementById('mapsLog');
+  btn.textContent='Buscando...';
+  btn.disabled=true;
+  log.style.display='block';
+  log.textContent='Enviando busca para o Make.com...';
+  try{
+    var r = await fetch(WEBHOOK_MAPS,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        query: query,
+        lat: coords.split(',')[0],
+        lng: coords.split(',')[1],
+        raio: 50000,
+        setor: setor,
+        google_key: googleKey
+      })
+    });
+    log.textContent='Busca enviada! O Make.com está processando os resultados e adicionando leads ao Supabase. Aguarde 2-3 minutos e recarregue a aba de Prospecção.';
+    log.style.color='var(--green)';
+    setTimeout(carregarProspeccao, 30000);
+  }catch(e){
+    log.textContent='Erro: '+e.message;
+    log.style.color='var(--red)';
+  }finally{
+    btn.textContent='🔍 Buscar Leads no Google Maps';
+    btn.disabled=false;
+  }
+}
+
+
+// MONITORAMENTO
+var dbMonit = [];
+
+async function carregarMonitoramento(){
+  dbMonit = await api('monitoramento').then(function(d){return Array.isArray(d)?d:[];}).catch(function(){return[];});
+  renderMonitoramento();
+}
+
+function renderMonitoramento(){
+  var total = dbMonit.reduce(function(s,m){return s+(m.custo_mensal||0);},0);
+  var critico = dbMonit.filter(function(m){return m.status==='Crítico';}).length;
+  var atencao = dbMonit.filter(function(m){return m.status==='Atenção';}).length;
+  var statsEl = document.getElementById('statsMonit');
+  if(statsEl) statsEl.innerHTML=
+    '<div class="stat"><div class="stat-num" style="color:var(--gold)">R$'+total.toFixed(0)+'</div><div class="stat-label">Custo/mês</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--green)">'+dbMonit.length+'</div><div class="stat-label">Serviços</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--amber)">'+atencao+'</div><div class="stat-label">Atenção</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--red)">'+critico+'</div><div class="stat-label">Crítico</div></div>';
+
+  var tbody = document.getElementById('tabelaMonit');
+  if(!tbody) return;
+  if(!dbMonit.length){tbody.innerHTML='<tr><td colspan="9"><div class="empty">Nenhum dado</div></td></tr>';return;}
+  var corStatus={OK:'var(--green)',Atenção:'var(--amber)',Crítico:'var(--red)'};
+  tbody.innerHTML = dbMonit.map(function(m){
+    var pct = m.percentual_uso||0;
+    var barColor = pct>80?'var(--red)':pct>60?'var(--amber)':'var(--green)';
+    return '<tr>'+
+      '<td style="font-weight:500">'+esc(m.servico)+'</td>'+
+      '<td class="muted">'+esc(m.plano||'')+'</td>'+
+      '<td class="mono">'+(m.custo_mensal>0?'R$'+m.custo_mensal:'Grátis')+'</td>'+
+      '<td class="muted" style="font-size:12px">'+esc(m.limite||'')+'</td>'+
+      '<td style="font-size:12px">'+esc(m.consumo_atual||'N/A')+'</td>'+
+      '<td><div style="display:flex;align-items:center;gap:6px"><div style="width:50px;height:4px;background:rgba(0,0,0,0.1);border-radius:2px"><div style="width:'+Math.min(pct,100)+'%;height:100%;background:'+barColor+';border-radius:2px"></div></div><span class="mono" style="font-size:10px">'+pct+'%</span></div></td>'+
+      '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+(corStatus[m.status]||'inherit')+'">'+esc(m.status||'OK')+'</span></td>'+
+      '<td class="muted">'+fmt(m.atualizado_em)+'</td>'+
+      '<td><button class="btn-sm" onclick="editarMonit(''+esc(m.servico)+'','+JSON.stringify({custo_mensal:m.custo_mensal,consumo_atual:m.consumo_atual,percentual_uso:m.percentual_uso,status:m.status,notas:m.notas}).replace(/'/g,"\\'")+')">Edit</button></td>'+
+    '</tr>';
+  }).join('');
+}
+
+function editarMonit(servico, dados){
+  var custo = prompt('Custo mensal (R$):', dados.custo_mensal||0);
+  if(custo===null) return;
+  var consumo = prompt('Consumo atual:', dados.consumo_atual||'');
+  if(consumo===null) return;
+  var pct = prompt('% de uso (0-100):', dados.percentual_uso||0);
+  if(pct===null) return;
+  var status = prompt('Status (OK/Atenção/Crítico):', dados.status||'OK');
+  if(status===null) return;
+  api('monitoramento/'+encodeURIComponent(servico),'PATCH',{custo_mensal:parseFloat(custo),consumo_atual:consumo,percentual_uso:parseFloat(pct),status:status}).then(carregarMonitoramento);
+}
+
+async function perguntarCFO(){
+  var pergunta = document.getElementById('cfoPergunta').value.trim();
+  if(!pergunta) return;
+  var resEl = document.getElementById('cfoResposta');
+  resEl.style.display='block';
+  resEl.textContent='Analisando...';
+
+  var ctx = JSON.stringify(dbMonit.map(function(m){
+    return {servico:m.servico,plano:m.plano,custo:m.custo_mensal,consumo:m.consumo_atual,pct:m.percentual_uso,status:m.status};
+  }));
+
+  try {
+    var r = await fetch(WORKER+'/admin/cfo-ia',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Admin-Token':ADMIN_TOKEN},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:'Você é o CFO operacional do ContratoIQ, uma startup SaaS jurídica brasileira. Responda em português, de forma direta e objetiva, com base apenas nos dados fornecidos.',messages:[{role:'user',content:'Dados dos serviços: '+ctx+'\n\nPergunta: '+pergunta}]})
+    });
+    var d = await r.json();
+    resEl.textContent = d.content && d.content[0] ? d.content[0].text : 'Erro na resposta.';
+  } catch(e) {
+    resEl.textContent = 'Erro ao conectar com a IA.';
+  }
+}
+
+
+// PROSPECÇÃO
+var WEBHOOK_PROSP = 'https://hook.us2.make.com/h7bp0y8cdl3rii7rpf2u9tayo13gmwcq';
+var dbProsp = [];
+var SPRSP_COLORS = {Novo:'var(--blue)',Abordado:'var(--amber)',Respondeu:'#8B6914',Convertido:'var(--green)',NaoInteressado:'var(--red)',SemResposta:'#717D7E'};
+
+async function carregarProspeccao(){
+  dbProsp = await api('prospeccao').then(function(d){return Array.isArray(d)?d:[];}).catch(function(){return[];});
+  renderProspeccao(); setTimeout(carregarAutomacao, 1000);
+}
+
+function renderProspeccao(){
+  var bEl = document.getElementById('buscaProsp');
+  var busca = bEl ? bEl.value.toLowerCase() : '';
+  var lista = dbProsp.filter(function(l){return !busca||JSON.stringify(l).toLowerCase().includes(busca);});
+  var counts = {total:dbProsp.length,Novo:0,Abordado:0,Respondeu:0,Convertido:0};
+  dbProsp.forEach(function(l){if(counts[l.status]!==undefined)counts[l.status]++;});
+  var statsEl = document.getElementById('statsProsp');
+  if(statsEl) statsEl.innerHTML =
+    '<div class="stat"><div class="stat-num" style="color:var(--blue)">'+counts.Novo+'</div><div class="stat-label">Novos</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--amber)">'+counts.Abordado+'</div><div class="stat-label">Abordados</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--gold)">'+counts.Respondeu+'</div><div class="stat-label">Responderam</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--green)">'+counts.Convertido+'</div><div class="stat-label">Convertidos</div></div>'+
+    '<div class="stat"><div class="stat-num">'+counts.total+'</div><div class="stat-label">Total</div></div>';
+  var tbody = document.getElementById('tabelaProsp');
+  if(!tbody) return;
+  if(!lista.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty">Nenhum lead</div></td></tr>';return;}
+  tbody.innerHTML = lista.map(function(l){
+    var cor = SPRSP_COLORS[l.status]||'var(--ink)';
+    return '<tr>'+
+      '<td style="font-weight:500">'+esc(l.nome||'—')+'</td>'+
+      '<td class="muted" style="font-size:12px">'+esc(l.empresa||'')+'</td>'+
+      '<td class="mono muted">'+esc(l.email||'')+'</td>'+
+      '<td class="muted">'+esc(l.cidade||'')+'</td>'+
+      '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+cor+'">'+esc(l.status||'Novo')+'</span></td>'+
+      '<td class="muted">'+(l.data_contato?new Date(l.data_contato).toLocaleDateString('pt-BR'):'—')+'</td>'+
+      '<td style="font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.6">'+esc((l.email_enviado||'').slice(0,80))+'</td>'+
+    '</tr>';
+  }).join('');
+}
+
+async function dispararProspeccao(){
+  var novos = dbProsp.filter(function(l){return l.status==='Novo';});
+  if(!novos.length){alert('Nenhum lead com status Novo.');return;}
+  var btn = document.getElementById('btnDisparar');
+  btn.textContent='Enviando '+novos.length+' emails...';
+  btn.disabled = true;
+  var ok = 0;
+  for(var i=0;i<novos.length;i++){
+    try{
+      await fetch(WEBHOOK_PROSP,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(novos[i])});
+      ok++;
+      btn.textContent='Enviando... '+ok+'/'+novos.length;
+      await new Promise(function(r){setTimeout(r,3000);});
+    }catch(e){}
+  }
+  btn.textContent='▶ Disparar Emails';
+  btn.disabled = false;
+  alert(ok+' emails disparados. Aguarde o Make.com processar.');
+  await carregarProspeccao();
+}
+
 function fecharModal(id){document.getElementById(id).classList.remove('show');}
 document.querySelectorAll('.modal-overlay').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('show');});});
 document.getElementById('senhaInput').addEventListener('keydown',function(e){if(e.key==='Enter')entrar();});
