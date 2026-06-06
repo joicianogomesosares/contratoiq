@@ -197,11 +197,58 @@ tr:hover td{background:rgba(201,168,76,0.03)}
     <!-- PROSPECÇÃO -->
     <div id="panel-prospeccao" class="panel">
       <div class="sec-header">
-        <div class="sec-title">Prospecção Automática</div>
+        <div class="sec-title">Prospecção</div>
         <div style="display:flex;gap:10px;align-items:center">
-          <input class="sec-search" id="buscaProsp" placeholder="Buscar..." oninput="renderProspeccao()">
-          <button class="btn-primary" id="btnDisparar" onclick="dispararProspeccao()">▶ Disparar Emails</button>
+          <input class="sec-search" id="buscaProsp" placeholder="Buscar leads..." oninput="renderProspeccao()">
         </div>
+      </div>
+
+      <!-- KPIs DE PROSPECÇÃO -->
+      <div id="statsProsp" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:20px"></div>
+
+      <!-- PAINEL DE CAMPANHAS -->
+      <div style="background:var(--paper);border:1px solid var(--rule);padding:20px;margin-bottom:20px;border-radius:4px">
+        <div class="sec-header" style="margin-bottom:16px">
+          <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700">Controle de Disparo</div>
+          <span class="badge badge-novo" style="font-size:11px">Aprovação obrigatória</span>
+        </div>
+        <div style="font-size:12px;opacity:.55;margin-bottom:16px">Leads captados ficam em espera até você aprovar o disparo. Nenhum email é enviado automaticamente.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:flex-end;margin-bottom:14px">
+          <div>
+            <label class="form-label" style="display:block;margin-bottom:5px">Filtrar por setor</label>
+            <select class="form-select" id="filtroSetorDisparo">
+              <option value="">Todos os setores</option>
+              <option value="advocacia">Advocacia</option>
+              <option value="construção">Construção / Imóveis</option>
+              <option value="franquias">Franquias</option>
+              <option value="saúde">Saúde</option>
+              <option value="tecnologia">Tecnologia</option>
+              <option value="agronegócio">Agronegócio</option>
+              <option value="contabilidade">Contabilidade</option>
+              <option value="indústria">Indústria</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label" style="display:block;margin-bottom:5px">Filtrar por cidade</label>
+            <input class="form-input" id="filtroCidadeDisparo" placeholder="Ex: Fortaleza">
+          </div>
+          <div>
+            <label class="form-label" style="display:block;margin-bottom:5px">Quantidade de leads</label>
+            <input class="form-input" id="qtdDisparo" type="number" min="1" max="500" placeholder="Ex: 20" value="10" style="font-family:'DM Mono',monospace">
+          </div>
+          <div>
+            <button class="btn-primary" onclick="selecionarParaDisparo()" id="btnSelecionar">Selecionar Leads</button>
+          </div>
+        </div>
+        <div id="previewDisparo" style="display:none;background:rgba(0,0,0,0.04);border:1px solid var(--rule);padding:14px;border-radius:4px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:8px" id="previewDisparoTitulo"></div>
+          <div id="previewDisparoLista" style="font-size:12px;font-family:'DM Mono',monospace;max-height:160px;overflow-y:auto;line-height:1.8;opacity:.7"></div>
+          <div style="display:flex;gap:10px;margin-top:14px">
+            <button class="btn-primary" onclick="aprovarEDisparar()" id="btnDisparar" style="background:var(--green);border-color:var(--green)">✔ Aprovar e Disparar</button>
+            <button onclick="cancelarSelecao()" style="padding:8px 16px;border:1px solid var(--rule);background:transparent;cursor:pointer;font-size:13px;border-radius:2px">Cancelar</button>
+          </div>
+        </div>
+        <div id="logDisparo" style="font-size:12px;font-family:'DM Mono',monospace;opacity:.5;display:none;margin-top:8px"></div>
       </div>
       
       <!-- GOOGLE MAPS DISCOVERY -->
@@ -254,10 +301,9 @@ tr:hover td{background:rgba(201,168,76,0.03)}
         <div id="mapsLog" style="margin-top:12px;font-size:12px;font-family:'DM Mono',monospace;opacity:.5;display:none"></div>
       </div>
 
-      <div id="statsProsp" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px"></div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Nome</th><th>Empresa</th><th>Email</th><th>Status</th><th>Score</th><th>Gatilho</th><th>Objeção</th><th>Contato</th><th>Msg</th></tr></thead>
+          <thead><tr><th>Nome</th><th>Empresa</th><th>Email</th><th>Cidade</th><th>Status</th><th>Disparo</th><th>Score</th><th>Contato</th><th>Msg</th></tr></thead>
           <tbody id="tabelaProsp"><tr><td colspan="7"><div class="loading">Carregando...</div></td></tr></tbody>
         </table>
       </div>
@@ -1052,54 +1098,135 @@ async function carregarProspeccao(){
   renderProspeccao(); setTimeout(carregarAutomacao, 1000);
 }
 
+var _leadsParaDisparar = [];
+
 function renderProspeccao(){
   var bEl = document.getElementById('buscaProsp');
   var busca = bEl ? bEl.value.toLowerCase() : '';
   var lista = dbProsp.filter(function(l){return !busca||JSON.stringify(l).toLowerCase().includes(busca);});
-  var counts = {total:dbProsp.length,Novo:0,Abordado:0,Respondeu:0,Convertido:0};
-  dbProsp.forEach(function(l){if(counts[l.status]!==undefined)counts[l.status]++;});
+
+  // KPIs
+  var counts = {total:dbProsp.length, aguardando:0, em_fluxo:0, Respondeu:0, Convertido:0, descartado:0};
+  dbProsp.forEach(function(l){
+    var sd = l.status_disparo||'aguardando_aprovacao';
+    if(sd==='aguardando_aprovacao') counts.aguardando++;
+    else if(sd==='em_fluxo' || sd==='aprovado') counts.em_fluxo++;
+    else if(sd==='concluido') {
+      if(l.status==='Convertido') counts.Convertido++;
+      else if(l.status==='Respondeu') counts.Respondeu++;
+    } else if(sd==='descartado') counts.descartado++;
+  });
   var statsEl = document.getElementById('statsProsp');
   if(statsEl) statsEl.innerHTML =
-    '<div class="stat"><div class="stat-num" style="color:var(--blue)">'+counts.Novo+'</div><div class="stat-label">Novos</div></div>'+
-    '<div class="stat"><div class="stat-num" style="color:var(--amber)">'+counts.Abordado+'</div><div class="stat-label">Abordados</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--amber)">'+counts.aguardando+'</div><div class="stat-label">Aguardando aprovação</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--blue)">'+counts.em_fluxo+'</div><div class="stat-label">Em fluxo</div></div>'+
     '<div class="stat"><div class="stat-num" style="color:var(--gold)">'+counts.Respondeu+'</div><div class="stat-label">Responderam</div></div>'+
     '<div class="stat"><div class="stat-num" style="color:var(--green)">'+counts.Convertido+'</div><div class="stat-label">Convertidos</div></div>'+
-    '<div class="stat"><div class="stat-num">'+counts.total+'</div><div class="stat-label">Total</div></div>';
+    '<div class="stat"><div class="stat-num">'+counts.total+'</div><div class="stat-label">Total base</div></div>';
+
+  // Tabela
   var tbody = document.getElementById('tabelaProsp');
   if(!tbody) return;
-  if(!lista.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty">Nenhum lead</div></td></tr>';return;}
+  if(!lista.length){tbody.innerHTML='<tr><td colspan="9"><div class="empty">Nenhum lead</div></td></tr>';return;}
+
+  var DISPARO_COLORS = {
+    'aguardando_aprovacao':'var(--amber)',
+    'aprovado':'var(--blue)',
+    'em_fluxo':'var(--gold)',
+    'concluido':'var(--green)',
+    'descartado':'var(--muted)'
+  };
+  var DISPARO_LABELS = {
+    'aguardando_aprovacao':'Aguardando',
+    'aprovado':'Aprovado',
+    'em_fluxo':'Em fluxo',
+    'concluido':'Concluído',
+    'descartado':'Descartado'
+  };
+
   tbody.innerHTML = lista.map(function(l){
     var cor = SPRSP_COLORS[l.status]||'var(--ink)';
+    var sd = l.status_disparo||'aguardando_aprovacao';
+    var sdCor = DISPARO_COLORS[sd]||'var(--muted)';
+    var sdLabel = DISPARO_LABELS[sd]||sd;
     return '<tr>'+
       '<td style="font-weight:500">'+esc(l.nome||'—')+'</td>'+
       '<td class="muted" style="font-size:12px">'+esc(l.empresa||'')+'</td>'+
-      '<td class="mono muted">'+esc(l.email||'')+'</td>'+
-      '<td class="muted">'+esc(l.cidade||'')+'</td>'+
-      '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+cor+'">'+esc(l.status||'Novo')+'</span></td>'+
-      '<td class="muted">'+(l.data_contato?new Date(l.data_contato).toLocaleDateString('pt-BR'):'—')+'</td>'+
-      '<td style="font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.6">'+esc((l.email_enviado||'').slice(0,80))+'</td>'+
+      '<td class="mono muted" style="font-size:11px">'+esc(l.email||'')+'</td>'+
+      '<td class="muted" style="font-size:12px">'+esc(l.cidade||'')+'</td>'+
+      '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+cor+';font-size:11px">'+esc(l.status||'Novo')+'</span></td>'+
+      '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+sdCor+';font-size:11px">'+sdLabel+'</span></td>'+
+      '<td class="muted" style="font-size:12px">'+(l.score_interesse||'—')+'</td>'+
+      '<td class="muted" style="font-size:12px">'+(l.data_contato?new Date(l.data_contato).toLocaleDateString('pt-BR'):'—')+'</td>'+
+      '<td style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.5">'+esc((l.email_enviado||'').slice(0,60))+'</td>'+
     '</tr>';
   }).join('');
 }
 
-async function dispararProspeccao(){
-  var novos = dbProsp.filter(function(l){return l.status==='Novo';});
-  if(!novos.length){alert('Nenhum lead com status Novo.');return;}
-  var btn = document.getElementById('btnDisparar');
-  btn.textContent='Enviando '+novos.length+' emails...';
-  btn.disabled = true;
-  var ok = 0;
-  for(var i=0;i<novos.length;i++){
-    try{
-      await fetch(WEBHOOK_PROSP,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(novos[i])});
-      ok++;
-      btn.textContent='Enviando... '+ok+'/'+novos.length;
-      await new Promise(function(r){setTimeout(r,3000);});
-    }catch(e){}
+function selecionarParaDisparo(){
+  var setor = document.getElementById('filtroSetorDisparo').value;
+  var cidade = document.getElementById('filtroCidadeDisparo').value.toLowerCase().trim();
+  var qtd = parseInt(document.getElementById('qtdDisparo').value)||10;
+
+  // Apenas leads aguardando aprovação e sem fluxo ativo
+  var candidatos = dbProsp.filter(function(l){
+    var sd = l.status_disparo||'aguardando_aprovacao';
+    if(sd !== 'aguardando_aprovacao') return false;
+    if(setor && (l.setor||'').toLowerCase() !== setor.toLowerCase()) return false;
+    if(cidade && !(l.cidade||'').toLowerCase().includes(cidade)) return false;
+    return true;
+  });
+
+  _leadsParaDisparar = candidatos.slice(0, qtd);
+
+  if(!_leadsParaDisparar.length){
+    alert('Nenhum lead disponível com os filtros aplicados. Todos já foram abordados ou estão em fluxo ativo.');
+    return;
   }
-  btn.textContent='▶ Disparar Emails';
+
+  var preview = document.getElementById('previewDisparo');
+  var titulo = document.getElementById('previewDisparoTitulo');
+  var lista = document.getElementById('previewDisparoLista');
+  titulo.textContent = _leadsParaDisparar.length + ' leads selecionados para disparo:';
+  lista.innerHTML = _leadsParaDisparar.map(function(l,i){
+    return (i+1)+'. '+esc(l.nome||'—')+' — '+esc(l.empresa||'')+' ('+esc(l.setor||'')+', '+esc(l.cidade||'')+')';
+  }).join('<br>');
+  preview.style.display = 'block';
+}
+
+function cancelarSelecao(){
+  _leadsParaDisparar = [];
+  document.getElementById('previewDisparo').style.display = 'none';
+  document.getElementById('logDisparo').style.display = 'none';
+}
+
+async function aprovarEDisparar(){
+  if(!_leadsParaDisparar.length){alert('Nenhum lead selecionado.');return;}
+  var btn = document.getElementById('btnDisparar');
+  var log = document.getElementById('logDisparo');
+  btn.disabled = true;
+  btn.textContent = 'Disparando...';
+  log.style.display = 'block';
+  log.textContent = 'Iniciando disparo de '+_leadsParaDisparar.length+' leads...';
+
+  var ok = 0;
+  for(var i=0; i<_leadsParaDisparar.length; i++){
+    var l = _leadsParaDisparar[i];
+    try{
+      await fetch(WEBHOOK_PROSP, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(l)});
+      ok++;
+      log.textContent = 'Enviando... '+ok+'/'+_leadsParaDisparar.length+' — '+esc(l.nome||l.empresa||'');
+      await new Promise(function(r){setTimeout(r,3000);});
+    } catch(e){
+      log.textContent += '\nErro no lead '+esc(l.nome||'')+': '+e.message;
+    }
+  }
+
+  btn.textContent = '✔ Aprovar e Disparar';
   btn.disabled = false;
-  alert(ok+' emails disparados. Aguarde o Make.com processar.');
+  log.textContent = '✔ '+ok+' emails disparados com sucesso. Aguarde o Make.com processar.';
+  _leadsParaDisparar = [];
+  document.getElementById('previewDisparo').style.display = 'none';
   await carregarProspeccao();
 }
 
