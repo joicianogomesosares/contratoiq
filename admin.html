@@ -97,6 +97,10 @@ tr:hover td{background:rgba(201,168,76,0.03)}
     <div class="login-logo">Contrato<span>IQ</span></div>
     <div class="login-sub">Área Administrativa</div>
     <input type="password" class="login-input" id="senhaInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')entrar()">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+      <input type="checkbox" id="manterConectado" style="cursor:pointer">
+      <label for="manterConectado" style="font-family:'DM Mono',monospace;font-size:11px;opacity:.5;cursor:pointer">Manter conectado por 30 dias</label>
+    </div>
     <button class="login-btn" onclick="entrar()">Entrar</button>
     <div class="login-err" id="loginErr">Senha incorreta.</div>
   </div>
@@ -120,6 +124,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
     <button class="tab" onclick="trocarTab('prospeccao',this)">Prospecção</button>
     <button class="tab" onclick="trocarTab('monitoramento',this)">Monitoramento</button>
     <button class="tab" onclick="trocarTab('suporte',this)">Suporte</button>
+    <button class="tab" onclick="trocarTab('agendamentos',this)">📅 Agendamentos</button>
     <button class="tab" onclick="trocarTab('automacao',this)">⚡ Automação</button>
   </div>
 
@@ -257,10 +262,11 @@ tr:hover td{background:rgba(201,168,76,0.03)}
           <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700">Descoberta de Leads</div>
           <span class="badge badge-novo">Multi-fonte</span>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:12px">
           <div>
             <label class="form-label" style="display:block;margin-bottom:6px">Setor</label>
             <select class="form-select" id="mapsSetor">
+              <option value="">Todos os setores</option>
               <option value="advocacia">Escritórios de Advocacia</option>
               <option value="construção">Construtoras e Incorporadoras</option>
               <option value="imobiliária">Imobiliárias</option>
@@ -273,31 +279,60 @@ tr:hover td{background:rgba(201,168,76,0.03)}
             </select>
           </div>
           <div>
+            <label class="form-label" style="display:block;margin-bottom:6px">Estado</label>
+            <select class="form-select" id="mapsEstado" onchange="atualizarCidades()">
+              <option value="todos">Todos os estados</option>
+              <option value="SP">São Paulo</option>
+              <option value="RJ">Rio de Janeiro</option>
+              <option value="MG">Minas Gerais</option>
+              <option value="PR">Paraná</option>
+              <option value="RS">Rio Grande do Sul</option>
+              <option value="SC">Santa Catarina</option>
+              <option value="BA">Bahia</option>
+              <option value="PE">Pernambuco</option>
+              <option value="CE">Ceará</option>
+              <option value="GO">Goiás</option>
+              <option value="DF">Distrito Federal</option>
+              <option value="AM">Amazonas</option>
+              <option value="PA">Pará</option>
+              <option value="MT">Mato Grosso</option>
+              <option value="MS">Mato Grosso do Sul</option>
+              <option value="ES">Espírito Santo</option>
+              <option value="MA">Maranhão</option>
+              <option value="PB">Paraíba</option>
+              <option value="RN">Rio Grande do Norte</option>
+              <option value="AL">Alagoas</option>
+              <option value="SE">Sergipe</option>
+              <option value="PI">Piauí</option>
+              <option value="TO">Tocantins</option>
+              <option value="RO">Rondônia</option>
+              <option value="AC">Acre</option>
+              <option value="RR">Roraima</option>
+              <option value="AP">Amapá</option>
+            </select>
+          </div>
+          <div>
             <label class="form-label" style="display:block;margin-bottom:6px">Cidade</label>
             <select class="form-select" id="mapsCidade">
-              <option value="-23.5505,-46.6333">São Paulo, SP</option>
-              <option value="-22.9068,-43.1729">Rio de Janeiro, RJ</option>
-              <option value="-19.9167,-43.9345">Belo Horizonte, MG</option>
-              <option value="-25.4296,-49.2713">Curitiba, PR</option>
-              <option value="-30.0346,-51.2177">Porto Alegre, RS</option>
-              <option value="-15.7801,-47.9292">Brasília, DF</option>
-              <option value="-16.6869,-49.2648">Goiânia, GO</option>
-              <option value="-8.0476,-34.8770">Recife, PE</option>
-              <option value="-3.7172,-38.5433" selected>Fortaleza, CE</option>
-              <option value="-12.9714,-38.5014">Salvador, BA</option>
-              <option value="-3.1190,-60.0217">Manaus, AM</option>
-              <option value="-22.9064,-47.0616">Campinas, SP</option>
+              <option value="todos">Todas as cidades do estado</option>
             </select>
           </div>
           <div>
             <label class="form-label" style="display:block;margin-bottom:6px">Chave Google Maps API</label>
-            <input class="form-input" id="mapsGoogleKey" placeholder="AIza..." type="password" value="" style="font-family:'DM Mono',monospace;font-size:11px">
+            <input class="form-input" id="mapsGoogleKey" placeholder="AIza..." type="password" style="font-family:'DM Mono',monospace;font-size:11px">
+            <div style="font-size:10px;opacity:.4;margin-top:4px;font-family:'DM Mono',monospace">Salva automaticamente</div>
           </div>
         </div>
-        <div style="display:flex;gap:10px;align-items:center">
-          <button class="btn-primary" onclick="buscarGoogleMaps()" id="btnMaps">🔍 Buscar Leads no Google Maps</button>
-          <span style="font-size:12px;opacity:.4">Cada busca retorna até 60 empresas. Gratuito até 6.000 buscas/mês.</span>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-bottom:8px">
+          <div>
+            <label class="form-label" style="display:block;margin-bottom:5px">Limite de leads por busca</label>
+            <input class="form-input" id="mapsLimite" type="number" min="10" max="200" value="60" style="width:100px;font-family:'DM Mono',monospace">
+          </div>
+          <div style="padding-top:20px">
+            <button class="btn-primary" onclick="buscarGoogleMaps()" id="btnMaps">🔍 Buscar Leads</button>
+          </div>
         </div>
+        <div style="font-size:11px;opacity:.35;font-family:'DM Mono',monospace">Gratuito até $200/mês (~6.000 buscas). Leads entram como aguardando_aprovacao.</div>
         <div id="mapsLog" style="margin-top:12px;font-size:12px;font-family:'DM Mono',monospace;opacity:.5;display:none"></div>
       </div>
 
@@ -360,6 +395,14 @@ tr:hover td{background:rgba(201,168,76,0.03)}
 
     <!-- SUPORTE -->
     
+  <div id="panel-agendamentos" class="panel">
+    <div class="sec-header">
+      <div class="sec-title">Agendamentos Pendentes</div>
+      <button class="btn-primary" onclick="carregarAgendamentos()">↻ Atualizar</button>
+    </div>
+    <div id="listaAgendamentos"><div class="loading">Carregando...</div></div>
+  </div>
+
   <!-- PANEL AUTOMAÇÃO TOTAL -->
   <div id="panel-automacao" class="panel">
 
@@ -454,9 +497,14 @@ tr:hover td{background:rgba(201,168,76,0.03)}
     <div class="form-row">
       <label class="form-label">Plano</label>
       <select class="form-select" id="tPlano" onchange="atualizarLimite()">
-        <option value="trial">Trial (10 análises)</option>
-        <option value="lite">Lite (300 análises)</option>
-        <option value="advanced">Advanced (1000 análises)</option>
+        <option value="trial_5">Trial — 5 análises</option>
+        <option value="trial">Trial — 10 análises</option>
+        <option value="lite">Lite Mensal (R$1.790 — 300 análises)</option>
+        <option value="lite_anual">Lite Anual (300 análises/mês)</option>
+        <option value="starter">Starter Mensal (R$3.500 — 600 análises)</option>
+        <option value="starter_anual">Starter Anual (600 análises/mês)</option>
+        <option value="advanced">Advanced Mensal (R$5.970 — 1.000 análises)</option>
+        <option value="advanced_anual">Advanced Anual (1.000 análises/mês)</option>
       </select>
     </div>
     <div class="form-row"><label class="form-label">Limite de análises</label><input class="form-input" id="tLimite" type="number"></div>
@@ -537,21 +585,45 @@ var dbLeads = [];
 var dbHistorico = [];
 var dbFeedback = [];
 
+var ADMIN_SESSAO_KEY = 'ciq_admin_sessao';
+var ADMIN_SESSAO_DIAS = 30;
+
 function entrar(){
   var s = document.getElementById('senhaInput').value;
   if(s === ADMIN_SENHA){
-    document.getElementById('tela-login').style.display='none';
-    document.getElementById('admin').style.display='block';
-    carregarTudo();
+    var manter = document.getElementById('manterConectado').checked;
+    if(manter){
+      var expiry = Date.now() + ADMIN_SESSAO_DIAS * 24 * 3600 * 1000;
+      localStorage.setItem(ADMIN_SESSAO_KEY, JSON.stringify({expiry: expiry}));
+    }
+    mostrarAdmin();
   } else {
     document.getElementById('loginErr').style.display='block';
   }
 }
+
+function mostrarAdmin(){
+  document.getElementById('tela-login').style.display='none';
+  document.getElementById('admin').style.display='block';
+  carregarTudo();
+}
+
 function sair(){
+  localStorage.removeItem(ADMIN_SESSAO_KEY);
   document.getElementById('tela-login').style.display='block';
   document.getElementById('admin').style.display='none';
   document.getElementById('senhaInput').value='';
 }
+
+// Auto-login se sessão persistente válida
+(function(){
+  try {
+    var sess = JSON.parse(localStorage.getItem(ADMIN_SESSAO_KEY)||'null');
+    if(sess && sess.expiry && Date.now() < sess.expiry){
+      mostrarAdmin();
+    }
+  } catch(e){}
+})();
 
 function trocarTab(id,btn){
   document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('ativo');});
@@ -572,6 +644,15 @@ async function api(path, method, body){
 }
 
 async function carregarTudo(){
+  // Restaurar chave Google Maps do localStorage
+  var savedKey = localStorage.getItem('ciq_maps_key');
+  if(savedKey) document.getElementById('mapsGoogleKey').value = savedKey;
+  // Salvar chave automaticamente ao digitar
+  document.getElementById('mapsGoogleKey').addEventListener('input', function(){
+    localStorage.setItem('ciq_maps_key', this.value);
+  });
+  // Inicializar cidades
+  atualizarCidades();
   try {
     var data = await api("dashboard");
     if(data && data.error){ mostrarErro("Erro do servidor: "+data.error); return; }
@@ -579,7 +660,11 @@ async function carregarTudo(){
     dbHistorico = (data&&data.historico)||[];
     dbFeedback = (data&&data.feedback)||[];
     dbLeads = await api("leads").then(function(d){return Array.isArray(d)?d:[];}).catch(function(){return[];});
-    renderDashboard(); renderTokens(); renderLeads(); renderHistorico(); renderFeedback(); renderTickets(); setTimeout(carregarProspeccao,500); setTimeout(carregarMonitoramento,800); renderProspeccao(); setTimeout(carregarAutomacao, 1000);
+    renderDashboard(); renderTokens(); renderLeads(); renderHistorico(); renderFeedback(); renderTickets();
+    setTimeout(carregarProspeccao, 500);
+    setTimeout(carregarMonitoramento, 800);
+    setTimeout(carregarAutomacao, 1000);
+    setTimeout(carregarAgendamentos, 1200);
   } catch(e) {
     mostrarErro("Falha ao conectar: "+e.message+". Publique o worker.js com a correcao de CORS no Cloudflare.");
   }
@@ -596,25 +681,47 @@ function renderDashboard(){
   var ativos = dbTokens.filter(function(t){return t.ativo;}).length;
   var pagantes = dbTokens.filter(function(t){return t.ativo&&(t.plano==='lite'||t.plano==='advanced');}).length;
   var trials = dbTokens.filter(function(t){return t.ativo&&t.plano==='trial';}).length;
+  var inativos = dbTokens.filter(function(t){return !t.ativo;}).length;
+  var semUso = dbTokens.filter(function(t){return t.ativo&&t.plano!=='trial'&&(t.analises_usadas||0)===0;}).length;
+  var mrrLite = dbTokens.filter(function(t){return t.ativo&&t.plano==='lite';}).length * 1790;
+  var mrrAdv = dbTokens.filter(function(t){return t.ativo&&t.plano==='advanced';}).length * 5970;
+  var mrr = mrrLite + mrrAdv;
+  var totalAnalises7d = dbHistorico.filter(function(h){
+    return h.criado_em && (new Date()-new Date(h.criado_em)) < 7*24*3600*1000;
+  }).length;
+  var taxaConv = dbProsp && dbProsp.length ? Math.round(pagantes/dbProsp.length*100) : 0;
+
   document.getElementById('dashStats').innerHTML=
-    '<div class="stat"><div class="stat-num" style="color:var(--gold)">'+ativos+'</div><div class="stat-label">Tokens Ativos</div></div>'+
-    '<div class="stat"><div class="stat-num" style="color:var(--green)">'+pagantes+'</div><div class="stat-label">Clientes Pagantes</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--green)">R$'+mrr.toLocaleString('pt-BR')+'</div><div class="stat-label">MRR</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--gold)">'+pagantes+'</div><div class="stat-label">Clientes Pagantes</div></div>'+
     '<div class="stat"><div class="stat-num" style="color:var(--blue)">'+trials+'</div><div class="stat-label">Em Trial</div></div>'+
-    '<div class="stat"><div class="stat-num">'+dbHistorico.length+'</div><div class="stat-label">Análises Realizadas</div></div>';
+    '<div class="stat"><div class="stat-num">'+ativos+'</div><div class="stat-label">Tokens Ativos</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--amber)">'+inativos+'</div><div class="stat-label">Inativos</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--red)">'+semUso+'</div><div class="stat-label">Risco Churn</div></div>'+
+    '<div class="stat"><div class="stat-num">'+dbHistorico.length+'</div><div class="stat-label">Total Análises</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--blue)">'+totalAnalises7d+'</div><div class="stat-label">Análises 7 dias</div></div>'+
+    '<div class="stat"><div class="stat-num">'+taxaConv+'%</div><div class="stat-label">Taxa Conversão</div></div>';
 
   var rows = dbTokens.slice(0,5).map(function(t){
-    return '<tr><td><div style="font-weight:500">'+esc(t.nome||'—')+'</div><div class="muted">'+esc(t.email||'')+'</div></td>'+
+    var pct = t.analises_limite ? Math.round((t.analises_usadas||0)/t.analises_limite*100) : 0;
+    var risco = t.ativo && t.plano!=='trial' && (t.analises_usadas||0)===0;
+    return '<tr>'+
+      '<td><div style="font-weight:500">'+esc(t.nome||'—')+'</div><div class="muted">'+esc(t.email||'')+'</div></td>'+
       '<td><span class="badge badge-'+(t.plano||'trial')+'">'+esc(t.plano||'trial')+'</span></td>'+
-      '<td class="mono">'+(t.analises_usadas||0)+'/'+(t.analises_limite||0)+'</td></tr>';
+      '<td class="mono">'+(t.analises_usadas||0)+'/'+(t.analises_limite||0)+' <span style="opacity:.4">('+pct+'%)</span></td>'+
+      '<td>'+(risco?'<span style="color:var(--red);font-size:11px;font-family:DM Mono,monospace">⚠ sem uso</span>':'')+'</td></tr>';
   }).join('');
-  document.getElementById('dashClientes').innerHTML='<table><thead><tr><th>Cliente</th><th>Plano</th><th>Uso</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  document.getElementById('dashClientes').innerHTML='<table><thead><tr><th>Cliente</th><th>Plano</th><th>Uso</th><th>Alerta</th></tr></thead><tbody>'+rows+'</tbody></table>';
 
   var rows2 = dbHistorico.slice(0,5).map(function(h){
-    return '<tr><td style="font-size:12px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(h.arquivo_nome||'—')+'</td>'+
+    var rec = h.recomendacao||'';
+    var cor = rec==='ASSINAR'?'var(--green)':rec==='RECUSAR'?'var(--red)':'var(--amber)';
+    return '<tr><td style="font-size:12px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(h.arquivo_nome||'—')+'</td>'+
       '<td style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--gold)">'+(h.score||'—')+'</td>'+
+      '<td><span style="font-size:10px;color:'+cor+';font-family:DM Mono,monospace">'+esc(rec)+'</span></td>'+
       '<td class="muted">'+fmt(h.criado_em)+'</td></tr>';
   }).join('');
-  document.getElementById('dashAnalises').innerHTML='<table><thead><tr><th>Arquivo</th><th>Score</th><th>Data</th></tr></thead><tbody>'+rows2+'</tbody></table>';
+  document.getElementById('dashAnalises').innerHTML='<table><thead><tr><th>Arquivo</th><th>Score</th><th>Recomendação</th><th>Data</th></tr></thead><tbody>'+rows2+'</tbody></table>';
 }
 
 function renderTokens(){
@@ -680,7 +787,7 @@ function abrirModalToken(idx){
 }
 
 function atualizarLimite(){
-  var m={trial:10,lite:300,advanced:1000};
+  var m={trial_5:5,trial:10,lite:300,lite_anual:300,starter:600,starter_anual:600,advanced:1000,advanced_anual:1000};
   document.getElementById('tLimite').value=m[document.getElementById('tPlano').value]||10;
 }
 
@@ -958,6 +1065,7 @@ function renderCenarios() {
 
 // GOOGLE MAPS DISCOVERY
 var WEBHOOK_MAPS = 'https://hook.us2.make.com/dyjvz4q53bup5k6xnxspe07h5uoax9x2';
+var WEBHOOK_PROSP = 'https://hook.us2.make.com/h7bp0y8cdl3rii7rpf2u9tayo13gmwcq';
 
 var SETOR_QUERIES = {
   'advocacia': 'escritório de advocacia empresarial',
@@ -968,46 +1076,150 @@ var SETOR_QUERIES = {
   'tecnologia': 'empresa de tecnologia software SaaS',
   'agronegócio': 'agronegócio cooperativa agrícola',
   'contabilidade': 'escritório de contabilidade',
-  'indústria': 'indústria distribuidora atacadista'
+  'indústria': 'indústria distribuidora atacadista',
+  '': 'empresa jurídica contratos'
 };
+
+var CIDADES_BR = {
+  'SP': [['São Paulo','-23.5505,-46.6333'],['Campinas','-22.9064,-47.0616'],['Guarulhos','-23.4538,-46.5333'],['Santos','-23.9535,-46.3333'],['São Bernardo do Campo','-23.6939,-46.5650']],
+  'RJ': [['Rio de Janeiro','-22.9068,-43.1729'],['Niterói','-22.8833,-43.1036'],['Nova Iguaçu','-22.7556,-43.4511'],['Duque de Caxias','-22.7856,-43.3117']],
+  'MG': [['Belo Horizonte','-19.9167,-43.9345'],['Uberlândia','-18.9186,-48.2772'],['Contagem','-19.9317,-44.0536'],['Juiz de Fora','-21.7642,-43.3503']],
+  'PR': [['Curitiba','-25.4296,-49.2713'],['Londrina','-23.3045,-51.1696'],['Maringá','-23.4205,-51.9333']],
+  'RS': [['Porto Alegre','-30.0346,-51.2177'],['Caxias do Sul','-29.1678,-51.1794'],['Pelotas','-31.7717,-52.3425']],
+  'SC': [['Florianópolis','-27.5969,-48.5495'],['Joinville','-26.3044,-48.8458'],['Blumenau','-26.9194,-49.0661']],
+  'BA': [['Salvador','-12.9714,-38.5014'],['Feira de Santana','-12.2664,-38.9663'],['Vitória da Conquista','-14.8619,-40.8444']],
+  'PE': [['Recife','-8.0476,-34.8770'],['Caruaru','-8.2760,-35.9753'],['Olinda','-7.9958,-34.8483']],
+  'CE': [['Fortaleza','-3.7172,-38.5433'],['Caucaia','-3.7361,-38.6531'],['Juazeiro do Norte','-7.2133,-39.3156']],
+  'GO': [['Goiânia','-16.6869,-49.2648'],['Aparecida de Goiânia','-16.8236,-49.2436'],['Anápolis','-16.3281,-48.9531']],
+  'DF': [['Brasília','-15.7801,-47.9292']],
+  'AM': [['Manaus','-3.1190,-60.0217']],
+  'PA': [['Belém','-1.4558,-48.4902'],['Ananindeua','-1.3756,-48.3722']],
+  'MT': [['Cuiabá','-15.5989,-56.0949'],['Várzea Grande','-15.6469,-56.1325']],
+  'MS': [['Campo Grande','-20.4428,-54.6460'],['Dourados','-22.2211,-54.8056']],
+  'ES': [['Vitória','-20.2976,-40.2958'],['Vila Velha','-20.3297,-40.2922']],
+  'MA': [['São Luís','-2.5297,-44.3028'],['Imperatriz','-5.5178,-47.4844']],
+  'PB': [['João Pessoa','-7.1195,-34.8450'],['Campina Grande','-7.2306,-35.8811']],
+  'RN': [['Natal','-5.7945,-35.2110'],['Mossoró','-5.1877,-37.3442']],
+  'AL': [['Maceió','-9.6658,-35.7350']],
+  'SE': [['Aracaju','-10.9472,-37.0731']],
+  'PI': [['Teresina','-5.0892,-42.8019']],
+  'TO': [['Palmas','-10.2406,-48.3558']],
+  'RO': [['Porto Velho','-8.7619,-63.9039']],
+  'AC': [['Rio Branco','-9.9775,-67.8243']],
+  'RR': [['Boa Vista','2.8197,-60.6733']],
+  'AP': [['Macapá','0.0356,-51.0705']]
+};
+
+function atualizarCidades(){
+  var estado = document.getElementById('mapsEstado').value;
+  var sel = document.getElementById('mapsCidade');
+  sel.innerHTML = '<option value="todos">Todas as cidades do estado</option>';
+  if(estado && estado !== 'todos' && CIDADES_BR[estado]){
+    CIDADES_BR[estado].forEach(function(c){
+      var opt = document.createElement('option');
+      opt.value = c[1];
+      opt.textContent = c[0];
+      sel.appendChild(opt);
+    });
+  }
+}
 
 async function buscarGoogleMaps(){
   var googleKey = document.getElementById('mapsGoogleKey').value.trim();
   if(!googleKey){alert('Insira sua chave da Google Maps API primeiro.');return;}
+  localStorage.setItem('ciq_maps_key', googleKey);
   var setor = document.getElementById('mapsSetor').value;
-  var coords = document.getElementById('mapsCidade').value;
-  var query = SETOR_QUERIES[setor] || setor;
+  var estado = document.getElementById('mapsEstado').value;
+  var cidadeVal = document.getElementById('mapsCidade').value;
+  var limite = parseInt(document.getElementById('mapsLimite').value)||60;
+  var query = SETOR_QUERIES[setor] || 'empresa contratos';
+
+  // Determinar coordenadas
+  var lat = '-15.7801', lng = '-47.9292'; // centro do Brasil por padrão
+  var raio = 500000; // nacional
+  if(cidadeVal && cidadeVal !== 'todos'){
+    lat = cidadeVal.split(',')[0];
+    lng = cidadeVal.split(',')[1];
+    raio = 30000;
+  } else if(estado && estado !== 'todos'){
+    // Usar capital do estado
+    var cidades = CIDADES_BR[estado];
+    if(cidades && cidades.length){
+      lat = cidades[0][1].split(',')[0];
+      lng = cidades[0][1].split(',')[1];
+      raio = 200000;
+    }
+  }
+
   var btn = document.getElementById('btnMaps');
   var log = document.getElementById('mapsLog');
   btn.textContent='Buscando...';
   btn.disabled=true;
   log.style.display='block';
+  log.style.color='';
   log.textContent='Enviando busca para o Make.com...';
   try{
-    var r = await fetch(WEBHOOK_MAPS,{
+    await fetch(WEBHOOK_MAPS,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         query: query,
-        lat: coords.split(',')[0],
-        lng: coords.split(',')[1],
-        raio: 50000,
-        setor: setor,
+        lat: lat,
+        lng: lng,
+        raio: raio,
+        setor: setor||'geral',
+        estado: estado,
+        limite: limite,
         google_key: googleKey
       })
     });
-    log.textContent='Busca enviada! O Make.com está processando os resultados e adicionando leads ao Supabase. Aguarde 2-3 minutos e recarregue a aba de Prospecção.';
+    log.textContent='Busca enviada! Make.com processando — aguarde 2-3 minutos e recarregue a aba Prospecção.';
     log.style.color='var(--green)';
-    setTimeout(carregarProspeccao, 30000);
-  }catch(e){
-    log.textContent='Erro: '+e.message;
+  } catch(e){
+    log.textContent='Erro ao enviar: '+e.message;
     log.style.color='var(--red)';
-  }finally{
-    btn.textContent='🔍 Buscar Leads no Google Maps';
-    btn.disabled=false;
   }
+  btn.textContent='🔍 Buscar Leads';
+  btn.disabled=false;
+  setTimeout(carregarProspeccao, 30000);
 }
 
+// AGENDAMENTOS
+async function carregarAgendamentos(){
+  try {
+    var data = await api('agendamentos');
+    var lista = document.getElementById('listaAgendamentos');
+    if(!data || !data.length){ lista.innerHTML='<div class="empty">Nenhum agendamento pendente.</div>'; return; }
+    lista.innerHTML = data.map(function(a){
+      var isPendente = a.status === 'pendente';
+      return '<div class="feedback-card">'+
+        '<div class="fb-header">'+
+          '<div>'+
+            '<div style="font-weight:500;font-size:14px">'+esc(a.lead_nome||'—')+'</div>'+
+            '<div class="fb-meta">'+esc(a.lead_empresa||'')+(a.lead_email?' · '+esc(a.lead_email):'')+(a.lead_whatsapp?' · '+esc(a.lead_whatsapp):'')+'</div>'+
+          '</div>'+
+          '<span class="badge '+(isPendente?'badge-trial':'badge-'+(a.status==='aprovado'?'ativo':'inativo'))+'">'+esc(a.status||'pendente')+'</span>'+
+        '</div>'+
+        '<div class="fb-msg"><strong>Disponibilidade:</strong> '+esc(a.disponibilidade_lead||'Não informada')+'</div>'+
+        (a.mensagem_lead?'<div style="font-size:12px;opacity:.6;margin-bottom:8px">'+esc(a.mensagem_lead)+'</div>':'')+
+        '<div style="font-size:11px;opacity:.4;margin-bottom:10px">Recebido: '+fmt(a.criado_em)+'</div>'+
+        (isPendente?
+          '<div style="display:flex;gap:8px">'+
+            '<button class="btn-sm success" onclick="responderAgendamento(\''+esc(a.id)+'\',\'aprovado\')">✔ Aprovar</button>'+
+            '<button class="btn-sm danger" onclick="responderAgendamento(\''+esc(a.id)+'\',\'recusado\')">✕ Recusar</button>'+
+          '</div>':'')+
+      '</div>';
+    }).join('');
+  } catch(e){ document.getElementById('listaAgendamentos').innerHTML='<div class="empty">Erro ao carregar: '+e.message+'</div>'; }
+}
+
+async function responderAgendamento(id, decisao){
+  if(!confirm(decisao==='aprovado'?'Aprovar este agendamento e enviar confirmação ao lead?':'Recusar este agendamento?')) return;
+  try {
+    await api('agendamentos/'+id, 'PATCH', {status: decisao});
+    carregarAgendamentos();
+  } catch(e){ alert('Erro: '+e.message); }
+}
 
 // MONITORAMENTO
 var dbMonit = [];
