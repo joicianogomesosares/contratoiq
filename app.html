@@ -548,6 +548,55 @@ function toBase64(file){
 var ENDPOINT = 'https://contratoiq-analisar.gomesjoiciano.workers.dev';
 
 // ── ANÁLISE ──
+// ── TIMER SLA ─────────────────────────────────────────────────────────
+var _timerInterval=null, _timerStart=null, SLA_MAX=300;
+
+function iniciarTimer(){
+  _timerStart=Date.now();
+  var box=document.getElementById('timerBox');
+  if(box){ box.style.display='block'; }
+  var cort=document.getElementById('timerCortesia');
+  if(cort) cort.style.display='none';
+  var fill=document.getElementById('slaFill');
+  if(fill){ fill.style.width='0%'; fill.style.background='var(--gold)'; }
+  _timerInterval=setInterval(function(){
+    var el=Math.floor((Date.now()-_timerStart)/1000);
+    var m=Math.floor(el/60), s=el%60;
+    var disp=document.getElementById('timerDisplay');
+    if(disp) disp.textContent=m+':'+(s<10?'0':'')+s;
+    var pct=Math.min(100,(el/SLA_MAX)*100);
+    var f2=document.getElementById('slaFill');
+    if(f2){ f2.style.width=pct+'%'; f2.style.background=el>SLA_MAX*0.8?'var(--red)':el>SLA_MAX*0.5?'var(--amber)':'var(--gold)'; }
+  },1000);
+}
+
+function pararTimer(cortesia){
+  if(_timerInterval){ clearInterval(_timerInterval); _timerInterval=null; }
+  var cort=document.getElementById('timerCortesia');
+  if(cortesia && cort){ cort.style.display='block'; }
+  var disp=document.getElementById('timerDisplay');
+  if(cortesia && disp) disp.style.color='var(--green)';
+  setTimeout(function(){
+    var box=document.getElementById('timerBox');
+    if(box) box.style.display='none';
+    if(disp) disp.style.color='';
+  }, cortesia?6000:1500);
+}
+
+async function verificarSLA(token, arquivoNome){
+  if(!_timerStart) return false;
+  var el=Math.floor((Date.now()-_timerStart)/1000);
+  if(el>SLA_MAX){
+    try{
+      await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({token,modo:'rollback_sla',arquivo_nome:arquivoNome,tempo_segundos:el})});
+    }catch(e){}
+    return true;
+  }
+  return false;
+}
+// ─────────────────────────────────────────────────────────────────────
+
 async function iniciarAnalise(){
   if(!tokenAtivo){alert('Sessão expirada.');return;}
   var file=input.files[0];
@@ -558,8 +607,7 @@ async function iniciarAnalise(){
 
   var btn=document.getElementById('btnAnalisar');
   btn.textContent='Analisando...'; btn.disabled=true;
-
-  // Progresso simulado enquanto aguarda o Gemini
+  iniciarTimer(); enquanto aguarda o Gemini
   var passos=[
     {pct:5,label:'Enviando contrato'},
     {pct:20,label:'Lendo o documento'},
@@ -584,6 +632,8 @@ async function iniciarAnalise(){
     clearInterval(timer);
     mostrarProgresso(98,'Processando resultado','resultado');
     var data=await res.json();
+    var cortesia=await verificarSLA(tokenAtivo, file.name);
+    pararTimer(cortesia);
     if(data.error){alert(data.error);document.getElementById('resultado').innerHTML='';return;}
     if(data.analises_restantes!==undefined)
       document.getElementById('app-analises').textContent=data.analises_restantes+' análises restantes';
@@ -597,6 +647,7 @@ async function iniciarAnalise(){
     renderResultado(data);
   }catch(e){
     clearInterval(timer);
+    pararTimer(false);
     alert('Erro: '+e.message);
     document.getElementById('resultado').innerHTML='';
   }finally{
