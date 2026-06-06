@@ -607,7 +607,9 @@ async function iniciarAnalise(){
 
   var btn=document.getElementById('btnAnalisar');
   btn.textContent='Analisando...'; btn.disabled=true;
-  iniciarTimer(); enquanto aguarda o Gemini
+  iniciarTimer();
+
+  // Progresso simulado enquanto aguarda o Gemini
   var passos=[
     {pct:5,label:'Enviando contrato'},
     {pct:20,label:'Lendo o documento'},
