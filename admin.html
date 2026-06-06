@@ -998,12 +998,14 @@ function renderMonitoramento(){
       '<td><div style="display:flex;align-items:center;gap:6px"><div style="width:50px;height:4px;background:rgba(0,0,0,0.1);border-radius:2px"><div style="width:'+Math.min(pct,100)+'%;height:100%;background:'+barColor+';border-radius:2px"></div></div><span class="mono" style="font-size:10px">'+pct+'%</span></div></td>'+
       '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+(corStatus[m.status]||'inherit')+'">'+esc(m.status||'OK')+'</span></td>'+
       '<td class="muted">'+fmt(m.atualizado_em)+'</td>'+
-      '<td><button class="btn-sm" onclick="editarMonit(''+esc(m.servico)+'','+JSON.stringify({custo_mensal:m.custo_mensal,consumo_atual:m.consumo_atual,percentual_uso:m.percentual_uso,status:m.status,notas:m.notas}).replace(/'/g,"\\'")+')">Edit</button></td>'+
+      '<td><button class="btn-sm" onclick="editarMonit(this)" data-servico="'+esc(m.servico)+'">Edit</button></td>'+
     '</tr>';
   }).join('');
 }
 
-function editarMonit(servico, dados){
+function editarMonit(btn){
+  var servico=btn.dataset.servico;
+  var m=dbMonit.find(function(x){return x.servico===servico;})||{};
   var custo = prompt('Custo mensal (R$):', dados.custo_mensal||0);
   if(custo===null) return;
   var consumo = prompt('Consumo atual:', dados.consumo_atual||'');
