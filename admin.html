@@ -50,6 +50,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
 .badge-lite{background:rgba(201,168,76,0.1);color:#8B6914}
 .badge-advanced{background:rgba(13,13,13,0.08);color:var(--ink)}
 .badge-trial{background:rgba(36,113,163,0.1);color:var(--blue)}
+.badge-novo{background:rgba(36,113,163,0.1);color:var(--blue)}
 .btn-sm{padding:5px 12px;border:1px solid rgba(13,13,13,0.2);background:none;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;cursor:pointer;color:var(--ink);text-transform:uppercase;transition:all .15s}
 .btn-sm:hover{background:var(--ink);color:var(--cream)}
 .btn-sm.danger{border-color:var(--red);color:var(--red)}
@@ -88,6 +89,13 @@ tr:hover td{background:rgba(201,168,76,0.03)}
 .ticket-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:12px}
 .ticket-assunto{font-weight:500;font-size:14px}
 .ticket-desc{font-size:13px;line-height:1.7;opacity:.75;white-space:pre-wrap}
+/* Histórico de conversa do lead */
+.conv-item{border:1px solid var(--rule);border-radius:4px;padding:12px;margin-bottom:8px}
+.conv-enviada{background:rgba(201,168,76,0.06);border-left:3px solid var(--gold)}
+.conv-recebida{background:rgba(30,125,90,0.06);border-left:3px solid var(--green)}
+.conv-meta{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;opacity:.5;text-transform:uppercase;margin-bottom:6px;display:flex;justify-content:space-between;gap:8px}
+.conv-msg{font-size:13px;line-height:1.6;white-space:pre-wrap}
+.chip{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 7px;text-transform:uppercase;border-radius:3px;background:rgba(0,0,0,0.06)}
 </style>
 </head>
 <body>
@@ -199,12 +207,14 @@ tr:hover td{background:rgba(201,168,76,0.03)}
       </div>
       <div id="listaFeedback"><div class="loading">Carregando...</div></div>
     </div>
+
     <!-- PROSPECÇÃO -->
     <div id="panel-prospeccao" class="panel">
       <div class="sec-header">
         <div class="sec-title">Prospecção</div>
         <div style="display:flex;gap:10px;align-items:center">
           <input class="sec-search" id="buscaProsp" placeholder="Buscar leads..." oninput="renderProspeccao()">
+          <button class="btn-primary" onclick="abrirModalLeadManual()">+ Cadastrar Lead</button>
         </div>
       </div>
 
@@ -255,7 +265,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
         </div>
         <div id="logDisparo" style="font-size:12px;font-family:'DM Mono',monospace;opacity:.5;display:none;margin-top:8px"></div>
       </div>
-      
+
       <!-- GOOGLE MAPS DISCOVERY -->
       <div style="background:var(--paper);border:1px solid var(--rule);padding:24px;margin-bottom:20px">
         <div class="sec-header" style="margin-bottom:16px">
@@ -332,18 +342,17 @@ tr:hover td{background:rgba(201,168,76,0.03)}
             <button class="btn-primary" onclick="buscarGoogleMaps()" id="btnMaps">🔍 Buscar Leads</button>
           </div>
         </div>
-        <div style="font-size:11px;opacity:.35;font-family:'DM Mono',monospace">Gratuito até $200/mês (~6.000 buscas). Leads entram como aguardando_aprovacao.</div>
+        <div style="font-size:11px;opacity:.35;font-family:'DM Mono',monospace">Gratuito até $200/mês (renovável). Leads entram como aguardando_aprovacao.</div>
         <div id="mapsLog" style="margin-top:12px;font-size:12px;font-family:'DM Mono',monospace;opacity:.5;display:none"></div>
       </div>
 
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Nome</th><th>Empresa</th><th>Email</th><th>Cidade</th><th>Status</th><th>Disparo</th><th>Score</th><th>Contato</th><th>Msg</th></tr></thead>
-          <tbody id="tabelaProsp"><tr><td colspan="7"><div class="loading">Carregando...</div></td></tr></tbody>
+          <thead><tr><th>Nome</th><th>Empresa</th><th>Email</th><th>WhatsApp</th><th>Cidade</th><th>Status</th><th>Disparo</th><th>Canal</th><th>Conversa</th></tr></thead>
+          <tbody id="tabelaProsp"><tr><td colspan="9"><div class="loading">Carregando...</div></td></tr></tbody>
         </table>
       </div>
     </div>
-
 
     <!-- MONITORAMENTO -->
     <div id="panel-monitoramento" class="panel">
@@ -368,114 +377,89 @@ tr:hover td{background:rgba(201,168,76,0.03)}
       </div>
     </div>
 
-    <!-- SUPORTE -->
-
-    <!-- MONITORAMENTO -->
-    <div id="panel-monitoramento" class="panel">
+    <!-- AGENDAMENTOS -->
+    <div id="panel-agendamentos" class="panel">
       <div class="sec-header">
-        <div class="sec-title">CFO Operacional</div>
-        <button class="btn-primary" onclick="carregarMonitoramento()">↻ Atualizar</button>
+        <div class="sec-title">Agendamentos Pendentes</div>
+        <button class="btn-primary" onclick="carregarAgendamentos()">↻ Atualizar</button>
       </div>
-      <div id="statsMonit" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px"></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Serviço</th><th>Plano</th><th>Custo/mês</th><th>Limite</th><th>Consumo</th><th>%</th><th>Status</th><th>Atualizado</th><th>Ação</th></tr></thead>
-          <tbody id="tabelaMonit"><tr><td colspan="9"><div class="loading">Carregando...</div></td></tr></tbody>
-        </table>
-      </div>
-      <div style="background:var(--paper);border:1px solid var(--rule);padding:24px;margin-top:8px">
-        <div class="sec-title" style="font-size:16px;margin-bottom:16px">Perguntar ao CFO IA</div>
-        <div style="display:flex;gap:10px">
-          <input id="cfoPergunta" class="sec-search" style="flex:1;min-width:0" placeholder="Ex: Quanto gasto por mês? Tem algum serviço em risco?">
-          <button class="btn-primary" onclick="perguntarCFO()">Perguntar</button>
+      <div id="listaAgendamentos"><div class="loading">Carregando...</div></div>
+    </div>
+
+    <!-- PANEL AUTOMAÇÃO TOTAL -->
+    <div id="panel-automacao" class="panel">
+
+      <!-- MASTER SWITCH -->
+      <div style="background:var(--ink);padding:40px;text-align:center;margin-bottom:20px">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:rgba(245,240,232,0.4);margin-bottom:12px;text-transform:uppercase">Sistema de Automação</div>
+        <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:8px">Automatização Total</div>
+        <div style="font-size:13px;color:rgba(245,240,232,0.5);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto">Prospecção, respostas, follow-up, onboarding e monitoramento — tudo rodando 24h/7d com uma ativação.</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:24px">
+          <div id="autoStatusDot" style="width:12px;height:12px;border-radius:50%;background:var(--red);flex-shrink:0"></div>
+          <div id="autoStatusLabel" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(245,240,232,0.5);letter-spacing:2px">INATIVO</div>
+          <button id="btnAutoToggle" onclick="toggleAutomacao()" style="background:var(--gold);color:var(--ink);border:none;padding:14px 40px;font-weight:600;font-size:15px;cursor:pointer;letter-spacing:1px">
+            ATIVAR AUTOMAÇÃO
+          </button>
         </div>
-        <div id="cfoResposta" style="margin-top:16px;font-size:13px;line-height:1.7;display:none;background:var(--cream);padding:16px;border-left:3px solid var(--gold)"></div>
+        <div id="autoToggleLog" style="margin-top:16px;font-family:'DM Mono',monospace;font-size:11px;color:rgba(245,240,232,0.4)"></div>
       </div>
+
+      <!-- KPI CARDS -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px" id="autoKpis">
+        <div class="stat" id="kpiProspeccao">
+          <div class="stat-num" id="kpiProspNum">—</div>
+          <div class="stat-label">Em Prospecção</div>
+        </div>
+        <div class="stat" id="kpiRespondeu">
+          <div class="stat-num" id="kpiRespNum">—</div>
+          <div class="stat-label">Responderam</div>
+        </div>
+        <div class="stat" id="kpiDemo">
+          <div class="stat-num" id="kpiDemoNum">—</div>
+          <div class="stat-label">Em Demo</div>
+        </div>
+        <div class="stat" id="kpiOnboarding">
+          <div class="stat-num" id="kpiOnbNum">—</div>
+          <div class="stat-label">Em Onboarding</div>
+        </div>
+        <div class="stat" id="kpiAtivos">
+          <div class="stat-num" id="kpiAtvNum">—</div>
+          <div class="stat-label">Clientes Ativos</div>
+        </div>
+        <div class="stat" style="border-color:rgba(192,57,43,0.3)" id="kpiRisco">
+          <div class="stat-num" style="color:var(--red)" id="kpiRiscoNum">—</div>
+          <div class="stat-label">Em Risco</div>
+        </div>
+        <div class="stat" id="kpiCortesia">
+          <div class="stat-num" id="kpiCortNum">—</div>
+          <div class="stat-label">Análises Cortesia</div>
+        </div>
+      </div>
+
+      <!-- STATUS DOS CENÁRIOS -->
+      <div style="background:var(--paper);border:1px solid var(--rule);padding:20px;margin-bottom:20px">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;opacity:.4;margin-bottom:14px;text-transform:uppercase">Status dos Cenários Make.com</div>
+        <div id="cenariosStatus" style="display:flex;flex-direction:column;gap:6px">
+          <div class="cenario-row" data-id="5282968" data-nome="Entrega de Token" data-fixo="true"></div>
+          <div class="cenario-row" data-id="5290038" data-nome="Prospecção Automática"></div>
+          <div class="cenario-row" data-id="5290942" data-nome="Respostas de Prospecção (24/7)"></div>
+          <div class="cenario-row" data-id="5293128" data-nome="Follow-up 3 Dias"></div>
+          <div class="cenario-row" data-id="5293136" data-nome="Onboarding Clientes"></div>
+          <div class="cenario-row" data-id="5293138" data-nome="Monitoramento Operacional"></div>
+          <div class="cenario-row" data-id="5293451" data-nome="Descoberta Google Maps" data-manual="true"></div>
+        </div>
+      </div>
+
+      <!-- ANÁLISES CORTESIA -->
+      <div style="background:var(--paper);border:1px solid var(--rule);padding:20px">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;opacity:.4;margin-bottom:14px;text-transform:uppercase">Análises de Cortesia (SLA excedido)</div>
+        <div id="cortesiaLista" style="font-size:12px;opacity:.5">Carregando...</div>
+      </div>
+
     </div>
 
     <!-- SUPORTE -->
-    
-  <div id="panel-agendamentos" class="panel">
-    <div class="sec-header">
-      <div class="sec-title">Agendamentos Pendentes</div>
-      <button class="btn-primary" onclick="carregarAgendamentos()">↻ Atualizar</button>
-    </div>
-    <div id="listaAgendamentos"><div class="loading">Carregando...</div></div>
-  </div>
-
-  <!-- PANEL AUTOMAÇÃO TOTAL -->
-  <div id="panel-automacao" class="panel">
-
-    <!-- MASTER SWITCH -->
-    <div style="background:var(--ink);padding:40px;text-align:center;margin-bottom:20px">
-      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:rgba(245,240,232,0.4);margin-bottom:12px;text-transform:uppercase">Sistema de Automação</div>
-      <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:8px">Automatização Total</div>
-      <div style="font-size:13px;color:rgba(245,240,232,0.5);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto">Prospecção, respostas, follow-up, onboarding e monitoramento — tudo rodando 24h/7d com uma ativação.</div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:24px">
-        <div id="autoStatusDot" style="width:12px;height:12px;border-radius:50%;background:var(--red);flex-shrink:0"></div>
-        <div id="autoStatusLabel" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(245,240,232,0.5);letter-spacing:2px">INATIVO</div>
-        <button id="btnAutoToggle" onclick="toggleAutomacao()" style="background:var(--gold);color:var(--ink);border:none;padding:14px 40px;font-weight:600;font-size:15px;cursor:pointer;letter-spacing:1px">
-          ATIVAR AUTOMAÇÃO
-        </button>
-      </div>
-      <div id="autoToggleLog" style="margin-top:16px;font-family:'DM Mono',monospace;font-size:11px;color:rgba(245,240,232,0.4)"></div>
-    </div>
-
-    <!-- KPI CARDS -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px" id="autoKpis">
-      <div class="stat-card" id="kpiProspeccao">
-        <div class="stat-num" id="kpiProspNum">—</div>
-        <div class="stat-label">Em Prospecção</div>
-      </div>
-      <div class="stat-card" id="kpiRespondeu">
-        <div class="stat-num" id="kpiRespNum">—</div>
-        <div class="stat-label">Responderam</div>
-      </div>
-      <div class="stat-card" id="kpiDemo">
-        <div class="stat-num" id="kpiDemoNum">—</div>
-        <div class="stat-label">Em Demo</div>
-      </div>
-      <div class="stat-card" id="kpiOnboarding">
-        <div class="stat-num" id="kpiOnbNum">—</div>
-        <div class="stat-label">Em Onboarding</div>
-      </div>
-      <div class="stat-card" id="kpiAtivos">
-        <div class="stat-num" id="kpiAtvNum">—</div>
-        <div class="stat-label">Clientes Ativos</div>
-      </div>
-      <div class="stat-card" style="border-color:rgba(192,57,43,0.3)" id="kpiRisco">
-        <div class="stat-num" style="color:var(--red)" id="kpiRiscoNum">—</div>
-        <div class="stat-label">Em Risco</div>
-      </div>
-      <div class="stat-card" id="kpiCortesia">
-        <div class="stat-num" id="kpiCortNum">—</div>
-        <div class="stat-label">Análises Cortesia</div>
-      </div>
-    </div>
-
-    <!-- STATUS DOS CENÁRIOS -->
-    <div style="background:var(--paper);border:1px solid var(--rule);padding:20px;margin-bottom:20px">
-      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;opacity:.4;margin-bottom:14px;text-transform:uppercase">Status dos Cenários Make.com</div>
-      <div id="cenariosStatus" style="display:flex;flex-direction:column;gap:6px">
-        <div class="cenario-row" data-id="5282968" data-nome="Entrega de Token" data-fixo="true"></div>
-        <div class="cenario-row" data-id="5290038" data-nome="Prospecção Automática"></div>
-        <div class="cenario-row" data-id="5290942" data-nome="Respostas de Prospecção (24/7)"></div>
-        <div class="cenario-row" data-id="5293128" data-nome="Follow-up 3 Dias"></div>
-        <div class="cenario-row" data-id="5293136" data-nome="Onboarding Clientes"></div>
-        <div class="cenario-row" data-id="5293138" data-nome="Monitoramento Operacional"></div>
-        <div class="cenario-row" data-id="5293451" data-nome="Descoberta Google Maps" data-manual="true"></div>
-      </div>
-    </div>
-
-    <!-- ANÁLISES CORTESIA -->
-    <div style="background:var(--paper);border:1px solid var(--rule);padding:20px">
-      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;opacity:.4;margin-bottom:14px;text-transform:uppercase">Análises de Cortesia (SLA excedido)</div>
-      <div id="cortesiaLista" style="font-size:12px;opacity:.5">Carregando...</div>
-    </div>
-
-  </div>
-
-  <div id="panel-suporte" class="panel">
+    <div id="panel-suporte" class="panel">
       <div class="sec-header">
         <div class="sec-title">Atendimento ao Cliente</div>
         <button class="btn-primary" onclick="abrirModalSuporte()">+ Novo Atendimento</button>
@@ -574,6 +558,48 @@ tr:hover td{background:rgba(201,168,76,0.03)}
   </div>
 </div>
 
+<!-- MODAL CADASTRO MANUAL DE LEAD -->
+<div class="modal-overlay" id="modalLeadManual">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModal('modalLeadManual')">✕</button>
+    <div class="modal-title">Cadastrar Lead Manual</div>
+    <div style="font-size:12px;opacity:.55;margin-bottom:16px;line-height:1.6">Use para cadastrar um lead individual (inclusive um lead de teste). É obrigatório informar email OU WhatsApp. O lead entra como aguardando aprovação, igual aos da prospecção.</div>
+    <div class="form-row"><label class="form-label">Nome do contato</label><input class="form-input" id="lmNome" placeholder="Ex: João Silva"></div>
+    <div class="form-row"><label class="form-label">Empresa / Escritório</label><input class="form-input" id="lmEmpresa" placeholder="Ex: Silva Advocacia"></div>
+    <div class="form-row"><label class="form-label">Email</label><input class="form-input" id="lmEmail" type="email" placeholder="contato@empresa.com.br"></div>
+    <div class="form-row"><label class="form-label">WhatsApp (só números, com DDD)</label><input class="form-input" id="lmWhatsapp" placeholder="Ex: 85992323262" style="font-family:'DM Mono',monospace"></div>
+    <div class="form-row"><label class="form-label">Site</label><input class="form-input" id="lmSite" placeholder="empresa.com.br"></div>
+    <div class="form-row"><label class="form-label">Instagram (opcional)</label><input class="form-input" id="lmInstagram" placeholder="@empresa"></div>
+    <div class="form-row"><label class="form-label">Cidade</label><input class="form-input" id="lmCidade" placeholder="Ex: Fortaleza"></div>
+    <div class="form-row">
+      <label class="form-label">Segmento</label>
+      <select class="form-select" id="lmSetor">
+        <option value="advocacia">Advocacia</option>
+        <option value="construção">Construção / Imóveis</option>
+        <option value="imobiliária">Imobiliária</option>
+        <option value="franquias">Franquias</option>
+        <option value="saúde">Saúde</option>
+        <option value="tecnologia">Tecnologia</option>
+        <option value="agronegócio">Agronegócio</option>
+        <option value="contabilidade">Contabilidade</option>
+        <option value="indústria">Indústria</option>
+      </select>
+    </div>
+    <div id="lmErro" style="color:var(--red);font-size:12px;margin-bottom:10px;display:none"></div>
+    <button class="btn-save" id="lmBtnSalvar" onclick="salvarLeadManual()">Cadastrar Lead</button>
+  </div>
+</div>
+
+<!-- MODAL HISTÓRICO DE CONVERSA DO LEAD -->
+<div class="modal-overlay" id="modalHistorico">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModal('modalHistorico')">✕</button>
+    <div class="modal-title" id="histTitulo">Histórico de Conversa</div>
+    <div id="histMeta" style="font-family:'DM Mono',monospace;font-size:10px;opacity:.5;margin-bottom:16px"></div>
+    <div id="histLista"><div class="loading">Carregando...</div></div>
+  </div>
+</div>
+
 <script>
 // WORKER URL — sem nenhuma chave aqui
 var WORKER = 'https://contratoiq-analisar.gomesjoiciano.workers.dev';
@@ -666,7 +692,7 @@ async function carregarTudo(){
     setTimeout(carregarAutomacao, 1000);
     setTimeout(carregarAgendamentos, 1200);
   } catch(e) {
-    mostrarErro("Falha ao conectar: "+e.message+". Publique o worker.js com a correcao de CORS no Cloudflare.");
+    mostrarErro("Falha ao conectar: "+e.message+". Publique o worker.js no Cloudflare.");
   }
 }
 function mostrarErro(msg){
@@ -676,6 +702,7 @@ function mostrarErro(msg){
 
 function esc(t){ return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function fmt(d){ return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }
+function fmtDataHora(d){ return d ? new Date(d).toLocaleString('pt-BR') : '—'; }
 
 function renderDashboard(){
   var ativos = dbTokens.filter(function(t){return t.ativo;}).length;
@@ -923,11 +950,8 @@ function salvarTicket(){var t={nome:document.getElementById('sNome').value.trim(
 function mudarTicket(i){var tickets=carregarTickets();tickets[i].status=tickets[i].status==='resolvido'?'aberto':'resolvido';salvarTicketsLS(tickets);renderTickets();}
 function excluirTicket(i){if(!confirm('Remover?'))return;var tickets=carregarTickets();tickets.splice(i,1);salvarTicketsLS(tickets);renderTickets();}
 
-
-
 // AUTOMAÇÃO TOTAL
 var autoAtiva = false;
-
 
 async function gerarRoteiro(idx) {
   var lead = dbProsp[idx];
@@ -1062,7 +1086,6 @@ function renderCenarios() {
   });
 }
 
-
 // GOOGLE MAPS DISCOVERY
 var WEBHOOK_MAPS = 'https://hook.us2.make.com/dyjvz4q53bup5k6xnxspe07h5uoax9x2';
 var WEBHOOK_PROSP = 'https://hook.us2.make.com/h7bp0y8cdl3rii7rpf2u9tayo13gmwcq';
@@ -1142,7 +1165,6 @@ async function buscarGoogleMaps(){
     lng = cidadeVal.split(',')[1];
     raio = 30000;
   } else if(estado && estado !== 'todos'){
-    // Usar capital do estado
     var cidades = CIDADES_BR[estado];
     if(cidades && cidades.length){
       lat = cidades[0][1].split(',')[0];
@@ -1310,24 +1332,22 @@ async function perguntarCFO(){
       method:'POST',
       headers:{'Content-Type':'application/json','X-Admin-Token':ADMIN_SENHA},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:800,
         system:'Você é o CFO operacional do ContratoIQ, uma startup SaaS jurídica brasileira. Responda em português, de forma direta e objetiva, com análise de margem, custo por cliente, break-even e recomendações práticas quando relevante. Use os dados fornecidos.',
         messages:[{role:'user',content:'Contexto operacional: '+ctx+'\n\nPergunta: '+pergunta}]
       })
     });
     var d = await r.json();
-    resEl.textContent = d.content && d.content[0] ? d.content[0].text : (d.error ? 'Erro: '+d.error : 'Erro na resposta.');
+    resEl.textContent = d.content && d.content[0] ? d.content[0].text : (d.error ? 'Erro: '+(typeof d.error==='string'?d.error:JSON.stringify(d.error)) : 'Erro na resposta.');
   } catch(e) {
     resEl.textContent = 'Erro ao conectar com a IA: '+e.message;
   }
 }
 
-
 // PROSPECÇÃO
-var WEBHOOK_PROSP = 'https://hook.us2.make.com/h7bp0y8cdl3rii7rpf2u9tayo13gmwcq';
 var dbProsp = [];
-var SPRSP_COLORS = {Novo:'var(--blue)',Abordado:'var(--amber)',Respondeu:'#8B6914',Convertido:'var(--green)',NaoInteressado:'var(--red)',SemResposta:'#717D7E'};
+var SPRSP_COLORS = {Novo:'var(--blue)',Abordado:'var(--amber)',Respondeu:'#8B6914',Demo:'#8B6914',Convertido:'var(--green)',NaoInteressado:'var(--red)',SemResposta:'#717D7E'};
 
 async function carregarProspeccao(){
   dbProsp = await api('prospeccao').then(function(d){return Array.isArray(d)?d:[];}).catch(function(){return[];});
@@ -1370,7 +1390,7 @@ function renderProspeccao(){
     'aprovado':'var(--blue)',
     'em_fluxo':'var(--gold)',
     'concluido':'var(--green)',
-    'descartado':'var(--muted)'
+    'descartado':'#717D7E'
   };
   var DISPARO_LABELS = {
     'aguardando_aprovacao':'Aguardando',
@@ -1379,22 +1399,26 @@ function renderProspeccao(){
     'concluido':'Concluído',
     'descartado':'Descartado'
   };
+  var CANAL_LABELS = {email:'Email', whatsapp:'WhatsApp', instagram:'Instagram'};
 
   tbody.innerHTML = lista.map(function(l){
     var cor = SPRSP_COLORS[l.status]||'var(--ink)';
     var sd = l.status_disparo||'aguardando_aprovacao';
-    var sdCor = DISPARO_COLORS[sd]||'var(--muted)';
+    var sdCor = DISPARO_COLORS[sd]||'#717D7E';
     var sdLabel = DISPARO_LABELS[sd]||sd;
+    var canal = l.canal_preferido || (l.email?'email':(l.telefone?'whatsapp':'—'));
+    var idSafe = esc(l.id||'');
+    var nomeSafe = esc((l.nome||l.empresa||'lead')).replace(/'/g,'');
     return '<tr>'+
       '<td style="font-weight:500">'+esc(l.nome||'—')+'</td>'+
       '<td class="muted" style="font-size:12px">'+esc(l.empresa||'')+'</td>'+
       '<td class="mono muted" style="font-size:11px">'+esc(l.email||'')+'</td>'+
+      '<td class="mono muted" style="font-size:11px">'+esc(l.telefone||'')+'</td>'+
       '<td class="muted" style="font-size:12px">'+esc(l.cidade||'')+'</td>'+
       '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+cor+';font-size:11px">'+esc(l.status||'Novo')+'</span></td>'+
       '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+sdCor+';font-size:11px">'+sdLabel+'</span></td>'+
-      '<td class="muted" style="font-size:12px">'+(l.score_interesse||'—')+'</td>'+
-      '<td class="muted" style="font-size:12px">'+(l.data_contato?new Date(l.data_contato).toLocaleDateString('pt-BR'):'—')+'</td>'+
-      '<td style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.5">'+esc((l.email_enviado||'').slice(0,60))+'</td>'+
+      '<td><span class="chip">'+esc(CANAL_LABELS[canal]||canal)+'</span></td>'+
+      '<td><button class="btn-sm" onclick="verHistoricoLead(\''+idSafe+'\',\''+nomeSafe+'\')">Ver</button></td>'+
     '</tr>';
   }).join('');
 }
@@ -1404,7 +1428,6 @@ function selecionarParaDisparo(){
   var cidade = document.getElementById('filtroCidadeDisparo').value.toLowerCase().trim();
   var qtd = parseInt(document.getElementById('qtdDisparo').value)||10;
 
-  // Apenas leads aguardando aprovação e sem fluxo ativo
   var candidatos = dbProsp.filter(function(l){
     var sd = l.status_disparo||'aguardando_aprovacao';
     if(sd !== 'aguardando_aprovacao') return false;
@@ -1464,6 +1487,83 @@ async function aprovarEDisparar(){
   _leadsParaDisparar = [];
   document.getElementById('previewDisparo').style.display = 'none';
   await carregarProspeccao();
+}
+
+// CADASTRO MANUAL DE LEAD
+function abrirModalLeadManual(){
+  ['lmNome','lmEmpresa','lmEmail','lmWhatsapp','lmSite','lmInstagram','lmCidade'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('lmSetor').value='advocacia';
+  var err=document.getElementById('lmErro'); err.style.display='none'; err.textContent='';
+  document.getElementById('modalLeadManual').classList.add('show');
+}
+
+async function salvarLeadManual(){
+  var err = document.getElementById('lmErro');
+  err.style.display='none'; err.textContent='';
+  var body = {
+    nome: document.getElementById('lmNome').value.trim(),
+    empresa: document.getElementById('lmEmpresa').value.trim(),
+    email: document.getElementById('lmEmail').value.trim(),
+    whatsapp: document.getElementById('lmWhatsapp').value.trim(),
+    site: document.getElementById('lmSite').value.trim(),
+    instagram: document.getElementById('lmInstagram').value.trim(),
+    cidade: document.getElementById('lmCidade').value.trim(),
+    setor: document.getElementById('lmSetor').value
+  };
+  if(!body.email && !body.whatsapp){
+    err.textContent='Informe email OU WhatsApp. Lead sem contato não é cadastrado.';
+    err.style.display='block';
+    return;
+  }
+  var btn = document.getElementById('lmBtnSalvar');
+  btn.disabled=true; btn.textContent='Cadastrando...';
+  try{
+    var r = await api('lead-manual','POST',body);
+    if(r && r.ok){
+      fecharModal('modalLeadManual');
+      await carregarProspeccao();
+      alert('Lead cadastrado com sucesso. Ele entrou como aguardando aprovação.');
+    } else {
+      err.textContent = (r && r.error) ? r.error : 'Falha ao cadastrar o lead.';
+      err.style.display='block';
+    }
+  } catch(e){
+    err.textContent='Erro de conexão: '+e.message;
+    err.style.display='block';
+  }
+  btn.disabled=false; btn.textContent='Cadastrar Lead';
+}
+
+// HISTÓRICO DE CONVERSA DO LEAD
+async function verHistoricoLead(leadId, nome){
+  if(!leadId){ alert('Lead sem identificador.'); return; }
+  document.getElementById('histTitulo').textContent = 'Conversa — '+(nome||'lead');
+  document.getElementById('histMeta').textContent = '';
+  document.getElementById('histLista').innerHTML = '<div class="loading">Carregando...</div>';
+  document.getElementById('modalHistorico').classList.add('show');
+  try{
+    var data = await api('interacoes/'+encodeURIComponent(leadId));
+    var lista = document.getElementById('histLista');
+    if(!Array.isArray(data) || !data.length){
+      lista.innerHTML = '<div class="empty">Nenhuma conversa registrada com este lead ainda.</div>';
+      return;
+    }
+    document.getElementById('histMeta').textContent = data.length+' interação(ões) registrada(s)';
+    var CANAL = {email:'Email', whatsapp:'WhatsApp', instagram:'Instagram'};
+    lista.innerHTML = data.map(function(it){
+      var enviada = (it.direcao||'enviada')==='enviada';
+      return '<div class="conv-item '+(enviada?'conv-enviada':'conv-recebida')+'">'+
+        '<div class="conv-meta">'+
+          '<span>'+(enviada?'➤ Enviada':'⬅ Recebida')+' · '+esc(CANAL[it.canal]||it.canal||'email')+(it.status?' · '+esc(it.status):'')+'</span>'+
+          '<span>'+fmtDataHora(it.criado_em)+'</span>'+
+        '</div>'+
+        (it.assunto?'<div style="font-weight:500;font-size:12px;margin-bottom:4px">'+esc(it.assunto)+'</div>':'')+
+        '<div class="conv-msg">'+esc(it.mensagem||'')+'</div>'+
+      '</div>';
+    }).join('');
+  } catch(e){
+    document.getElementById('histLista').innerHTML = '<div class="empty">Erro ao carregar: '+esc(e.message)+'</div>';
+  }
 }
 
 function fecharModal(id){document.getElementById(id).classList.remove('show');}
