@@ -1424,42 +1424,76 @@ function renderProspeccao(){
     '</tr>';
   }
 
-  // Separar com e sem email
-  var comEmail = lista.filter(function(l){ return l.email && l.email.trim() !== ''; });
-  var semEmail = lista.filter(function(l){ return !l.email || l.email.trim() === ''; });
+  // ── Agrupamento por temperatura + tipo de contato ──────────────────────
+  var TEMPS = [
+    { key:'super_quente', label:'🔴 SUPER QUENTE', cor:'#C0392B', bg:'rgba(192,57,43,0.08)', desc:'20+ advogados · áreas de alto volume contratual' },
+    { key:'quente',       label:'🟡 QUENTE',        cor:'#E67E22', bg:'rgba(230,126,34,0.08)', desc:'5–19 advogados · perfil ideal · pronto para comprar' },
+    { key:'frio',         label:'❄️ FRIO',          cor:'#5D6D7E', bg:'rgba(93,109,126,0.08)', desc:'Pequeno porte · sem segmentação definida · menor prioridade' }
+  ];
+
+  var SUBGRUPOS = [
+    { key:'ambos',    label:'📧📱 Email + WhatsApp', filtro: function(l){ return (l.email&&l.email.trim()) && (l.telefone&&l.telefone.trim()); } },
+    { key:'email',    label:'📧 Só Email',           filtro: function(l){ return (l.email&&l.email.trim()) && !(l.telefone&&l.telefone.trim()); } },
+    { key:'whatsapp', label:'📱 Só WhatsApp',        filtro: function(l){ return !(l.email&&l.email.trim()) && (l.telefone&&l.telefone.trim()); } }
+  ];
 
   var html = '';
 
-  // Leads COM email — visíveis por padrão
-  if(comEmail.length) {
-    html += comEmail.map(gerarLinha).join('');
-  }
+  TEMPS.forEach(function(temp) {
+    var grupo = lista.filter(function(l){ return (l.temperatura_lead||'frio') === temp.key; });
+    if(!grupo.length) return;
 
-  // Separador colapsável — leads SEM email
-  if(semEmail.length) {
-    html += '<tr id="trSemEmailToggle">'+
-      '<td colspan="9" style="padding:0">'+
-        '<button onclick="toggleSemEmail()" style="width:100%;padding:10px 16px;background:rgba(0,0,0,0.03);border:none;border-top:2px dashed var(--rule);cursor:pointer;text-align:left;font-family:\'DM Mono\',monospace;font-size:10px;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;">'+
-          '<span>⚠ SEM EMAIL — '+semEmail.length+' leads (apenas telefone/Instagram) — clique para ver</span>'+
-          '<span id="semEmailArrow">▼</span>'+
+    // Cabeçalho do grupo de temperatura
+    html += '<tr><td colspan="9" style="padding:0">'+
+      '<div style="background:'+temp.bg+';border-left:3px solid '+temp.cor+';padding:10px 16px;display:flex;align-items:center;justify-content:space-between;">'+
+        '<div>'+
+          '<span style="font-family:\'DM Mono\',monospace;font-size:11px;font-weight:700;color:'+temp.cor+';letter-spacing:1px;">'+temp.label+'</span>'+
+          '<span style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--muted);margin-left:16px;opacity:.7">'+temp.desc+'</span>'+
+        '</div>'+
+        '<span style="font-family:\'DM Mono\',monospace;font-size:11px;color:'+temp.cor+';font-weight:700;">'+grupo.length+' leads</span>'+
+      '</div>'+
+    '</td></tr>';
+
+    SUBGRUPOS.forEach(function(sub) {
+      var subgrupo = grupo.filter(sub.filtro);
+      if(!subgrupo.length) return;
+      var subId = 'sub_'+temp.key+'_'+sub.key;
+
+      // Cabeçalho do subgrupo colapsável
+      html += '<tr><td colspan="9" style="padding:0">'+
+        '<button onclick="toggleSubgrupo(\''+subId+'\')" style="width:100%;padding:8px 24px;background:rgba(0,0,0,0.02);border:none;border-top:1px solid var(--rule);cursor:pointer;text-align:left;font-family:\'DM Mono\',monospace;font-size:10px;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;">'+
+          '<span>'+sub.label+' &nbsp;·&nbsp; '+subgrupo.length+' leads</span>'+
+          '<span id="arrow_'+subId+'">▼</span>'+
         '</button>'+
-      '</td>'+
-    '</tr>';
-    html += '<tbody id="tbodySemEmail" style="display:none">'+
-      semEmail.map(gerarLinha).join('')+
-    '</tbody>';
+      '</td></tr>';
+
+      html += '<tbody id="'+subId+'" style="display:none">'+
+        subgrupo.map(gerarLinha).join('')+
+      '</tbody>';
+    });
+  });
+
+  // Leads sem temperatura definida (fallback)
+  var semTemp = lista.filter(function(l){ return !l.temperatura_lead; });
+  if(semTemp.length) {
+    html += '<tr><td colspan="9"><div class="empty" style="font-size:11px;opacity:.5">'+semTemp.length+' leads sem classificação</div></td></tr>';
+    html += semTemp.map(gerarLinha).join('');
   }
 
   tbody.innerHTML = html;
 }
 
-function toggleSemEmail(){
-  var t = document.getElementById('tbodySemEmail');
-  var a = document.getElementById('semEmailArrow');
+function toggleSubgrupo(id){
+  var t = document.getElementById(id);
+  var a = document.getElementById('arrow_'+id);
   if(!t) return;
   var aberto = t.style.display !== 'none';
   t.style.display = aberto ? 'none' : '';
   if(a) a.textContent = aberto ? '▼' : '▲';
+}
+
+function toggleSemEmail(){
+  toggleSubgrupo('tbodySemEmail');
 }
 
 function selecionarParaDisparo(){
