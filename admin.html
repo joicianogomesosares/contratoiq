@@ -348,7 +348,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
 
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Nome</th><th>Empresa</th><th>Email</th><th>WhatsApp</th><th>Cidade</th><th>Status</th><th>Disparo</th><th>Canal</th><th>Conversa</th></tr></thead>
+          <thead><tr><th>Nome</th><th>Empresa</th><th>Email</th><th>WhatsApp</th><th>Cidade</th><th>Status</th><th>Disparo</th><th>Canal</th><th>Ações</th></tr></thead>
           <tbody id="tabelaProsp"><tr><td colspan="9"><div class="loading">Carregando...</div></td></tr></tbody>
         </table>
       </div>
@@ -1380,7 +1380,6 @@ function renderProspeccao(){
     '<div class="stat"><div class="stat-num" style="color:var(--green)">'+counts.Convertido+'</div><div class="stat-label">Convertidos</div></div>'+
     '<div class="stat"><div class="stat-num">'+counts.total+'</div><div class="stat-label">Total base</div></div>';
 
-  // Tabela
   var tbody = document.getElementById('tabelaProsp');
   if(!tbody) return;
   if(!lista.length){tbody.innerHTML='<tr><td colspan="9"><div class="empty">Nenhum lead</div></td></tr>';return;}
@@ -1401,7 +1400,7 @@ function renderProspeccao(){
   };
   var CANAL_LABELS = {email:'Email', whatsapp:'WhatsApp', instagram:'Instagram'};
 
-  tbody.innerHTML = lista.map(function(l){
+  function gerarLinha(l) {
     var cor = SPRSP_COLORS[l.status]||'var(--ink)';
     var sd = l.status_disparo||'aguardando_aprovacao';
     var sdCor = DISPARO_COLORS[sd]||'#717D7E';
@@ -1418,9 +1417,49 @@ function renderProspeccao(){
       '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+cor+';font-size:11px">'+esc(l.status||'Novo')+'</span></td>'+
       '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+sdCor+';font-size:11px">'+sdLabel+'</span></td>'+
       '<td><span class="chip">'+esc(CANAL_LABELS[canal]||canal)+'</span></td>'+
-      '<td><button class="btn-sm" onclick="verHistoricoLead(\''+idSafe+'\',\''+nomeSafe+'\')">Ver</button></td>'+
+      '<td><div style="display:flex;gap:4px">'+
+        '<button class="btn-sm" onclick="verHistoricoLead(\''+idSafe+'\',\''+nomeSafe+'\')">Ver</button>'+
+        '<button class="btn-sm danger" onclick="excluirLeadProsp(\''+idSafe+'\',\''+nomeSafe+'\')">✕</button>'+
+      '</div></td>'+
     '</tr>';
-  }).join('');
+  }
+
+  // Separar com e sem email
+  var comEmail = lista.filter(function(l){ return l.email && l.email.trim() !== ''; });
+  var semEmail = lista.filter(function(l){ return !l.email || l.email.trim() === ''; });
+
+  var html = '';
+
+  // Leads COM email — visíveis por padrão
+  if(comEmail.length) {
+    html += comEmail.map(gerarLinha).join('');
+  }
+
+  // Separador colapsável — leads SEM email
+  if(semEmail.length) {
+    html += '<tr id="trSemEmailToggle">'+
+      '<td colspan="9" style="padding:0">'+
+        '<button onclick="toggleSemEmail()" style="width:100%;padding:10px 16px;background:rgba(0,0,0,0.03);border:none;border-top:2px dashed var(--rule);cursor:pointer;text-align:left;font-family:\'DM Mono\',monospace;font-size:10px;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;">'+
+          '<span>⚠ SEM EMAIL — '+semEmail.length+' leads (apenas telefone/Instagram) — clique para ver</span>'+
+          '<span id="semEmailArrow">▼</span>'+
+        '</button>'+
+      '</td>'+
+    '</tr>';
+    html += '<tbody id="tbodySemEmail" style="display:none">'+
+      semEmail.map(gerarLinha).join('')+
+    '</tbody>';
+  }
+
+  tbody.innerHTML = html;
+}
+
+function toggleSemEmail(){
+  var t = document.getElementById('tbodySemEmail');
+  var a = document.getElementById('semEmailArrow');
+  if(!t) return;
+  var aberto = t.style.display !== 'none';
+  t.style.display = aberto ? 'none' : '';
+  if(a) a.textContent = aberto ? '▼' : '▲';
 }
 
 function selecionarParaDisparo(){
@@ -1532,6 +1571,23 @@ async function salvarLeadManual(){
     err.style.display='block';
   }
   btn.disabled=false; btn.textContent='Cadastrar Lead';
+}
+
+
+// EXCLUIR LEAD DE PROSPECÇÃO
+async function excluirLeadProsp(id, nome){
+  if(!confirm('Excluir "'+nome+'" permanentemente? Esta ação não pode ser desfeita.')) return;
+  try {
+    var r = await api('prospeccao/'+encodeURIComponent(id), 'DELETE', null);
+    if(r && r.ok){
+      dbProsp = dbProsp.filter(function(l){ return l.id !== id; });
+      renderProspeccao();
+    } else {
+      alert('Erro ao excluir: '+(r&&r.error?r.error:'tente novamente.'));
+    }
+  } catch(e){
+    alert('Erro de conexão ao excluir: '+e.message);
+  }
 }
 
 // HISTÓRICO DE CONVERSA DO LEAD
