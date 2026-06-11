@@ -233,7 +233,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
           <span>🇧🇷</span>
           <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--green)">Cobertura: <strong>Brasil inteiro</strong></span>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:flex-end;margin-bottom:14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:12px;align-items:flex-end;margin-bottom:14px">
           <div>
             <label class="form-label" style="display:block;margin-bottom:5px">Filtrar por setor</label>
             <select class="form-select" id="filtroSetorDisparo">
@@ -258,8 +258,16 @@ tr:hover td{background:rgba(201,168,76,0.03)}
             </select>
           </div>
           <div>
+            <label class="form-label" style="display:block;margin-bottom:5px">Pesquisa aprofundada</label>
+            <select class="form-select" id="filtroPesquisaDisparo">
+              <option value="">Todos</option>
+              <option value="pesquisados">✅ Com pesquisa</option>
+              <option value="sem_pesquisa">⏳ Sem pesquisa</option>
+            </select>
+          </div>
+          <div>
             <label class="form-label" style="display:block;margin-bottom:5px">Quantidade de leads</label>
-            <input class="form-input" id="qtdDisparo" type="number" min="1" max="500" placeholder="Ex: 20" value="10" style="font-family:'DM Mono',monospace">
+            <input class="form-input" id="qtdDisparo" type="number" min="1" max="500" placeholder="Ex: 20" value="20" style="font-family:'DM Mono',monospace">
           </div>
           <div>
             <button class="btn-primary" onclick="selecionarParaDisparo()" id="btnSelecionar">Selecionar Leads</button>
@@ -270,8 +278,9 @@ tr:hover td{background:rgba(201,168,76,0.03)}
         <div id="previewDisparo" style="display:none;background:rgba(0,0,0,0.04);border:1px solid var(--rule);padding:14px;border-radius:4px;margin-bottom:14px">
           <div style="font-size:13px;font-weight:600;margin-bottom:8px" id="previewDisparoTitulo"></div>
           <div id="previewDisparoLista" style="font-size:12px;font-family:'DM Mono',monospace;max-height:160px;overflow-y:auto;line-height:1.8;opacity:.7"></div>
-          <div style="display:flex;gap:10px;margin-top:14px">
-            <button class="btn-primary" onclick="aprovarEDisparar()" id="btnDisparar" style="background:var(--green);border-color:var(--green)">✔ Aprovar e Disparar</button>
+          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+            <button class="btn-primary" onclick="aprovarEDisparar('email')" id="btnDisparar" style="background:var(--green);border-color:var(--green)">✔ Disparar Email</button>
+            <button class="btn-primary" onclick="aprovarEDisparar('whatsapp')" id="btnDispararWA" style="background:#25D366;border:none">📱 Disparar WhatsApp</button>
             <button onclick="cancelarSelecao()" style="padding:8px 16px;border:1px solid var(--rule);background:transparent;cursor:pointer;font-size:13px;border-radius:2px">Cancelar</button>
           </div>
         </div>
@@ -358,9 +367,17 @@ tr:hover td{background:rgba(201,168,76,0.03)}
         <div id="mapsLog" style="margin-top:12px;font-size:12px;font-family:'DM Mono',monospace;opacity:.5;display:none"></div>
       </div>
 
+      <!-- TOOLBAR LEADS SELECIONADOS -->
+      <div id="toolbarSelecionados" style="display:none;background:var(--ink);color:var(--cream);padding:12px 20px;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px">
+        <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px"><span id="qtdSelecionados">0</span> leads selecionados</span>
+        <button onclick="dispararSelecionadosWhatsApp()" style="padding:7px 16px;background:#25D366;color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:500">📱 Disparar WhatsApp</button>
+        <button onclick="dispararSelecionadosEmail()" style="padding:7px 16px;background:var(--green);color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:500">✉ Disparar Email</button>
+        <button onclick="limparSelecaoLeads()" style="padding:7px 14px;background:transparent;color:rgba(245,240,232,0.5);border:1px solid rgba(245,240,232,0.2);cursor:pointer;font-size:12px">✕ Limpar seleção</button>
+      </div>
+
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Nome</th><th>Empresa</th><th>Email</th><th>WhatsApp</th><th>Cidade</th><th>Status</th><th>Disparo</th><th>Canal</th><th>Ações</th></tr></thead>
+          <thead><tr><th style="width:32px"><input type="checkbox" id="chkAll" onchange="toggleTodosLeads(this)" style="cursor:pointer"></th><th>Nome</th><th>Empresa</th><th>Email</th><th>WhatsApp</th><th>Pesquisa</th><th>Status</th><th>Canal</th><th>Ações</th></tr></thead>
           <tbody id="tabelaProsp"><tr><td colspan="9"><div class="loading">Carregando...</div></td></tr></tbody>
         </table>
       </div>
@@ -426,9 +443,12 @@ tr:hover td{background:rgba(201,168,76,0.03)}
         <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;opacity:.4;margin-bottom:14px;text-transform:uppercase">Status dos Cenários Make.com</div>
         <div id="cenariosStatus" style="display:flex;flex-direction:column;gap:6px">
           <div class="cenario-row" data-id="5282968" data-nome="Entrega de Token" data-fixo="true"></div>
-          <div class="cenario-row" data-id="5290038" data-nome="Prospecção Automática"></div>
-          <div class="cenario-row" data-id="5290942" data-nome="Respostas de Prospecção (24/7)"></div>
-          <div class="cenario-row" data-id="5293128" data-nome="Follow-up 3 Dias"></div>
+          <div class="cenario-row" data-id="5290038" data-nome="Prospecção Email Automática"></div>
+          <div class="cenario-row" data-id="5359195" data-nome="WhatsApp Outbound (Disparo)"></div>
+          <div class="cenario-row" data-id="5359237" data-nome="WhatsApp Follow-up 3 Dias"></div>
+          <div class="cenario-row" data-id="5350989" data-nome="Respostas WhatsApp (Z-API)"></div>
+          <div class="cenario-row" data-id="5290942" data-nome="Respostas Prospecção Email (24/7)"></div>
+          <div class="cenario-row" data-id="5293128" data-nome="Follow-up Email 3 Dias"></div>
           <div class="cenario-row" data-id="5293136" data-nome="Onboarding Clientes"></div>
           <div class="cenario-row" data-id="5293138" data-nome="Monitoramento Operacional"></div>
           <div class="cenario-row" data-id="5293451" data-nome="Descoberta Google Maps" data-manual="true"></div>
@@ -1074,7 +1094,8 @@ function renderProspeccao(){
     '<div class="stat"><div class="stat-num" style="color:var(--blue)">'+counts.em_fluxo+'</div><div class="stat-label">Em fluxo</div></div>'+
     '<div class="stat"><div class="stat-num" style="color:var(--gold)">'+counts.Respondeu+'</div><div class="stat-label">Responderam</div></div>'+
     '<div class="stat"><div class="stat-num" style="color:var(--green)">'+counts.Convertido+'</div><div class="stat-label">Convertidos</div></div>'+
-    '<div class="stat"><div class="stat-num">'+counts.total+'</div><div class="stat-label">Total base</div></div>';
+    '<div class="stat"><div class="stat-num">'+counts.total+'</div><div class="stat-label">Total base</div></div>'+
+    '<div class="stat"><div class="stat-num" style="color:var(--green)">'+dbProsp.filter(function(l){return l.contexto_empresa&&l.contexto_empresa.trim();}).length+'</div><div class="stat-label">Pesquisados</div></div>';
 
   var tbody = document.getElementById('tabelaProsp');
   if(!tbody) return;
@@ -1092,18 +1113,19 @@ function renderProspeccao(){
     var canal = l.canal_preferido || (l.email?'email':(l.telefone?'whatsapp':'—'));
     var idSafe = esc(l.id||'');
     var nomeSafe = esc((l.nome||l.empresa||'lead')).replace(/'/g,'');
+        var pesquisaBadge = l.contexto_empresa ? '<span style="color:var(--green);font-size:13px" title="Pesquisa feita">✅</span>' : '<span style="opacity:.3;font-size:13px" title="Sem pesquisa">⏳</span>';
     return '<tr>'+
+      '<td style="width:32px;text-align:center"><input type="checkbox" class="chk-lead" data-id="'+idSafe+'" data-phone="'+esc(l.telefone||'')+'" data-empresa="'+esc(l.empresa||'')+'" data-especializacao="'+esc(l.especializacao||'')+'" data-contexto="'+esc((l.contexto_empresa||'').substring(0,200))+'" data-temperatura="'+esc(l.temperatura||'frio')+'" onchange="atualizarToolbarLeads()" style="cursor:pointer"></td>'+
       '<td style="font-weight:500">'+esc(l.nome||'—')+'</td>'+
       '<td class="muted" style="font-size:12px">'+esc(l.empresa||'')+'</td>'+
       '<td class="mono muted" style="font-size:11px">'+esc(l.email||'')+'</td>'+
       '<td class="mono muted" style="font-size:11px">'+esc(l.telefone||'')+'</td>'+
-      '<td class="muted" style="font-size:12px">'+esc(l.cidade||'')+'</td>'+
+      '<td style="text-align:center">'+pesquisaBadge+'</td>'+
       '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+cor+';font-size:11px">'+esc(l.status||'Novo')+'</span></td>'+
-      '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+sdCor+';font-size:11px">'+sdLabel+'</span></td>'+
       '<td><span class="chip">'+esc(CANAL_LABELS[canal]||canal)+'</span></td>'+
       '<td><div style="display:flex;gap:4px">'+
-        '<button class="btn-sm" onclick="verHistoricoLead(\''+ idSafe+'\',\''+ nomeSafe+'\')">Ver</button>'+
-        '<button class="btn-sm danger" onclick="excluirLeadProsp(\''+ idSafe+'\',\''+ nomeSafe+'\')">✕</button>'+
+        '<button class="btn-sm" onclick="verHistoricoLead(\''+ idSafe+'\',\''+ nomeSafe+'\')">'+'Ver</button>'+
+        '<button class="btn-sm danger" onclick="excluirLeadProsp(\''+ idSafe+'\',\''+ nomeSafe+'\')">'+'✕</button>'+
       '</div></td></tr>';
   }
 
@@ -1157,7 +1179,8 @@ function toggleSubgrupo(id){
 function selecionarParaDisparo(){
   var setor = document.getElementById('filtroSetorDisparo').value;
   var temperatura = document.getElementById('filtroTemperaturaDisparo').value;
-  var qtd = parseInt(document.getElementById('qtdDisparo').value)||10;
+  var pesquisa = document.getElementById('filtroPesquisaDisparo').value;
+  var qtd = parseInt(document.getElementById('qtdDisparo').value)||20;
 
   var TEMP_ICONS = {super_quente:'🔥', quente:'🌡️', frio:'❄️'};
 
@@ -1166,6 +1189,8 @@ function selecionarParaDisparo(){
     if(sd !== 'aguardando_aprovacao') return false;
     if(setor && (l.setor||'').toLowerCase() !== setor.toLowerCase()) return false;
     if(temperatura && (l.temperatura||'frio') !== temperatura) return false;
+    if(pesquisa === 'pesquisados' && !(l.contexto_empresa && l.contexto_empresa.trim())) return false;
+    if(pesquisa === 'sem_pesquisa' && (l.contexto_empresa && l.contexto_empresa.trim())) return false;
     return true;
   });
 
@@ -1194,26 +1219,98 @@ function cancelarSelecao(){
   document.getElementById('logDisparo').style.display = 'none';
 }
 
-async function aprovarEDisparar(){
+var WEBHOOK_WA_OUTBOUND = 'https://hook.us2.make.com/gbvd96kfkrj2wdarlqe9yf2i80mtq9gf';
+
+async function aprovarEDisparar(canal){
+  canal = canal || 'email';
   if(!_leadsParaDisparar.length){alert('Nenhum lead selecionado.');return;}
-  var btn = document.getElementById('btnDisparar');
+  var isWA = canal === 'whatsapp';
+  var btn = document.getElementById(isWA ? 'btnDispararWA' : 'btnDisparar');
   var log = document.getElementById('logDisparo');
-  btn.disabled = true; btn.textContent = 'Disparando...';
+  if(btn){ btn.disabled = true; btn.textContent = 'Disparando...'; }
   log.style.display = 'block';
-  log.textContent = 'Iniciando disparo de '+_leadsParaDisparar.length+' leads...';
+  log.textContent = 'Iniciando disparo de '+_leadsParaDisparar.length+' leads ('+canal+')...';
   var ok = 0;
   for(var i=0; i<_leadsParaDisparar.length; i++){
     var l = _leadsParaDisparar[i];
     try{
-      await fetch(WEBHOOK_PROSP, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(l)});
+      if(isWA){
+        if(!l.telefone){log.textContent+='\n'+esc(l.nome||l.empresa||'')+': sem telefone, pulando.';continue;}
+        await fetch(WEBHOOK_WA_OUTBOUND,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lead_id:l.id,phone:l.telefone,empresa:l.empresa||'',especializacao:l.especializacao||'',contexto_empresa:l.contexto_empresa||'',temperatura:l.temperatura||'frio'})});
+      } else {
+        await fetch(WEBHOOK_PROSP,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(l)});
+      }
       ok++; log.textContent = 'Enviando... '+ok+'/'+_leadsParaDisparar.length+' — '+esc(l.nome||l.empresa||'');
-      await new Promise(function(r){setTimeout(r,3000);});
+      await new Promise(function(r){setTimeout(r,isWA?2000:3000);});
     } catch(e){ log.textContent += '\nErro no lead '+esc(l.nome||'')+': '+e.message; }
   }
-  btn.textContent = '✔ Aprovar e Disparar'; btn.disabled = false;
-  log.textContent = '✔ '+ok+' emails disparados com sucesso. Aguarde o Make.com processar.';
+  if(btn){ btn.textContent = isWA ? '📱 Disparar WhatsApp' : '✔ Disparar Email'; btn.disabled = false; }
+  log.textContent = '✔ '+ok+' leads disparados via '+canal+'. Aguarde o Make.com processar.';
   _leadsParaDisparar = [];
   document.getElementById('previewDisparo').style.display = 'none';
+  await carregarProspeccao();
+}
+
+function toggleTodosLeads(chkAll){
+  document.querySelectorAll('.chk-lead').forEach(function(c){
+    var row = c.closest('tr');
+    if(row && row.style.display !== 'none') c.checked = chkAll.checked;
+  });
+  atualizarToolbarLeads();
+}
+
+function atualizarToolbarLeads(){
+  var sel = document.querySelectorAll('.chk-lead:checked').length;
+  var qtdEl = document.getElementById('qtdSelecionados');
+  if(qtdEl) qtdEl.textContent = sel;
+  var toolbar = document.getElementById('toolbarSelecionados');
+  if(toolbar) toolbar.style.display = sel > 0 ? 'flex' : 'none';
+}
+
+function limparSelecaoLeads(){
+  document.querySelectorAll('.chk-lead').forEach(function(c){ c.checked = false; });
+  var chkAll = document.getElementById('chkAll');
+  if(chkAll) chkAll.checked = false;
+  atualizarToolbarLeads();
+}
+
+async function dispararSelecionadosWhatsApp(){
+  var checks = document.querySelectorAll('.chk-lead:checked');
+  if(!checks.length) return;
+  var leads = Array.from(checks).map(function(c){ return {id:c.dataset.id,phone:c.dataset.phone,empresa:c.dataset.empresa,especializacao:c.dataset.especializacao,contexto_empresa:c.dataset.contexto,temperatura:c.dataset.temperatura}; });
+  var comFone = leads.filter(function(l){ return l.phone; });
+  if(!comFone.length){ alert('Nenhum lead selecionado tem WhatsApp cadastrado.'); return; }
+  if(!confirm('Disparar WhatsApp para '+comFone.length+' leads?')) return;
+  var ok = 0;
+  for(var i=0; i<comFone.length; i++){
+    var l = comFone[i];
+    try{
+      await fetch(WEBHOOK_WA_OUTBOUND,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lead_id:l.id,phone:l.phone,empresa:l.empresa,especializacao:l.especializacao,contexto_empresa:l.contexto_empresa,temperatura:l.temperatura})});
+      ok++;
+      await new Promise(function(r){setTimeout(r,2000);});
+    } catch(e){}
+  }
+  alert('✔ WhatsApp disparado para '+ok+' leads.');
+  limparSelecaoLeads();
+  await carregarProspeccao();
+}
+
+async function dispararSelecionadosEmail(){
+  var checks = document.querySelectorAll('.chk-lead:checked');
+  if(!checks.length) return;
+  var ids = Array.from(checks).map(function(c){ return c.dataset.id; });
+  var leads = dbProsp.filter(function(l){ return ids.indexOf(l.id) >= 0; });
+  if(!confirm('Disparar email para '+leads.length+' leads?')) return;
+  var ok = 0;
+  for(var i=0; i<leads.length; i++){
+    try{
+      await fetch(WEBHOOK_PROSP,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(leads[i])});
+      ok++;
+      await new Promise(function(r){setTimeout(r,3000);});
+    } catch(e){}
+  }
+  alert('✔ Email disparado para '+ok+' leads.');
+  limparSelecaoLeads();
   await carregarProspeccao();
 }
 
