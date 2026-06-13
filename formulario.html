@@ -145,19 +145,13 @@ src="https://www.facebook.com/tr?id=2499084213848213&ev=PageView&noscript=1"
     <form name="acesso-antecipado" id="form-antecipado" method="POST" data-netlify="true">
       <input type="hidden" name="form-name" value="acesso-antecipado">
 
-      <div class="field-group">
-        <div class="field">
-          <label>Nome completo *</label>
-          <input type="text" name="nome" placeholder="Seu nome" required>
-        </div>
-        <div class="field">
-          <label>WhatsApp *</label>
-          <input type="tel" name="whatsapp" placeholder="(85) 99999-9999" required>
-        </div>
+      <div class="field">
+        <label>Nome completo *</label>
+        <input type="text" name="nome" placeholder="Seu nome" required>
       </div>
 
       <div class="field">
-        <label>Email *</label>
+        <label>Email * <span style="font-size:9px;opacity:0.5;font-weight:300;letter-spacing:0;text-transform:none;">— seu token de acesso será enviado aqui</span></label>
         <input type="email" name="email" placeholder="email@escritorio.com.br" required>
       </div>
 
@@ -178,11 +172,6 @@ src="https://www.facebook.com/tr?id=2499084213848213&ev=PageView&noscript=1"
         </div>
       </div>
 
-      <div class="terms">
-        <input type="checkbox" name="aceite" id="aceite" required>
-        <label for="aceite"><span>Aceito receber contato da equipe ContratoIQ via WhatsApp e email.</span></label>
-      </div>
-
       <button type="submit" class="submit-btn">Quero meu acesso grátis →</button>
       <div class="form-note">7 dias grátis · Sem cartão de crédito · Cancelamento imediato</div>
     </form>
@@ -191,10 +180,6 @@ src="https://www.facebook.com/tr?id=2499084213848213&ev=PageView&noscript=1"
 </div>
 
 <script>
-  document.getElementById('aceite').addEventListener('change', function() {
-    this.closest('.terms').style.borderColor = this.checked ? 'var(--gold)' : 'rgba(201,168,76,0.2)';
-  });
-
   document.getElementById('form-antecipado').addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = this.querySelector('.submit-btn');
@@ -205,7 +190,6 @@ src="https://www.facebook.com/tr?id=2499084213848213&ev=PageView&noscript=1"
     const dados = {
       nome:             formData.get('nome'),
       email:            formData.get('email'),
-      whatsapp:         formData.get('whatsapp') || '',
       escritorio:       formData.get('empresa') || '',
       empresa:          formData.get('empresa') || '',
       volume_contratos: formData.get('volume_contratos') || '',
