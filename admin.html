@@ -135,7 +135,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
     <input type="password" class="login-input" id="senhaInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')entrar()">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
       <input type="checkbox" id="manterConectado" style="cursor:pointer">
-      <label for="manterConectado" style="font-family:'DM Mono',monospace;font-size:11px;opacity:.5;cursor:pointer">Manter conectado por 30 dias</label>
+      <label for="manterConectado" style="font-family:DM Mono,monospace;font-size:11px;opacity:.5;cursor:pointer">Manter conectado por 30 dias</label>
     </div>
     <button class="login-btn" onclick="entrar()">Entrar</button>
     <div class="login-err" id="loginErr">Senha incorreta.</div>
@@ -260,7 +260,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
         <!-- ── MUDANÇA 1: Brasil inteiro + temperatura ── -->
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px">
           <span>🇧🇷</span>
-          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--green)">Cobertura: <strong>Brasil inteiro</strong></span>
+          <span style="font-family:DM Mono,monospace;font-size:11px;color:var(--green)">Cobertura: <strong>Brasil inteiro</strong></span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:12px;align-items:flex-end;margin-bottom:14px">
           <div>
@@ -296,7 +296,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
           </div>
           <div>
             <label class="form-label" style="display:block;margin-bottom:5px">Quantidade de leads</label>
-            <input class="form-input" id="qtdDisparo" type="number" min="1" max="500" placeholder="Ex: 20" value="20" style="font-family:'DM Mono',monospace">
+            <input class="form-input" id="qtdDisparo" type="number" min="1" max="500" placeholder="Ex: 20" value="20" style="font-family:DM Mono,monospace">
           </div>
           <div>
             <button class="btn-primary" onclick="selecionarParaDisparo()" id="btnSelecionar">Selecionar Leads</button>
@@ -306,14 +306,14 @@ tr:hover td{background:rgba(201,168,76,0.03)}
 
         <div id="previewDisparo" style="display:none;background:rgba(0,0,0,0.04);border:1px solid var(--rule);padding:14px;border-radius:4px;margin-bottom:14px">
           <div style="font-size:13px;font-weight:600;margin-bottom:8px" id="previewDisparoTitulo"></div>
-          <div id="previewDisparoLista" style="font-size:12px;font-family:'DM Mono',monospace;max-height:160px;overflow-y:auto;line-height:1.8;opacity:.7"></div>
+          <div id="previewDisparoLista" style="font-size:12px;font-family:DM Mono,monospace;max-height:160px;overflow-y:auto;line-height:1.8;opacity:.7"></div>
           <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
             <button class="btn-primary" onclick="aprovarEDisparar('email')" id="btnDisparar" style="background:var(--green);border-color:var(--green)">✔ Disparar Email</button>
             <button class="btn-primary" onclick="aprovarEDisparar('whatsapp')" id="btnDispararWA" style="background:#25D366;border:none">📱 Disparar WhatsApp</button>
             <button onclick="cancelarSelecao()" style="padding:8px 16px;border:1px solid var(--rule);background:transparent;cursor:pointer;font-size:13px;border-radius:2px">Cancelar</button>
           </div>
         </div>
-        <div id="logDisparo" style="font-size:12px;font-family:'DM Mono',monospace;opacity:.5;display:none;margin-top:8px"></div>
+        <div id="logDisparo" style="font-size:12px;font-family:DM Mono,monospace;opacity:.5;display:none;margin-top:8px"></div>
       </div>
 
       <!-- GOOGLE MAPS DISCOVERY -->
@@ -379,26 +379,26 @@ tr:hover td{background:rgba(201,168,76,0.03)}
           </div>
           <div>
             <label class="form-label" style="display:block;margin-bottom:6px">Chave Google Maps API</label>
-            <input class="form-input" id="mapsGoogleKey" placeholder="AIza..." type="password" style="font-family:'DM Mono',monospace;font-size:11px">
-            <div style="font-size:10px;opacity:.4;margin-top:4px;font-family:'DM Mono',monospace">Salva automaticamente</div>
+            <input class="form-input" id="mapsGoogleKey" placeholder="AIza..." type="password" style="font-family:DM Mono,monospace;font-size:11px">
+            <div style="font-size:10px;opacity:.4;margin-top:4px;font-family:DM Mono,monospace">Salva automaticamente</div>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-bottom:8px">
           <div>
             <label class="form-label" style="display:block;margin-bottom:5px">Limite de leads por busca</label>
-            <input class="form-input" id="mapsLimite" type="number" min="10" max="200" value="60" style="width:100px;font-family:'DM Mono',monospace">
+            <input class="form-input" id="mapsLimite" type="number" min="10" max="200" value="60" style="width:100px;font-family:DM Mono,monospace">
           </div>
           <div style="padding-top:20px">
             <button class="btn-primary" onclick="buscarGoogleMaps()" id="btnMaps">🔍 Buscar Leads</button>
           </div>
         </div>
-        <div style="font-size:11px;opacity:.35;font-family:'DM Mono',monospace">Gratuito até $200/mês (renovável). Leads entram como aguardando_aprovacao.</div>
-        <div id="mapsLog" style="margin-top:12px;font-size:12px;font-family:'DM Mono',monospace;opacity:.5;display:none"></div>
+        <div style="font-size:11px;opacity:.35;font-family:DM Mono,monospace">Gratuito até $200/mês (renovável). Leads entram como aguardando_aprovacao.</div>
+        <div id="mapsLog" style="margin-top:12px;font-size:12px;font-family:DM Mono,monospace;opacity:.5;display:none"></div>
       </div>
 
       <!-- TOOLBAR LEADS SELECIONADOS -->
       <div id="toolbarSelecionados" style="display:none;background:var(--ink);color:var(--cream);padding:12px 20px;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px">
-        <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px"><span id="qtdSelecionados">0</span> leads selecionados</span>
+        <span style="font-family:DM Mono,monospace;font-size:11px;letter-spacing:1px"><span id="qtdSelecionados">0</span> leads selecionados</span>
         <button onclick="dispararSelecionadosWhatsApp()" style="padding:7px 16px;background:#25D366;color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:500">📱 Disparar WhatsApp</button>
         <button onclick="dispararSelecionadosEmail()" style="padding:7px 16px;background:var(--green);color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:500">✉ Disparar Email</button>
         <button onclick="limparSelecaoLeads()" style="padding:7px 14px;background:transparent;color:rgba(245,240,232,0.5);border:1px solid rgba(245,240,232,0.2);cursor:pointer;font-size:12px">✕ Limpar seleção</button>
@@ -425,6 +425,23 @@ tr:hover td{background:rgba(201,168,76,0.03)}
           <tbody id="tabelaMonit"><tr><td colspan="9"><div class="loading">Carregando...</div></td></tr></tbody>
         </table>
       </div>
+
+      <!-- GEMINI API — CUSTO POR CLIENTE -->
+      <div style="background:var(--paper);border:1px solid var(--rule);margin-top:8px">
+        <div onclick="toggleGemini()" style="padding:16px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="font-size:22px">🤖</span>
+            <div>
+              <div style="font-weight:600;font-size:14px">Gemini API — Custo por Cliente</div>
+              <div style="font-family:DM Mono,monospace;font-size:9px;opacity:.5;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px">R$2,75 por análise · Clique para expandir</div>
+            </div>
+          </div>
+          <span id="geminiArrow" style="font-size:16px;opacity:.35;font-family:DM Mono,monospace">▼</span>
+        </div>
+        <div id="geminiCustosPanel" style="display:none;padding:0 20px 20px">
+          <div id="geminiCustosContent"><div class="loading">Carregando...</div></div>
+        </div>
+      </div>
       <div style="background:var(--paper);border:1px solid var(--rule);padding:24px;margin-top:8px">
         <div class="sec-title" style="font-size:16px;margin-bottom:16px">Perguntar ao CFO IA</div>
         <div style="display:flex;gap:10px">
@@ -447,17 +464,17 @@ tr:hover td{background:rgba(201,168,76,0.03)}
     <!-- PANEL AUTOMAÇÃO TOTAL -->
     <div id="panel-automacao" class="panel">
       <div style="background:var(--ink);padding:40px;text-align:center;margin-bottom:20px">
-        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:rgba(245,240,232,0.4);margin-bottom:12px;text-transform:uppercase">Sistema de Automação</div>
+        <div style="font-family:DM Mono,monospace;font-size:10px;letter-spacing:3px;color:rgba(245,240,232,0.4);margin-bottom:12px;text-transform:uppercase">Sistema de Automação</div>
         <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cream);margin-bottom:8px">Automatização Total</div>
         <div style="font-size:13px;color:rgba(245,240,232,0.5);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto">Prospecção, respostas, follow-up, onboarding e monitoramento — tudo rodando 24h/7d com uma ativação.</div>
         <div style="display:flex;align-items:center;justify-content:center;gap:24px">
           <div id="autoStatusDot" style="width:12px;height:12px;border-radius:50%;background:var(--red);flex-shrink:0"></div>
-          <div id="autoStatusLabel" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(245,240,232,0.5);letter-spacing:2px">INATIVO</div>
+          <div id="autoStatusLabel" style="font-family:DM Mono,monospace;font-size:11px;color:rgba(245,240,232,0.5);letter-spacing:2px">INATIVO</div>
           <button id="btnAutoToggle" onclick="toggleAutomacao()" style="background:var(--gold);color:var(--ink);border:none;padding:14px 40px;font-weight:600;font-size:15px;cursor:pointer;letter-spacing:1px">
             ATIVAR AUTOMAÇÃO
           </button>
         </div>
-        <div id="autoToggleLog" style="margin-top:16px;font-family:'DM Mono',monospace;font-size:11px;color:rgba(245,240,232,0.4)"></div>
+        <div id="autoToggleLog" style="margin-top:16px;font-family:DM Mono,monospace;font-size:11px;color:rgba(245,240,232,0.4)"></div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px" id="autoKpis">
         <div class="stat" id="kpiProspeccao"><div class="stat-num" id="kpiProspNum">—</div><div class="stat-label">Em Prospecção</div></div>
@@ -469,7 +486,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
         <div class="stat" id="kpiCortesia"><div class="stat-num" id="kpiCortNum">—</div><div class="stat-label">Análises Cortesia</div></div>
       </div>
       <div style="background:var(--paper);border:1px solid var(--rule);padding:20px;margin-bottom:20px">
-        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;opacity:.4;margin-bottom:14px;text-transform:uppercase">Status dos Cenários Make.com</div>
+        <div style="font-family:DM Mono,monospace;font-size:10px;letter-spacing:2px;opacity:.4;margin-bottom:14px;text-transform:uppercase">Status dos Cenários Make.com</div>
         <div id="cenariosStatus" style="display:flex;flex-direction:column;gap:6px">
           <div class="cenario-row" data-id="5282968" data-nome="Entrega de Token" data-fixo="true"></div>
           <div class="cenario-row" data-id="5290038" data-nome="Prospecção Email Automática"></div>
@@ -484,7 +501,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
         </div>
       </div>
       <div style="background:var(--paper);border:1px solid var(--rule);padding:20px">
-        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;opacity:.4;margin-bottom:14px;text-transform:uppercase">Análises de Cortesia (SLA excedido)</div>
+        <div style="font-family:DM Mono,monospace;font-size:10px;letter-spacing:2px;opacity:.4;margin-bottom:14px;text-transform:uppercase">Análises de Cortesia (SLA excedido)</div>
         <div id="cortesiaLista" style="font-size:12px;opacity:.5">Carregando...</div>
       </div>
     </div>
@@ -598,7 +615,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
     <div class="form-row"><label class="form-label">Nome do contato</label><input class="form-input" id="lmNome" placeholder="Ex: João Silva"></div>
     <div class="form-row"><label class="form-label">Empresa / Escritório</label><input class="form-input" id="lmEmpresa" placeholder="Ex: Silva Advocacia"></div>
     <div class="form-row"><label class="form-label">Email</label><input class="form-input" id="lmEmail" type="email" placeholder="contato@empresa.com.br"></div>
-    <div class="form-row"><label class="form-label">WhatsApp (só números, com DDD)</label><input class="form-input" id="lmWhatsapp" placeholder="Ex: 85992323262" style="font-family:'DM Mono',monospace"></div>
+    <div class="form-row"><label class="form-label">WhatsApp (só números, com DDD)</label><input class="form-input" id="lmWhatsapp" placeholder="Ex: 85992323262" style="font-family:DM Mono,monospace"></div>
     <div class="form-row"><label class="form-label">Site</label><input class="form-input" id="lmSite" placeholder="empresa.com.br"></div>
     <div class="form-row"><label class="form-label">Instagram (opcional)</label><input class="form-input" id="lmInstagram" placeholder="@empresa"></div>
     <div class="form-row"><label class="form-label">Cidade</label><input class="form-input" id="lmCidade" placeholder="Ex: Fortaleza"></div>
@@ -626,7 +643,7 @@ tr:hover td{background:rgba(201,168,76,0.03)}
   <div class="modal">
     <button class="modal-close" onclick="fecharModal('modalHistorico')">✕</button>
     <div class="modal-title" id="histTitulo">Histórico de Conversa</div>
-    <div id="histMeta" style="font-family:'DM Mono',monospace;font-size:10px;opacity:.5;margin-bottom:16px"></div>
+    <div id="histMeta" style="font-family:DM Mono,monospace;font-size:10px;opacity:.5;margin-bottom:16px"></div>
     <div id="histLista"><div class="loading">Carregando...</div></div>
   </div>
 </div>
@@ -1538,6 +1555,76 @@ async function salvarLigacao() {
   }
 }
 // ── FIM MODAL LIGAÇÃO ──
+
+// ── GEMINI API — CUSTO POR CLIENTE ──────────────────────────
+function toggleGemini() {
+  var panel = document.getElementById('geminiCustosPanel');
+  var arrow = document.getElementById('geminiArrow');
+  var aberto = panel.style.display !== 'none';
+  panel.style.display = aberto ? 'none' : 'block';
+  arrow.textContent = aberto ? '▼' : '▲';
+  if (!aberto) renderGeminiCustos();
+}
+
+function renderGeminiCustos() {
+  var el = document.getElementById('geminiCustosContent');
+  if (!dbTokens || !dbTokens.length) {
+    el.innerHTML = '<div class="empty">Nenhum cliente cadastrado.</div>';
+    return;
+  }
+
+  var CUSTO = 2.75;
+  var PRECO_PLANO = { lite: 1790, lite_anual: 1790, starter: 3500, starter_anual: 3500, advanced: 5970, advanced_anual: 5970, trial: 0, trial_5: 0 };
+
+  var clientes = dbTokens.slice().sort(function(a,b){ return (b.analises_usadas||0)-(a.analises_usadas||0); });
+  var totalCusto = clientes.reduce(function(s,t){ return s + (t.analises_usadas||0)*CUSTO; }, 0);
+  var totalAnalises = clientes.reduce(function(s,t){ return s + (t.analises_usadas||0); }, 0);
+
+  var rows = clientes.map(function(t) {
+    var usadas = t.analises_usadas || 0;
+    var limite = t.analises_limite || 0;
+    var custo = +(usadas * CUSTO).toFixed(2);
+    var pct = limite ? Math.round(usadas/limite*100) : 0;
+    var precoPago = PRECO_PLANO[t.plano] || 0;
+    var reembolsoMax = Math.max(0, precoPago - custo);
+    var corPct = pct>80?'var(--red)':pct>50?'var(--amber)':'var(--green)';
+    return '<tr>'+
+      '<td class="mono" style="font-size:10px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(t.token||'')+'</td>'+
+      '<td style="font-weight:500">'+esc(t.nome||'—')+'</td>'+
+      '<td class="muted" style="font-size:12px">'+esc(t.email||'')+'</td>'+
+      '<td><span class="badge badge-'+(t.plano||'trial')+'">'+esc(t.plano||'trial')+'</span></td>'+
+      '<td class="mono" style="text-align:right">'+limite+'</td>'+
+      '<td class="mono" style="text-align:right;font-weight:600">'+usadas+'</td>'+
+      '<td style="text-align:right"><span style="font-family:DM Mono,monospace;font-size:10px;color:'+corPct+'">'+pct+'%</span></td>'+
+      '<td class="mono" style="text-align:right;color:var(--red);font-weight:700">R$'+custo.toFixed(2).replace('.',',')+'</td>'+
+      '<td class="mono" style="text-align:right;color:var(--green);font-weight:700">'+(precoPago>0?'R$'+reembolsoMax.toFixed(2).replace('.',','):'—')+'</td>'+
+    '</tr>';
+  }).join('');
+
+  el.innerHTML =
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px">'+
+      '<div class="stat"><div class="stat-num" style="color:var(--red);font-size:28px">R$'+totalCusto.toFixed(2).replace('.',',')+'</div><div class="stat-label">Custo total Gemini</div></div>'+
+      '<div class="stat"><div class="stat-num" style="font-size:28px">'+totalAnalises+'</div><div class="stat-label">Análises consumidas</div></div>'+
+      '<div class="stat"><div class="stat-num" style="color:var(--amber);font-size:28px">R$2,75</div><div class="stat-label">Custo unitário</div></div>'+
+    '</div>'+
+    '<div class="table-wrap" style="margin-bottom:12px"><table>'+
+      '<thead><tr>'+
+        '<th>Token</th><th>Cliente</th><th>Email</th><th>Plano</th>'+
+        '<th style="text-align:right">Disponíveis</th>'+
+        '<th style="text-align:right">Usadas</th>'+
+        '<th style="text-align:right">Uso %</th>'+
+        '<th style="text-align:right">Custo Gemini</th>'+
+        '<th style="text-align:right">Reembolso Máx.</th>'+
+      '</tr></thead>'+
+      '<tbody>'+rows+'</tbody>'+
+    '</table></div>'+
+    '<div style="background:rgba(201,168,76,0.06);border-left:3px solid var(--gold);padding:10px 14px;font-size:12px;line-height:1.7;font-family:DM Mono,monospace;opacity:.7">'+
+      'Custo Gemini = análises usadas × R$2,75 &nbsp;·&nbsp; '+
+      'Reembolso máximo = preço do plano − custo Gemini consumido &nbsp;·&nbsp; '+
+      'Aplicável dentro de 7 dias (direito de arrependimento, Art. 49 CDC)'+
+    '</div>';
+}
+// ── FIM GEMINI CUSTOS ──
 </script>
 
 <!-- MODAL REGISTRO DE LIGAÇÃO -->
@@ -1545,9 +1632,9 @@ async function salvarLigacao() {
   <div class="modal-ligacao">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
       <div>
-        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Registro de Ligação</div>
+        <div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Registro de Ligação</div>
         <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900" id="ligNome">—</div>
-        <div style="font-family:'DM Mono',monospace;font-size:10px;opacity:.5;margin-top:2px" id="ligEmpresa">—</div>
+        <div style="font-family:DM Mono,monospace;font-size:10px;opacity:.5;margin-top:2px" id="ligEmpresa">—</div>
       </div>
       <button onclick="fecharModalLigacao()" style="background:none;border:none;font-size:20px;cursor:pointer;opacity:.4;padding:0 4px">✕</button>
     </div>
