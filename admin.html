@@ -95,6 +95,35 @@ tr:hover td{background:rgba(201,168,76,0.03)}
 .conv-meta{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;opacity:.5;text-transform:uppercase;margin-bottom:6px;display:flex;justify-content:space-between;gap:8px}
 .conv-msg{font-size:13px;line-height:1.6;white-space:pre-wrap}
 .chip{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 7px;text-transform:uppercase;border-radius:3px;background:rgba(0,0,0,0.06)}
+
+/* ── MODAL LIGAÇÃO ── */
+.modal-ligacao-overlay{display:none;position:fixed;inset:0;background:rgba(13,13,13,0.75);z-index:2000;align-items:center;justify-content:center;padding:16px}
+.modal-ligacao-overlay.show{display:flex}
+.modal-ligacao{background:var(--paper);border:1px solid var(--rule);padding:32px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto}
+.lig-roteiro{background:var(--ink);color:var(--cream);padding:14px 18px;margin-bottom:20px;font-size:12px;line-height:1.8;font-family:'DM Mono',monospace}
+.lig-roteiro strong{color:var(--gold)}
+.lig-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.lig-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.45}
+.lig-opts{display:flex;gap:8px;flex-wrap:wrap}
+.lig-opt{padding:8px 14px;border:1px solid rgba(13,13,13,0.2);background:var(--cream);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;transition:all .15s}
+.lig-opt:hover{border-color:var(--gold)}
+.lig-opt.sel{border-color:var(--gold);background:rgba(201,168,76,0.1);font-weight:500}
+.lig-opt.sel-green{border-color:var(--green);background:rgba(30,125,90,0.1);color:var(--green);font-weight:500}
+.lig-opt.sel-red{border-color:var(--red);background:rgba(192,57,43,0.1);color:var(--red);font-weight:500}
+.lig-cond{display:none}
+.lig-cond.show{display:block}
+.lig-textarea{width:100%;padding:10px 14px;min-height:70px;resize:vertical;border:1px solid rgba(13,13,13,0.15);background:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
+.lig-textarea:focus{border-color:var(--gold)}
+.lig-date{width:100%;padding:10px 14px;border:1px solid rgba(13,13,13,0.15);background:var(--cream);font-family:'DM Mono',monospace;font-size:12px;outline:none}
+.lig-date:focus{border-color:var(--gold)}
+.lig-actions{display:flex;gap:10px;margin-top:20px}
+.lig-btn-salvar{flex:1;background:var(--ink);color:var(--cream);border:none;padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer}
+.lig-btn-cancelar{padding:14px 20px;border:1px solid var(--rule);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px}
+.tag-lig{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 7px;text-transform:uppercase;display:inline-block;margin-left:6px}
+.tag-lig-sim{background:rgba(30,125,90,0.1);color:var(--green)}
+.tag-lig-nao{background:rgba(192,57,43,0.1);color:var(--red)}
+.tag-lig-depois{background:rgba(201,168,76,0.1);color:#8B6914}
+.tag-lig-semresp{background:rgba(127,140,141,0.15);color:#717D7E}
 </style>
 </head>
 <body>
@@ -1125,6 +1154,7 @@ function renderProspeccao(){
       '<td><span class="chip">'+esc(CANAL_LABELS[canal]||canal)+'</span></td>'+
       '<td><div style="display:flex;gap:4px">'+
         '<button class="btn-sm" onclick="verHistoricoLead(\''+ idSafe+'\',\''+ nomeSafe+'\')">'+'Ver</button>'+
+        '<button class="btn-sm success" onclick="abrirModalLigacao(\''+ idSafe+"\')">'+'📞</button>'+
         '<button class="btn-sm danger" onclick="excluirLeadProsp(\''+ idSafe+'\',\''+ nomeSafe+'\')">'+'✕</button>'+
       '</div></td></tr>';
   }
@@ -1367,6 +1397,260 @@ async function verHistoricoLead(leadId, nome){
 function fecharModal(id){document.getElementById(id).classList.remove('show');}
 document.querySelectorAll('.modal-overlay').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('show');});});
 document.getElementById('senhaInput').addEventListener('keydown',function(e){if(e.key==='Enter')entrar();});
+
+// ── MODAL LIGAÇÃO ──────────────────────────────────────────
+var _ligLeadId = null;
+var _ligDados = {};
+
+function abrirModalLigacao(leadId) {
+  var lead = dbProsp.find(function(l){ return l.id === leadId; });
+  if (!lead) return;
+  _ligLeadId = leadId;
+  _ligDados = {};
+  document.getElementById('ligNome').textContent = lead.nome || lead.empresa || '—';
+  document.getElementById('ligEmpresa').textContent = lead.empresa || '';
+  // Reset
+  document.querySelectorAll('#modalLigacao .lig-opt').forEach(function(b){ b.className = 'lig-opt'; });
+  document.querySelectorAll('#modalLigacao .lig-cond').forEach(function(c){ c.classList.remove('show'); });
+  document.querySelectorAll('#modalLigacao .lig-textarea').forEach(function(t){ t.value = ''; });
+  document.querySelectorAll('#modalLigacao .lig-date').forEach(function(i){ i.value = ''; });
+  document.getElementById('modalLigacao').classList.add('show');
+}
+
+function fecharModalLigacao() {
+  document.getElementById('modalLigacao').classList.remove('show');
+  _ligLeadId = null;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var overlay = document.getElementById('modalLigacao');
+  if (overlay) overlay.addEventListener('click', function(e){ if(e.target === this) fecharModalLigacao(); });
+});
+
+function selLigRes(btn) {
+  document.querySelectorAll('[data-res]').forEach(function(b){ b.className = 'lig-opt'; });
+  var cls = btn.dataset.res === 'atendeu_sim' ? 'sel-green' : btn.dataset.res === 'atendeu_nao' ? 'sel-red' : 'sel';
+  btn.classList.add(cls);
+  _ligDados.resultado = btn.dataset.res;
+  document.querySelectorAll('#modalLigacao .lig-cond').forEach(function(c){ c.classList.remove('show'); });
+  var mapa = { atendeu_sim: 'sim', atendeu_nao: 'nao', ligar_depois: 'depois', sem_resposta: 'semresp' };
+  var bloco = document.getElementById('ligCond-' + (mapa[btn.dataset.res] || ''));
+  if (bloco) bloco.classList.add('show');
+}
+
+function selLigOpt(btn, grupo, cls) {
+  document.querySelectorAll('[data-'+grupo+']').forEach(function(b){ b.className = 'lig-opt'; });
+  btn.classList.add(cls);
+  _ligDados[grupo] = btn.dataset[grupo];
+}
+
+function selLigMot(btn) {
+  document.querySelectorAll('[data-mot]').forEach(function(b){ b.className = 'lig-opt'; });
+  btn.classList.add('sel-red');
+  _ligDados.motivo = btn.dataset.mot;
+  var timing = document.getElementById('ligCond-timing');
+  if (timing) timing.classList.toggle('show', btn.dataset.mot === 'timing');
+}
+
+function selLigRetry(btn) {
+  document.querySelectorAll('[data-retry]').forEach(function(b){ b.className = 'lig-opt'; });
+  btn.classList.add(btn.dataset.retry === 'sim' ? 'sel-green' : 'sel-red');
+  _ligDados.retry = btn.dataset.retry;
+  var retryBloco = document.getElementById('ligCond-retry');
+  if (retryBloco) retryBloco.classList.toggle('show', btn.dataset.retry === 'sim');
+}
+
+async function salvarLigacao() {
+  if (!_ligLeadId) return;
+  if (!_ligDados.resultado) { alert('Selecione o resultado da ligação.'); return; }
+
+  var agora = new Date();
+  var dataHora = agora.toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  var obsSim   = (document.getElementById('ligObs-sim')   || {}).value || '';
+  var obsNao   = (document.getElementById('ligObs-nao')   || {}).value || '';
+  var obsDepois= (document.getElementById('ligObs-depois') || {}).value || '';
+  var dataRelig= (document.getElementById('ligDataReligar')|| {}).value || '';
+  var dataRetry= (document.getElementById('ligDataRetry')  || {}).value || '';
+
+  var statusMap = {
+    atendeu_sim:  'Teste',
+    atendeu_nao:  'NaoInteressado',
+    ligar_depois: 'SemResposta',
+    sem_resposta: _ligDados.retry === 'nao' ? 'NaoInteressado' : 'SemResposta'
+  };
+  var novoStatus = statusMap[_ligDados.resultado] || 'SemResposta';
+
+  var obsPartes = [
+    '📞 Ligação em ' + dataHora,
+    'Resultado: ' + _ligDados.resultado,
+    _ligDados.motivo ? 'Motivo: ' + _ligDados.motivo : '',
+    _ligDados.wpp   ? 'Link WA: ' + _ligDados.wpp : '',
+    _ligDados.tim   ? 'Timing/link: ' + _ligDados.tim : '',
+    _ligDados.tent  ? 'Tentativas: ' + _ligDados.tent + 'x' : '',
+    dataRelig ? 'Religar em: ' + dataRelig : '',
+    obsSim || obsNao || obsDepois || ''
+  ].filter(Boolean).join(' | ');
+
+  var proximaAcao = {
+    atendeu_sim:  'Acompanhar uso do trial (3 dias)',
+    atendeu_nao:  _ligDados.motivo === 'timing' ? 'Recontato futuro' : 'Sem ação — recusou o serviço',
+    ligar_depois: 'Religar em ' + (dataRelig || 'data a definir'),
+    sem_resposta: _ligDados.retry === 'nao' ? 'Descartado' : 'Nova tentativa em ' + (dataRetry || 'data a definir')
+  }[_ligDados.resultado] || '';
+
+  try {
+    var SUPABASE_URL = 'https://xgevgxhrdycvpdhdobti.supabase.co';
+    var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnZXZneGhyZHljdnBkaGRvYnRpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODg4OTAxMCwiZXhwIjoyMDk0NDY1MDEwfQ.FlyxreY1nmrC2coKaPDc2cOkZ01pjU9kJtXKTqjBAvY';
+    var res = await fetch(SUPABASE_URL + '/rest/v1/leads_prospeccao?id=eq.' + encodeURIComponent(_ligLeadId), {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        status: novoStatus,
+        data_contato: agora.toISOString(),
+        data_followup: dataRelig || dataRetry || null,
+        observacoes: obsPartes,
+        proxima_acao: proximaAcao,
+        gatilho_resposta: _ligDados.resultado,
+        objecao_principal: _ligDados.motivo || null
+      })
+    });
+    if (res.ok) {
+      var idx = dbProsp.findIndex(function(l){ return l.id === _ligLeadId; });
+      if (idx >= 0) {
+        dbProsp[idx].status = novoStatus;
+        dbProsp[idx].observacoes = obsPartes;
+        dbProsp[idx].proxima_acao = proximaAcao;
+      }
+      fecharModalLigacao();
+      renderProspeccao();
+      alert('✅ Ligação registrada.');
+    } else {
+      throw new Error('HTTP ' + res.status);
+    }
+  } catch(e) {
+    alert('Erro ao salvar: ' + e.message);
+  }
+}
+// ── FIM MODAL LIGAÇÃO ──
 </script>
+
+<!-- MODAL REGISTRO DE LIGAÇÃO -->
+<div class="modal-ligacao-overlay" id="modalLigacao">
+  <div class="modal-ligacao">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Registro de Ligação</div>
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900" id="ligNome">—</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;opacity:.5;margin-top:2px" id="ligEmpresa">—</div>
+      </div>
+      <button onclick="fecharModalLigacao()" style="background:none;border:none;font-size:20px;cursor:pointer;opacity:.4;padding:0 4px">✕</button>
+    </div>
+
+    <div class="lig-roteiro">
+      <strong>ABERTURA:</strong> "Bom dia, Dr(a). [Nome]. Me chamo Joiciano Lima, fundador da ContratoIQ.
+Estou ligando porque estamos selecionando escritórios para um teste gratuito.
+Tenho menos de 2 minutos — posso te apresentar a ideia?"<br><br>
+      <strong>SE SIM:</strong> "A ContratoIQ faz análise de contratos em menos de 5 minutos. O que um advogado levaria 4 horas pra revisar, cláusulas, riscos, legislação, parecer completo — a nossa plataforma entrega em 5 minutos. Já testamos com contratos de mais de 100 páginas. Estou oferecendo 7 dias de acesso gratuito, só nome e email. Faz sentido pra você testar?"
+    </div>
+
+    <div class="lig-field">
+      <div class="lig-label">Resultado da ligação *</div>
+      <div class="lig-opts">
+        <button class="lig-opt" data-res="atendeu_sim" onclick="selLigRes(this)">✅ Aceitou o trial</button>
+        <button class="lig-opt" data-res="atendeu_nao" onclick="selLigRes(this)">❌ Recusou</button>
+        <button class="lig-opt" data-res="ligar_depois" onclick="selLigRes(this)">📅 Ligar depois</button>
+        <button class="lig-opt" data-res="sem_resposta" onclick="selLigRes(this)">📵 Sem resposta</button>
+      </div>
+    </div>
+
+    <!-- SE ACEITOU -->
+    <div class="lig-cond" id="ligCond-sim">
+      <div class="lig-field">
+        <div class="lig-label">Link enviado pelo WhatsApp?</div>
+        <div class="lig-opts">
+          <button class="lig-opt" data-wpp="sim" onclick="selLigOpt(this,'wpp','sel-green')">✅ Sim, enviei agora</button>
+          <button class="lig-opt" data-wpp="nao" onclick="selLigOpt(this,'wpp','sel')">⏳ Vou enviar depois</button>
+        </div>
+      </div>
+      <div class="lig-field">
+        <div class="lig-label">Observação (opcional)</div>
+        <textarea class="lig-textarea" id="ligObs-sim" placeholder="Ex: vai testar amanhã com um contrato de fornecedor..."></textarea>
+      </div>
+    </div>
+
+    <!-- SE RECUSOU -->
+    <div class="lig-cond" id="ligCond-nao">
+      <div class="lig-field">
+        <div class="lig-label">Motivo da recusa *</div>
+        <div class="lig-opts">
+          <button class="lig-opt" data-mot="timing" onclick="selLigMot(this)">⏰ Não é o momento certo</button>
+          <button class="lig-opt" data-mot="servico" onclick="selLigMot(this)">🚫 Serviço não faz sentido</button>
+          <button class="lig-opt" data-mot="nao_explicou" onclick="selLigMot(this)">🤷 Não explicou o motivo</button>
+        </div>
+      </div>
+      <div class="lig-cond" id="ligCond-timing">
+        <div class="lig-field">
+          <div class="lig-label">Ofereceu enviar o link para depois?</div>
+          <div class="lig-opts">
+            <button class="lig-opt" data-tim="sim" onclick="selLigOpt(this,'tim','sel-green')">✅ Aceitou o link</button>
+            <button class="lig-opt" data-tim="nao" onclick="selLigOpt(this,'tim','sel-red')">❌ Não quis</button>
+          </div>
+        </div>
+      </div>
+      <div class="lig-field">
+        <div class="lig-label">Observação (opcional)</div>
+        <textarea class="lig-textarea" id="ligObs-nao" placeholder="O que ele disse exatamente..."></textarea>
+      </div>
+    </div>
+
+    <!-- SE LIGAR DEPOIS -->
+    <div class="lig-cond" id="ligCond-depois">
+      <div class="lig-field">
+        <div class="lig-label">Data para religar *</div>
+        <input type="date" class="lig-date" id="ligDataReligar">
+      </div>
+      <div class="lig-field">
+        <div class="lig-label">Motivo / combinado</div>
+        <textarea class="lig-textarea" id="ligObs-depois" placeholder="Ex: está em audiência até sexta, pediu pra ligar na segunda..."></textarea>
+      </div>
+    </div>
+
+    <!-- SE SEM RESPOSTA -->
+    <div class="lig-cond" id="ligCond-semresp">
+      <div class="lig-field">
+        <div class="lig-label">Quantas vezes tentou ligar?</div>
+        <div class="lig-opts">
+          <button class="lig-opt" data-tent="1" onclick="selLigOpt(this,'tent','sel')">1×</button>
+          <button class="lig-opt" data-tent="2" onclick="selLigOpt(this,'tent','sel')">2×</button>
+          <button class="lig-opt" data-tent="3" onclick="selLigOpt(this,'tent','sel')">3×</button>
+        </div>
+      </div>
+      <div class="lig-field">
+        <div class="lig-label">Tentar novamente?</div>
+        <div class="lig-opts">
+          <button class="lig-opt" data-retry="sim" onclick="selLigRetry(this)">✅ Sim — tentar de novo</button>
+          <button class="lig-opt" data-retry="nao" onclick="selLigRetry(this)">❌ Não — descartar</button>
+        </div>
+      </div>
+      <div class="lig-cond" id="ligCond-retry">
+        <div class="lig-field">
+          <div class="lig-label">Data para nova tentativa</div>
+          <input type="date" class="lig-date" id="ligDataRetry">
+        </div>
+      </div>
+    </div>
+
+    <div class="lig-actions">
+      <button class="lig-btn-cancelar" onclick="fecharModalLigacao()">Cancelar</button>
+      <button class="lig-btn-salvar" onclick="salvarLigacao()">Salvar registro →</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
