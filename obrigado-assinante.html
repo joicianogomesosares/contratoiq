@@ -118,5 +118,24 @@ src="https://www.facebook.com/tr?id=2499084213848213&ev=PageView&noscript=1"/>
   <div style="font-family:'DM Mono',monospace;font-size:9px;opacity:.3;">CNPJ 66.816.981/0001-58 · © 2026 ContratoIQ</div>
 </footer>
 
+
+<script>
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var plano = params.get('plano') || 'lite';
+  var valores = { lite: 1790, starter: 5970, advanced: 16900 };
+  var nomes = {
+    lite: 'ContratoIQ Lite - 300 analises/mes',
+    starter: 'ContratoIQ Starter - 1.000 analises/mes',
+    advanced: 'ContratoIQ Advanced - 3.000 analises/mes'
+  };
+  fbq('track', 'Purchase', {
+    value: valores[plano] || 1790,
+    currency: 'BRL',
+    content_name: nomes[plano] || nomes['lite'],
+    content_category: 'assinatura_stripe'
+  });
+})();
+</script>
 </body>
 </html>
