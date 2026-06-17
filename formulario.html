@@ -294,7 +294,10 @@ async function enviarFormulario() {
     });
 
     if (typeof fbq !== 'undefined') {
-      fbq('track', 'Lead');
+      fbq('track', 'Lead', {
+      content_name: 'Trial Gratuito',
+      content_category: 'formulario'
+    });
       fbq('track', 'CompleteRegistration');
     }
 
