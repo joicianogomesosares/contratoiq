@@ -120,11 +120,21 @@ src="https://www.facebook.com/tr?id=2499084213848213&ev=PageView&noscript=1"/>
 
 
 <script>
-fbq('track', 'Purchase', {
-  value: 1790,
-  currency: 'BRL',
-  content_name: 'Assinatura ContratoIQ'
-});
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var plano = params.get('plano') || 'lite';
+  var map = {
+    lite:     { value: 1790,  name: 'ContratoIQ Lite' },
+    starter:  { value: 5970,  name: 'ContratoIQ Starter' },
+    advanced: { value: 16900, name: 'ContratoIQ Advanced' }
+  };
+  var p = map[plano] || map['lite'];
+  fbq('track', 'Purchase', {
+    value: p.value,
+    currency: 'BRL',
+    content_name: p.name
+  });
+})();
 </script>
 </body>
 </html>
