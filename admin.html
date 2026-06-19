@@ -123,6 +123,18 @@ tr:hover td{background:rgba(201,168,76,0.03)}
 .tag-lig-sim{background:rgba(30,125,90,0.1);color:var(--green)}
 .tag-lig-nao{background:rgba(192,57,43,0.1);color:var(--red)}
 .tag-lig-depois{background:rgba(201,168,76,0.1);color:#8B6914}
+.angulo-row{background:rgba(201,168,76,0.04)}
+.angulo-wrap{padding:14px 24px;border-left:3px solid var(--gold);background:rgba(201,168,76,0.04)}
+.angulo-card{background:var(--cream);border:1px solid var(--rule);padding:12px 14px;margin-bottom:8px;border-radius:3px}
+.angulo-card:last-child{margin-bottom:0}
+.angulo-titulo{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:500}
+.angulo-texto{font-size:13px;line-height:1.7;white-space:pre-wrap}
+.angulo-tempo{color:var(--blue)}
+.angulo-medo{color:var(--red)}
+.angulo-oab{color:var(--green)}
+.angulo-vazio{font-size:12px;opacity:.4;font-family:'DM Mono',monospace;padding:8px 0}
+.btn-angulo{padding:5px 12px;border:1px solid var(--gold);background:none;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;cursor:pointer;color:#8B6914;text-transform:uppercase;transition:all .15s}
+.btn-angulo:hover{background:var(--gold);color:var(--ink)}
 .tag-lig-semresp{background:rgba(127,140,141,0.15);color:#717D7E}
 </style>
 </head>
@@ -1170,10 +1182,20 @@ function renderProspeccao(){
       '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+cor+';font-size:11px">'+esc(l.status||'Novo')+'</span></td>'+
       '<td><span class="chip">'+esc(CANAL_LABELS[canal]||canal)+'</span></td>'+
       '<td><div style="display:flex;gap:4px">'+
-        '<button class="btn-sm" onclick="verHistoricoLead(\''+ idSafe+'\',\''+ nomeSafe+'\')">'+'Ver</button>'+
-        '<button class="btn-sm success" onclick="abrirModalLigacao(\''+ idSafe +'\')">'+'📞</button>'+
-        '<button class="btn-sm danger" onclick="excluirLeadProsp(\''+ idSafe+'\',\''+ nomeSafe+'\')">'+'✕</button>'+
-      '</div></td></tr>';
+        '<button class="btn-angulo" onclick="toggleAngulos(\''+ idSafe+'\')">▼ Ângulos</button>'+
+        '<button class="btn-sm" onclick="verHistoricoLead(\''+ idSafe+'\',\''+ nomeSafe+'\')">'\+'Ver</button>'+
+        '<button class="btn-sm success" onclick="abrirModalLigacao(\''+ idSafe +'\')">'\+'📞</button>'+
+        '<button class="btn-sm danger" onclick="excluirLeadProsp(\''+ idSafe+'\',\''+ nomeSafe+'\')">'\+'✕</button>'+
+      '</div></td></tr>'+
+      '<tr class="angulo-row" id="angulos_'+idSafe+'" style="display:none"><td colspan="9" style="padding:0">'+
+        '<div class="angulo-wrap">'+
+          (l.angulo_tempo_roi||l.angulo_medo||l.angulo_oab ?
+            (l.angulo_tempo_roi?'<div class="angulo-card"><div class="angulo-titulo angulo-tempo">⏱ Tempo / ROI</div><div class="angulo-texto">'+esc(l.angulo_tempo_roi)+'</div></div>':'')+
+            (l.angulo_medo?'<div class="angulo-card"><div class="angulo-titulo angulo-medo">⚠ Medo de responsabilização</div><div class="angulo-texto">'+esc(l.angulo_medo)+'</div></div>':'')+
+            (l.angulo_oab?'<div class="angulo-card"><div class="angulo-titulo angulo-oab">⚖ Conformidade OAB</div><div class="angulo-texto">'+esc(l.angulo_oab)+'</div></div>':'')
+            : '<div class="angulo-vazio">Nenhum ângulo gerado para este lead ainda. O script de prospecção preenche automaticamente.</div>')+
+        '</div>'+
+      '</td></tr>';
   }
 
   // ── MUDANÇA 3: usa l.temperatura (não l.temperatura_lead) ──
@@ -1211,6 +1233,13 @@ function renderProspeccao(){
   }
 
   tbody.innerHTML = html;
+}
+
+
+function toggleAngulos(id){
+  var row = document.getElementById('angulos_'+id);
+  if(!row) return;
+  row.style.display = row.style.display === 'none' ? '' : 'none';
 }
 
 function toggleSubgrupo(id){
