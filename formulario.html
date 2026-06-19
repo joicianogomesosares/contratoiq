@@ -6,16 +6,48 @@
 <title>Acesso Gratuito — ContratoIQ</title>
 <!-- Meta Pixel Code -->
 <script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '2499084213848213');
-fbq('track', 'PageView');
+async function enviarFormulario() {
+  const nome  = document.getElementById('f-nome').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+
+  if (!nome || !email) {
+    alert('Por favor, preencha nome e email.');
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert('Email inválido. Verifique e tente novamente.');
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
+
+  const payload = { nome, email };
+
+  try {
+    const res = await fetch('https://hook.us2.make.com/1cifuz9lp8pp65waw18tykdaf5xklodc', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      document.getElementById('form-body').innerHTML = `
+        <div style="text-align:center;padding:32px 0;">
+          <div style="font-size:36px;margin-bottom:16px;">✓</div>
+          <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:900;margin-bottom:12px;">Acesso enviado!</div>
+          <div style="font-size:14px;opacity:.6;line-height:1.7;">Verifique seu email <strong>${email}</strong>.<br>Seu token de acesso estará lá em instantes.</div>
+        </div>`;
+    } else {
+      throw new Error('Erro no envio');
+    }
+  } catch (err) {
+    btn.textContent = 'Solicitar acesso gratuito →';
+    btn.disabled = false;
+    alert('Erro ao enviar. Tente novamente ou escreva para joiciano@contratoiq.com');
+  }
+}
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=2499084213848213&ev=PageView&noscript=1"
@@ -147,12 +179,9 @@ src="https://www.facebook.com/tr?id=2499084213848213&ev=PageView&noscript=1"
   <!-- DIREITA — FORMULÁRIO -->
   <div class="right">
     <div class="form-title">Solicitar acesso gratuito</div>
-    <div class="form-sub">Preencha abaixo e receba seu token de acesso por email em instantes.</div>
+    <div class="form-sub">Só nome e email. Seu token de acesso chega em instantes.</div>
 
     <div class="form-body" id="form-body">
-
-      <!-- DADOS PESSOAIS -->
-      <div class="section-label">Seus dados</div>
 
       <div class="field">
         <label>Nome completo *</label>
@@ -164,150 +193,15 @@ src="https://www.facebook.com/tr?id=2499084213848213&ev=PageView&noscript=1"
         <input type="email" id="f-email" placeholder="email@escritorio.com.br" required>
       </div>
 
-      <div class="field">
-        <label>WhatsApp <span class="optional-tag">opcional</span></label>
-        <input type="tel" id="f-whatsapp" placeholder="(85) 99999-9999">
-        <div class="field-hint">Só para dúvidas durante o trial, se precisar</div>
-      </div>
-
-      <div class="section-sep"></div>
-
-      <!-- DADOS PROFISSIONAIS -->
-      <div class="section-label">Seu escritório / empresa</div>
-
-      <div class="field">
-        <label>Escritório ou empresa *</label>
-        <input type="text" id="f-empresa" placeholder="Ex: Almeida & Associados Advogados" required>
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label>Cargo *</label>
-          <select id="f-cargo" required>
-            <option value="" disabled selected>Selecione</option>
-            <option value="socio_advogado">Sócio Advogado</option>
-            <option value="advogado_senior">Advogado Sênior</option>
-            <option value="advogado_junior">Advogado Júnior / Associado</option>
-            <option value="diretor_juridico">Diretor Jurídico</option>
-            <option value="gerente_juridico">Gerente Jurídico</option>
-            <option value="analista_juridico">Analista Jurídico</option>
-            <option value="contador">Contador</option>
-            <option value="empresario">Empresário / Sócio</option>
-            <option value="outro">Outro</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Área de atuação *</label>
-          <select id="f-setor" required>
-            <option value="" disabled selected>Selecione</option>
-            <option value="advocacia_empresarial">Advocacia Empresarial</option>
-            <option value="advocacia_trabalhista">Advocacia Trabalhista</option>
-            <option value="advocacia_tributaria">Advocacia Tributária</option>
-            <option value="advocacia_civil">Advocacia Civil</option>
-            <option value="departamento_juridico">Departamento Jurídico Corporativo</option>
-            <option value="construcao_imoveis">Construção / Imóveis</option>
-            <option value="franquias">Franquias</option>
-            <option value="saude">Saúde</option>
-            <option value="tecnologia">Tecnologia</option>
-            <option value="agronegocio">Agronegócio</option>
-            <option value="contabilidade">Contabilidade</option>
-            <option value="outro">Outro</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label>Tamanho do escritório *</label>
-          <select id="f-tamanho" required>
-            <option value="" disabled selected>Selecione</option>
-            <option value="1">Só eu</option>
-            <option value="2_5">2 a 5 advogados</option>
-            <option value="6_20">6 a 20 advogados</option>
-            <option value="21_50">21 a 50 advogados</option>
-            <option value="50_mais">Mais de 50</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Contratos revisados por mês *</label>
-          <select id="f-volume" required>
-            <option value="" disabled selected>Selecione</option>
-            <option value="ate_10">Até 10 contratos</option>
-            <option value="11_30">11 a 30 contratos</option>
-            <option value="31_100">31 a 100 contratos</option>
-            <option value="101_300">101 a 300 contratos</option>
-            <option value="300_mais">Mais de 300 contratos</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="section-sep"></div>
-
       <button type="button" class="submit-btn" id="submit-btn" onclick="enviarFormulario()">
         Solicitar acesso gratuito →
       </button>
-      <div class="form-note">7 dias grátis · Sem cartão de crédito · Sem compromisso</div>
+      <div class="form-note">10 análises grátis · Sem cartão · Sem compromisso</div>
 
     </div>
   </div>
-</div>
+</div></div>
 
-<script>
-async function enviarFormulario() {
-  const nome    = document.getElementById('f-nome').value.trim();
-  const email   = document.getElementById('f-email').value.trim();
-  const empresa = document.getElementById('f-empresa').value.trim();
-  const cargo   = document.getElementById('f-cargo').value;
-  const setor   = document.getElementById('f-setor').value;
-  const tamanho = document.getElementById('f-tamanho').value;
-  const volume  = document.getElementById('f-volume').value;
-  const wpp     = document.getElementById('f-whatsapp').value.trim();
 
-  if (!nome || !email || !empresa || !cargo || !setor || !tamanho || !volume) {
-    alert('Por favor, preencha todos os campos obrigatórios.');
-    return;
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    alert('Email inválido. Verifique e tente novamente.');
-    return;
-  }
-
-  const btn = document.getElementById('submit-btn');
-  btn.textContent = 'Enviando...';
-  btn.disabled = true;
-
-  const payload = {
-    nome, email, empresa, cargo, setor,
-    tamanho_escritorio: tamanho,
-    volume_contratos: volume,
-    whatsapp: wpp,
-    plano_sugerido: 'lite',
-    tipo: 'trial_7_dias',
-    data: new Date().toISOString()
-  };
-
-  try {
-    await fetch('https://hook.us2.make.com/1cifuz9lp8pp65waw18tykdaf5xklodc', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    if (typeof fbq !== 'undefined') {
-      fbq('track', 'Lead', {
-      content_name: 'Trial Gratuito',
-      content_category: 'formulario'
-    });
-      fbq('track', 'CompleteRegistration');
-    }
-
-    window.location.href = '/obrigado.html';
-  } catch(err) {
-    btn.textContent = 'Solicitar acesso gratuito →';
-    btn.disabled = false;
-    alert('Erro ao enviar. Tente novamente ou entre em contato pelo WhatsApp (85) 99232-3262.');
-  }
-}
-</script>
 </body>
 </html>
