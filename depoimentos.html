@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Depoimentos — ContratoIQ</title>
+<meta name="description" content="Veja como profissionais do direito usam o ContratoIQ no dia a dia.">
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2499084213848213');
+fbq('track', 'PageView');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0D0D0D; --cream: #F5F0E8; --gold: #C9A84C;
+    --paper: #FAF7F2; --rule: rgba(13,13,13,0.10);
+  }
+  body { background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+
+  /* NAV */
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 24px 48px; border-bottom: 1px solid var(--rule); background: var(--cream); position: sticky; top: 0; z-index: 100; }
+  .logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: var(--ink); text-decoration: none; }
+  .logo span { color: var(--gold); }
+  .nav-cta { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink); text-decoration: none; border: 1px solid rgba(13,13,13,0.2); padding: 10px 18px; transition: all .2s; }
+  .nav-cta:hover { background: var(--ink); color: var(--cream); }
+
+  /* HERO */
+  .hero { background: var(--ink); color: var(--cream); padding: 80px 48px; text-align: center; }
+  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; opacity: .8; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 52px); font-weight: 900; letter-spacing: -2px; line-height: 1.1; margin-bottom: 20px; }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero p { font-size: 15px; line-height: 1.85; opacity: .55; max-width: 520px; margin: 0 auto; }
+
+  /* CONTEXTO */
+  .contexto { background: rgba(201,168,76,0.06); border-top: 1px solid rgba(201,168,76,0.2); border-bottom: 1px solid rgba(201,168,76,0.2); padding: 20px 48px; text-align: center; }
+  .contexto p { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; color: var(--gold); opacity: .8; line-height: 1.8; }
+
+  /* SEÇÃO PRINCIPAL */
+  .section { padding: 80px 48px; max-width: 1000px; margin: 0 auto; }
+
+  /* CARD DE DEPOIMENTO */
+  .depoimento-card { border: 1px solid var(--rule); background: var(--paper); margin-bottom: 64px; }
+  .depoimento-header { padding: 28px 32px; border-bottom: 1px solid var(--rule); display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+  .depoimento-perfil { display: flex; align-items: center; gap: 16px; }
+  .depoimento-avatar { width: 48px; height: 48px; background: var(--ink); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: var(--gold); flex-shrink: 0; }
+  .depoimento-nome { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .depoimento-cargo { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; opacity: .4; text-transform: uppercase; }
+  .depoimento-badge { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.3); padding: 6px 12px; white-space: nowrap; flex-shrink: 0; }
+
+  /* VIDEO WRAPPER */
+  .video-wrapper { position: relative; background: #000; }
+  .video-wrapper video { width: 100%; display: block; max-height: 560px; object-fit: contain; background: #000; }
+  .video-wrapper iframe { width: 100%; height: 560px; border: none; display: block; }
+
+  /* PLAY OVERLAY — aparece antes do play */
+  .video-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.45); cursor: pointer; transition: opacity .3s; }
+  .video-overlay:hover { background: rgba(0,0,0,0.3); }
+  .play-btn { width: 72px; height: 72px; border: 2px solid var(--gold); background: rgba(201,168,76,0.15); display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all .2s; }
+  .play-btn svg { width: 28px; height: 28px; fill: var(--gold); margin-left: 4px; }
+  .video-overlay:hover .play-btn { background: rgba(201,168,76,0.3); transform: scale(1.05); }
+
+  /* DEPOIMENTO FOOTER */
+  .depoimento-footer { padding: 20px 32px; border-top: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; }
+  .depoimento-nota { font-family: 'DM Mono', monospace; font-size: 10px; opacity: .35; letter-spacing: .5px; line-height: 1.7; }
+  .depoimento-plano { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; opacity: .4; }
+
+  /* CTA SECTION */
+  .cta-section { background: var(--ink); color: var(--cream); padding: 80px 48px; text-align: center; }
+  .cta-section h2 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 3vw, 42px); font-weight: 900; letter-spacing: -1.5px; margin-bottom: 16px; }
+  .cta-section h2 em { font-style: italic; color: var(--gold); }
+  .cta-section p { font-size: 14px; opacity: .5; margin-bottom: 36px; line-height: 1.8; }
+  .btn-gold { display: inline-block; background: var(--gold); color: var(--ink); padding: 16px 36px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; text-decoration: none; letter-spacing: .3px; transition: all .25s; }
+  .btn-gold:hover { background: #d4b05a; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+  .cta-note { font-family: 'DM Mono', monospace; font-size: 10px; opacity: .25; margin-top: 16px; letter-spacing: 1px; }
+
+  /* FOOTER */
+  footer { padding: 32px 48px; border-top: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 900; color: var(--ink); }
+  .footer-logo span { color: var(--gold); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; opacity: .35; color: var(--ink); text-decoration: none; text-transform: uppercase; transition: opacity .2s; }
+  .footer-links a:hover { opacity: .7; }
+
+  @media(max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .hero { padding: 56px 24px; }
+    .contexto { padding: 16px 20px; }
+    .section { padding: 48px 24px; }
+    .depoimento-header { flex-direction: column; gap: 16px; }
+    .video-wrapper iframe { height: 240px; }
+    .depoimento-footer { flex-direction: column; gap: 8px; align-items: flex-start; }
+    .cta-section { padding: 56px 24px; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Contrato<span>IQ</span></a>
+  <a href="/formulario" class="nav-cta">Acesso gratuito →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Quem usa, conta</div>
+  <h1>Sem script.<br>Sem edição.<br><em>Do jeito que realmente funciona.</em></h1>
+  <p>Pedimos para um usuário mostrar como usa a ContratoIQ no dia a dia — análise real, contrato fictício para preservar o sigilo do cliente.</p>
+</section>
+
+<!-- CONTEXTO -->
+<div class="contexto">
+  <p>Este vídeo foi gravado a pedido da ContratoIQ para demonstração da plataforma · Contrato fictício utilizado para preservar o sigilo profissional · Conteúdo patrocinado</p>
+</div>
+
+<!-- DEPOIMENTOS -->
+<div class="section">
+
+  <!-- CARD 1 — Vídeo principal -->
+  <div class="depoimento-card">
+    <div class="depoimento-header">
+      <div class="depoimento-perfil">
+        <div class="depoimento-avatar">A</div>
+        <div>
+          <div class="depoimento-nome">Advogado · Direito Empresarial</div>
+          <div class="depoimento-cargo">Usuário do plano Lite · Fortaleza, CE</div>
+        </div>
+      </div>
+      <div class="depoimento-badge">Feedback em vídeo</div>
+    </div>
+
+    <!-- SUBSTITUA O src DO VÍDEO PELO SEU ARQUIVO OU LINK DO YOUTUBE -->
+    <!-- OPÇÃO 1: Vídeo local (arquivo .mp4 na pasta do site) -->
+    <!-- <div class="video-wrapper">
+      <video controls poster="">
+        <source src="/videos/depoimento-01.mp4" type="video/mp4">
+      </video>
+    </div> -->
+
+    <!-- OPÇÃO 2: YouTube embed (recomendado para vídeo de 8 minutos) -->
+    <!-- Substitua YOUTUBE_VIDEO_ID pelo ID do vídeo no YouTube -->
+    <div class="video-wrapper" id="video-1">
+      <div class="video-overlay" onclick="playVideo('video-1', 'YOUTUBE_VIDEO_ID')">
+        <div class="play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+      <div id="video-1-thumb" style="width:100%;height:360px;background:#111;display:flex;align-items:center;justify-content:center;">
+        <div style="text-align:center;color:rgba(245,240,232,0.3);">
+          <div style="font-size:48px;margin-bottom:12px;">▶</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;">Clique para assistir · 8 minutos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="depoimento-footer">
+      <div class="depoimento-nota">
+        Vídeo gravado a pedido da ContratoIQ · Contrato fictício utilizado na demonstração<br>
+        O usuário foi informado que o conteúdo poderia ser usado em publicidade
+      </div>
+      <div class="depoimento-plano">Plano Lite</div>
+    </div>
+  </div>
+
+  <!-- ESPAÇO PARA PRÓXIMOS DEPOIMENTOS -->
+  <!-- Duplique o bloco acima para adicionar novos vídeos -->
+
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Quer ver funcionando<br>com um contrato <em>seu?</em></h2>
+  <p>10 análises gratuitas. Sem cartão de crédito. Conforme OAB Recomendação 001/2024.</p>
+  <a href="/formulario" class="btn-gold">Solicitar acesso gratuito →</a>
+  <div class="cta-note">Documentos excluídos automaticamente · Nunca treinam IA · LGPD Compliant</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Contrato<span>IQ</span></div>
+  <div class="footer-links">
+    <a href="/">Início</a>
+    <a href="/formulario">Acesso gratuito</a>
+    <a href="/termos">Termos</a>
+    <a href="/privacidade">Privacidade</a>
+  </div>
+</footer>
+
+<script>
+function playVideo(containerId, youtubeId) {
+  const container = document.getElementById(containerId);
+  const overlay = container.querySelector('.video-overlay');
+  const thumb = document.getElementById(containerId + '-thumb');
+
+  // Se tiver YouTube ID configurado
+  if (youtubeId && youtubeId !== 'YOUTUBE_VIDEO_ID') {
+    overlay.style.display = 'none';
+    if (thumb) thumb.style.display = 'none';
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1&rel=0';
+    iframe.allow = 'autoplay; encrypted-media';
+    iframe.allowFullscreen = true;
+    container.appendChild(iframe);
+  } else {
+    // Fallback: abre em nova aba se não tiver ID configurado
+    alert('Vídeo em breve. Configure o YouTube ID no HTML.');
+  }
+}
+</script>
+
+</body>
+</html>
