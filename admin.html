@@ -123,6 +123,12 @@ tr:hover td{background:rgba(201,168,76,0.03)}
 .tag-lig-sim{background:rgba(30,125,90,0.1);color:var(--green)}
 .tag-lig-nao{background:rgba(192,57,43,0.1);color:var(--red)}
 .tag-lig-depois{background:rgba(201,168,76,0.1);color:#8B6914}
+.roteiro-row{background:rgba(30,125,90,0.04)}
+.roteiro-wrap{padding:14px 24px;border-left:3px solid var(--green);background:rgba(30,125,90,0.04)}
+.roteiro-card{background:var(--cream);border:1px solid var(--rule);padding:16px 18px;border-radius:3px;white-space:pre-wrap;font-size:12px;line-height:1.7;font-family:'DM Mono',monospace;max-height:500px;overflow-y:auto}
+.roteiro-vazio{font-size:12px;opacity:.4;font-family:'DM Mono',monospace;padding:8px 0}
+.btn-roteiro{padding:5px 12px;border:1px solid var(--green);background:none;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;cursor:pointer;color:#1E7D5A;text-transform:uppercase;transition:all .15s}
+.btn-roteiro:hover{background:var(--green);color:#fff}
 .angulo-row{background:rgba(201,168,76,0.04)}
 .angulo-wrap{padding:14px 24px;border-left:3px solid var(--gold);background:rgba(201,168,76,0.04)}
 .angulo-card{background:var(--cream);border:1px solid var(--rule);padding:12px 14px;margin-bottom:8px;border-radius:3px}
@@ -773,6 +779,13 @@ function renderDashboard(){
     var pct = t.analises_limite ? Math.round((t.analises_usadas||0)/t.analises_limite*100) : 0;
     var risco = t.ativo && t.plano!=='trial' && (t.analises_usadas||0)===0;
     return '<tr>'+'<td><div style="font-weight:500">'+esc(t.nome||'—')+'</div><div class="muted">'+esc(t.email||'')+'</div></td>'+'<td><span class="badge badge-'+(t.plano||'trial')+'">'+esc(t.plano||'trial')+'</span></td>'+'<td class="mono">'+(t.analises_usadas||0)+'/'+(t.analises_limite||0)+' <span style="opacity:.4">('+ pct+'%)</span></td>'+'<td>'+(risco?'<span style="color:var(--red);font-size:11px;font-family:DM Mono,monospace">⚠ sem uso</span>':'' )+'</td></tr>';
+      '<tr class="roteiro-row" id="roteiro_'+idSafe+'" style="display:none"><td colspan="9" style="padding:0">'+
+        '<div class="roteiro-wrap">'+
+          (l.roteiro_ligacao ?
+            '<div class="roteiro-card">'+esc(l.roteiro_ligacao)+'</div>'
+            : '<div class="roteiro-vazio">Nenhum roteiro gerado ainda.</div>')+
+        '</div>'+
+      '</td></tr>'
   }).join('');
   document.getElementById('dashClientes').innerHTML='<table><thead><tr><th>Cliente</th><th>Plano</th><th>Uso</th><th>Alerta</th></tr></thead><tbody>'+rows+'</tbody></table>';
   var rows2 = dbHistorico.slice(0,5).map(function(h){
@@ -1182,6 +1195,7 @@ function renderProspeccao(){
       '<td><span class="badge" style="background:rgba(0,0,0,0.06);color:'+cor+';font-size:11px">'+esc(l.status||'Novo')+'</span></td>'+
       '<td><span class="chip">'+esc(CANAL_LABELS[canal]||canal)+'</span></td>'+
       '<td><div style="display:flex;gap:4px">'+
+        '<button class="btn-roteiro" onclick="toggleRoteiro(\''+ idSafe+'\')">▼ Roteiro</button>'+
         '<button class="btn-angulo" onclick="toggleAngulos(\''+ idSafe+'\')">▼ Ângulos</button>'+
         '<button class="btn-sm" onclick="verHistoricoLead(\''+ idSafe+'\',\''+ nomeSafe+'\')">'+'Ver</button>'+
         '<button class="btn-sm success" onclick="abrirModalLigacao(\''+ idSafe +'\')">'+'📞</button>'+
@@ -1235,6 +1249,13 @@ function renderProspeccao(){
   tbody.innerHTML = html;
 }
 
+
+
+function toggleRoteiro(id){
+  var row = document.getElementById('roteiro_'+id);
+  if(!row) return;
+  row.style.display = row.style.display === 'none' ? '' : 'none';
+}
 
 function toggleAngulos(id){
   var row = document.getElementById('angulos_'+id);
