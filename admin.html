@@ -779,13 +779,6 @@ function renderDashboard(){
     var pct = t.analises_limite ? Math.round((t.analises_usadas||0)/t.analises_limite*100) : 0;
     var risco = t.ativo && t.plano!=='trial' && (t.analises_usadas||0)===0;
     return '<tr>'+'<td><div style="font-weight:500">'+esc(t.nome||'—')+'</div><div class="muted">'+esc(t.email||'')+'</div></td>'+'<td><span class="badge badge-'+(t.plano||'trial')+'">'+esc(t.plano||'trial')+'</span></td>'+'<td class="mono">'+(t.analises_usadas||0)+'/'+(t.analises_limite||0)+' <span style="opacity:.4">('+ pct+'%)</span></td>'+'<td>'+(risco?'<span style="color:var(--red);font-size:11px;font-family:DM Mono,monospace">⚠ sem uso</span>':'' )+'</td></tr>';
-      '<tr class="roteiro-row" id="roteiro_'+idSafe+'" style="display:none"><td colspan="9" style="padding:0">'+
-        '<div class="roteiro-wrap">'+
-          (l.roteiro_ligacao ?
-            '<div class="roteiro-card">'+esc(l.roteiro_ligacao)+'</div>'
-            : '<div class="roteiro-vazio">Nenhum roteiro gerado ainda.</div>')+
-        '</div>'+
-      '</td></tr>'
   }).join('');
   document.getElementById('dashClientes').innerHTML='<table><thead><tr><th>Cliente</th><th>Plano</th><th>Uso</th><th>Alerta</th></tr></thead><tbody>'+rows+'</tbody></table>';
   var rows2 = dbHistorico.slice(0,5).map(function(h){
@@ -1208,6 +1201,13 @@ function renderProspeccao(){
             (l.angulo_medo?'<div class="angulo-card"><div class="angulo-titulo angulo-medo">⚠ Medo de responsabilização</div><div class="angulo-texto">'+esc(l.angulo_medo)+'</div></div>':'')+
             (l.angulo_oab?'<div class="angulo-card"><div class="angulo-titulo angulo-oab">⚖ Conformidade OAB</div><div class="angulo-texto">'+esc(l.angulo_oab)+'</div></div>':'')
             : '<div class="angulo-vazio">Nenhum ângulo gerado para este lead ainda. O script de prospecção preenche automaticamente.</div>')+
+        '</div>'+
+      '</td></tr>'+
+      '<tr class="roteiro-row" id="roteiro_'+idSafe+'" style="display:none"><td colspan="9" style="padding:0">'+
+        '<div class="roteiro-wrap">'+
+          (l.roteiro_ligacao ?
+            '<div class="roteiro-card">'+esc(l.roteiro_ligacao)+'</div>'
+            : '<div class="roteiro-vazio">Nenhum roteiro gerado ainda.</div>')+
         '</div>'+
       '</td></tr>';
   }
