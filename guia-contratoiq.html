@@ -55,10 +55,10 @@
   .sect h2{font-size:30px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
   .sect .lead{margin-top:14px;color:var(--muted);font-size:16px;max-width:720px}
 
-  /* STEPS (como usar) */
+  /* STEPS */
   .steps{padding:26px 60px 0;display:grid;grid-template-columns:1fr 1fr;gap:16px}
   .step{background:var(--paper);border:1px solid var(--line);border-radius:16px;
-    padding:24px 24px 22px;position:relative}
+    padding:24px 24px 22px;position:relative;break-inside:avoid}
   .step .n{font-family:"DM Mono",monospace;width:38px;height:38px;border-radius:50%;
     background:var(--ink);color:var(--gold);display:flex;align-items:center;justify-content:center;
     font-size:15px;font-weight:500;margin-bottom:16px}
@@ -70,7 +70,7 @@
 
   /* SCORE / VERDICT */
   .scoreWrap{padding:26px 60px 0}
-  .scoreCard{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:28px 30px}
+  .scoreCard{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:28px 30px;break-inside:avoid}
   .scoreCard h3{font-size:20px;font-weight:600;margin-bottom:18px}
   .bar{height:16px;border-radius:9px;
     background:linear-gradient(90deg,var(--green) 0%,var(--amber) 55%,var(--red) 100%)}
@@ -99,7 +99,7 @@
 
   /* PLANS */
   .plans{padding:26px 60px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-  .plan{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px 22px;position:relative}
+  .plan{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px 22px;position:relative;break-inside:avoid}
   .plan.best{border:1.5px solid var(--gold);box-shadow:0 8px 28px rgba(201,168,76,.18)}
   .plan .pill{position:absolute;top:-11px;left:22px;background:var(--gold);color:var(--ink);
     font-family:"DM Mono",monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;
@@ -120,7 +120,7 @@
 
   /* SECURITY */
   .sec{padding:26px 60px 0}
-  .secCard{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:26px 28px}
+  .secCard{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:26px 28px;break-inside:avoid}
   .secCard p{color:var(--muted);font-size:14.5px;max-width:740px}
   .secList{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:9px}
   .secList div{font-size:13.5px;padding-left:24px;position:relative}
@@ -128,7 +128,7 @@
 
   /* FAQ */
   .faq{padding:24px 60px 0}
-  .qa{border-top:1px solid var(--line);padding:16px 0}
+  .qa{border-top:1px solid var(--line);padding:16px 0;break-inside:avoid}
   .qa:last-child{border-bottom:1px solid var(--line)}
   .qa h4{font-size:15.5px;font-weight:600;margin-bottom:5px}
   .qa p{font-size:14px;color:var(--muted)}
@@ -139,7 +139,7 @@
   .foot b{color:var(--ink)}
   .foot .mono{font-size:12px;letter-spacing:.3px;margin-top:8px}
 
-  /* DOWNLOAD BTN (fora do PDF) */
+  /* DOWNLOAD BTN */
   #pdfBtn{position:fixed;right:26px;bottom:26px;z-index:50;background:var(--ink);color:var(--gold);
     border:none;border-radius:13px;padding:15px 22px;font-family:"DM Sans",sans-serif;font-size:14.5px;
     font-weight:600;cursor:pointer;box-shadow:0 10px 30px rgba(13,13,13,.28);
@@ -153,6 +153,17 @@
     .hero h1{font-size:34px}
     .steps,.grid,.plans,.verds,.secList{grid-template-columns:1fr}
   }
+  /* Estado de exportacao: largura fixa p/ o PDF sair completo e largo */
+  body.exporting #guia{width:940px !important;max-width:940px !important}
+  body.exporting .hero,body.exporting .sect,body.exporting .steps,body.exporting .scoreWrap,
+  body.exporting .grid,body.exporting .plans,body.exporting .sec,body.exporting .faq,
+  body.exporting .foot,body.exporting .grouptag{padding-left:60px;padding-right:60px}
+  body.exporting .trial{margin-left:60px;margin-right:60px}
+  body.exporting .hero h1{font-size:46px}
+  body.exporting .steps,body.exporting .grid,body.exporting .plans{grid-template-columns:1fr 1fr}
+  body.exporting .plans{grid-template-columns:repeat(3,1fr)}
+  body.exporting .verds{grid-template-columns:repeat(3,1fr)}
+  body.exporting .secList{grid-template-columns:1fr 1fr}
 </style>
 </head>
 <body>
@@ -394,25 +405,54 @@
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>
   </svg>
-  Baixar PDF
+  <span>Baixar PDF</span>
 </button>
 
 <script>
-function baixarPDF(){
-  var btn = document.getElementById('pdfBtn');
-  var el  = document.getElementById('guia');
-  btn.style.display = 'none';
+async function baixarPDF(){
+  var btn   = document.getElementById('pdfBtn');
+  var label = btn.querySelector('span');
+  var el    = document.getElementById('guia');
+  var oldLabel = label.textContent;
 
-  var w = el.offsetWidth, h = el.offsetHeight;
+  label.textContent = 'Gerando…';
+  btn.disabled = true; btn.style.opacity = '.7';
+
+  // 1) Espera FONTES carregarem (senao o texto reflui depois e a pagina sai cortada).
+  try { await document.fonts.ready; } catch(e){}
+  await new Promise(function(r){ setTimeout(r, 400); });
+
+  // 2) Forca largura fixa de 940px (layout desktop) durante a captura.
+  document.body.classList.add('exporting');
+  void el.offsetHeight;
+  await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
+
+  // 3) Mede a altura REAL ja com as fontes aplicadas.
+  var W = 940;
+  var H = Math.ceil(el.getBoundingClientRect().height);
+
+  // Escala adaptativa para nao estourar o limite de canvas (~16384px de altura).
+  var scale = (H * 2 <= 15800) ? 2 : (15800 / H);
+
   var opt = {
     margin: 0,
     filename: 'Guia-de-Uso-ContratoIQ.pdf',
-    image: { type: 'jpeg', quality: 1 },
-    html2canvas: { scale: 2, backgroundColor: '#F5F0E8', useCORS: true, scrollY: 0, windowWidth: w },
-    jsPDF: { unit: 'px', format: [w, h], orientation: (w > h ? 'landscape' : 'portrait'), hotfixes: ['px_scaling'] }
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: {
+      scale: scale, backgroundColor: '#F5F0E8', useCORS: true,
+      scrollX: 0, scrollY: 0, width: W, height: H, windowWidth: W, windowHeight: H
+    },
+    jsPDF: { unit: 'px', format: [W, H], orientation: 'portrait', hotfixes: ['px_scaling'] }
   };
-  html2pdf().set(opt).from(el).save().then(function(){ btn.style.display=''; })
-    .catch(function(){ btn.style.display=''; });
+
+  function restore(){
+    document.body.classList.remove('exporting');
+    label.textContent = oldLabel;
+    btn.disabled = false; btn.style.opacity = ''; btn.style.display = '';
+  }
+
+  btn.style.display = 'none';
+  html2pdf().set(opt).from(el).save().then(restore).catch(function(err){ console.error(err); restore(); });
 }
 </script>
 </body>
