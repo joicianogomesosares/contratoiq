@@ -418,41 +418,51 @@ async function baixarPDF(){
   label.textContent = 'Gerando…';
   btn.disabled = true; btn.style.opacity = '.7';
 
-  // 1) Espera FONTES carregarem (senao o texto reflui depois e a pagina sai cortada).
-  try { await document.fonts.ready; } catch(e){}
-  await new Promise(function(r){ setTimeout(r, 400); });
-
-  // 2) Forca largura fixa de 940px (layout desktop) durante a captura.
-  document.body.classList.add('exporting');
-  void el.offsetHeight;
-  await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
-
-  // 3) Mede a altura REAL ja com as fontes aplicadas.
-  var W = 940;
-  var H = Math.ceil(el.getBoundingClientRect().height);
-
-  // Escala adaptativa para nao estourar o limite de canvas (~16384px de altura).
-  var scale = (H * 2 <= 15800) ? 2 : (15800 / H);
-
-  var opt = {
-    margin: 0,
-    filename: 'Guia-de-Uso-ContratoIQ.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: {
-      scale: scale, backgroundColor: '#F5F0E8', useCORS: true,
-      scrollX: 0, scrollY: 0, width: W, height: H, windowWidth: W, windowHeight: H
-    },
-    jsPDF: { unit: 'px', format: [W, H], orientation: 'portrait', hotfixes: ['px_scaling'] }
-  };
-
   function restore(){
     document.body.classList.remove('exporting');
     label.textContent = oldLabel;
     btn.disabled = false; btn.style.opacity = ''; btn.style.display = '';
   }
 
-  btn.style.display = 'none';
-  html2pdf().set(opt).from(el).save().then(restore).catch(function(err){ console.error(err); restore(); });
+  try{
+    // 1) Espera as FONTES carregarem (senao o texto reflui depois e corta a pagina).
+    try { await document.fonts.ready; } catch(e){}
+    await new Promise(function(r){ setTimeout(r, 400); });
+
+    // 2) Forca o layout desktop (940px) durante a captura — vale p/ PC e celular.
+    document.body.classList.add('exporting');
+    void el.offsetHeight;
+    await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
+
+    var W = 940;
+    var fullH = Math.ceil(Math.max(el.scrollHeight, el.getBoundingClientRect().height));
+
+    // Escala adaptativa: nitidez sem estourar o limite de canvas (~16384px).
+    var scale = (fullH * 2 <= 15800) ? 2 : (15800 / fullH);
+
+    btn.style.display = 'none';
+
+    // 3) Renderiza o CANVAS primeiro. A pagina do PDF e criada a partir do
+    //    tamanho REAL do canvas — assim e impossivel cortar (a causa do bug no PC).
+    var canvas = await window.html2canvas(el, {
+      scale: scale, backgroundColor: '#F5F0E8', useCORS: true,
+      scrollX: 0, scrollY: 0, width: W, height: fullH, windowWidth: W, windowHeight: fullH
+    });
+
+    var pw = canvas.width  / scale;   // largura em px CSS
+    var ph = canvas.height / scale;   // altura  em px CSS (exata)
+
+    var JsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+    var pdf = new JsPDF({ unit: 'px', format: [pw, ph], orientation: 'portrait', hotfixes: ['px_scaling'] });
+    pdf.addImage(canvas.toDataURL('image/jpeg', 0.98), 'JPEG', 0, 0, pw, ph, undefined, 'FAST');
+    pdf.save('Guia-de-Uso-ContratoIQ.pdf');
+
+    restore();
+  }catch(err){
+    console.error(err);
+    restore();
+    alert('Nao consegui gerar o PDF. Tente novamente.');
+  }
 }
 </script>
 </body>
