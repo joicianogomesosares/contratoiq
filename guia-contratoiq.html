@@ -424,44 +424,67 @@ async function baixarPDF(){
     btn.disabled = false; btn.style.opacity = ''; btn.style.display = '';
   }
 
-  try{
-    // 1) Espera as FONTES carregarem (senao o texto reflui depois e corta a pagina).
-    try { await document.fonts.ready; } catch(e){}
-    await new Promise(function(r){ setTimeout(r, 400); });
+  // 1) Espera as FONTES carregarem (senao o texto reflui depois e corta a pagina).
+  try { await document.fonts.ready; } catch(e){}
+  await new Promise(function(r){ setTimeout(r, 400); });
 
-    // 2) Forca o layout desktop (940px) durante a captura — vale p/ PC e celular.
-    document.body.classList.add('exporting');
-    void el.offsetHeight;
-    await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
+  // 2) Forca o layout desktop (940px) durante a captura — vale p/ PC e celular.
+  document.body.classList.add('exporting');
+  void el.offsetHeight;
+  await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
 
-    var W = 940;
-    var fullH = Math.ceil(Math.max(el.scrollHeight, el.getBoundingClientRect().height));
+  var W = 940;
+  var fullH = Math.ceil(Math.max(el.scrollHeight, el.getBoundingClientRect().height));
+  var scale = (fullH * 2 <= 15800) ? 2 : (15800 / fullH);  // nitidez sem estourar canvas
 
-    // Escala adaptativa: nitidez sem estourar o limite de canvas (~16384px).
-    var scale = (fullH * 2 <= 15800) ? 2 : (15800 / fullH);
+  btn.style.display = 'none';
 
-    btn.style.display = 'none';
+  // Resolve as libs do pacote html2pdf.bundle (nomes variam entre versoes).
+  var H2C   = window.html2canvas || (window.html2pdf && window.html2pdf.html2canvas);
+  var JsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF ||
+              (window.jspdf && window.jspdf.default);
 
-    // 3) Renderiza o CANVAS primeiro. A pagina do PDF e criada a partir do
-    //    tamanho REAL do canvas — assim e impossivel cortar (a causa do bug no PC).
-    var canvas = await window.html2canvas(el, {
+  // METODO A: canvas -> jsPDF (pagina do tamanho exato do canvas, nao corta).
+  async function metodoDireto(){
+    var canvas = await H2C(el, {
       scale: scale, backgroundColor: '#F5F0E8', useCORS: true,
       scrollX: 0, scrollY: 0, width: W, height: fullH, windowWidth: W, windowHeight: fullH
     });
-
-    var pw = canvas.width  / scale;   // largura em px CSS
-    var ph = canvas.height / scale;   // altura  em px CSS (exata)
-
-    var JsPDF = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+    var pw = canvas.width / scale, ph = canvas.height / scale;
     var pdf = new JsPDF({ unit: 'px', format: [pw, ph], orientation: 'portrait', hotfixes: ['px_scaling'] });
     pdf.addImage(canvas.toDataURL('image/jpeg', 0.98), 'JPEG', 0, 0, pw, ph, undefined, 'FAST');
     pdf.save('Guia-de-Uso-ContratoIQ.pdf');
+  }
 
+  // METODO B (fallback): wrapper html2pdf() — sempre tem as libs internas.
+  function metodoWrapper(){
+    return html2pdf().set({
+      margin: 0,
+      filename: 'Guia-de-Uso-ContratoIQ.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: scale, backgroundColor: '#F5F0E8', useCORS: true,
+                     width: W, windowWidth: W, height: fullH, windowHeight: fullH, scrollX: 0, scrollY: 0 },
+      jsPDF: { unit: 'px', format: [W, fullH], orientation: 'portrait', hotfixes: ['px_scaling'] }
+    }).from(el).save();
+  }
+
+  try{
+    if (H2C && JsPDF) {
+      await metodoDireto();
+    } else {
+      await metodoWrapper();
+    }
     restore();
-  }catch(err){
-    console.error(err);
-    restore();
-    alert('Nao consegui gerar o PDF. Tente novamente.');
+  }catch(errA){
+    console.error('metodo direto falhou:', errA);
+    try{
+      await metodoWrapper();           // ultima tentativa
+      restore();
+    }catch(errB){
+      console.error('wrapper falhou:', errB);
+      restore();
+      alert('Nao consegui gerar o PDF: ' + ((errB && errB.message) || errB || 'erro desconhecido'));
+    }
   }
 }
 </script>
