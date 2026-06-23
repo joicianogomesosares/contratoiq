@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContratoIQ — Guia de Uso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  :root{
+    --ink:#0D0D0D;
+    --cream:#F5F0E8;
+    --paper:#FAF7F2;
+    --gold:#C9A84C;
+    --gold-d:#A8862F;
+    --red:#C0392B;
+    --green:#1E7D5A;
+    --amber:#E67E22;
+    --muted:rgba(13,13,13,.60);
+    --line:rgba(13,13,13,.12);
+    --line2:rgba(201,168,76,.40);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--cream);color:var(--ink);
+    font-family:"DM Sans",system-ui,sans-serif;line-height:1.62;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.disp{font-family:"Playfair Display",Georgia,serif}
+  .mono{font-family:"DM Mono",monospace}
+  a{color:var(--gold-d);text-decoration:none}
+
+  #guia{background:var(--cream);width:100%;max-width:940px;margin:0 auto}
+
+  .label{font-family:"DM Mono",monospace;font-size:11.5px;letter-spacing:2.5px;
+    text-transform:uppercase;color:var(--gold-d)}
+
+  /* HERO */
+  .hero{padding:60px 60px 48px;border-bottom:1px solid var(--line);position:relative}
+  .brand{display:flex;align-items:center;gap:13px;margin-bottom:34px}
+  .logo{width:44px;height:44px;border-radius:11px;background:var(--ink);
+    display:flex;align-items:center;justify-content:center;color:var(--gold);
+    font-family:"Playfair Display",serif;font-weight:800;font-size:20px}
+  .brand b{font-family:"Playfair Display",serif;font-size:20px;font-weight:700}
+  .brand small{display:block;color:var(--muted);font-size:12px;letter-spacing:.4px;font-weight:500}
+  .hero h1{font-size:46px;line-height:1.08;font-weight:700;letter-spacing:-.5px;max-width:680px;margin-top:6px}
+  .hero h1 em{font-style:italic;color:var(--gold-d)}
+  .hero .sub{margin-top:20px;color:var(--muted);font-size:17px;max-width:620px}
+  .chips{margin-top:28px;display:flex;flex-wrap:wrap;gap:10px}
+  .chip{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.3px;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line);padding:7px 13px;border-radius:999px}
+
+  /* SECTION HEADER */
+  .sect{padding:54px 60px 0}
+  .sect .label{margin-bottom:12px}
+  .sect h2{font-size:30px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
+  .sect .lead{margin-top:14px;color:var(--muted);font-size:16px;max-width:720px}
+
+  /* STEPS (como usar) */
+  .steps{padding:26px 60px 0;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .step{background:var(--paper);border:1px solid var(--line);border-radius:16px;
+    padding:24px 24px 22px;position:relative}
+  .step .n{font-family:"DM Mono",monospace;width:38px;height:38px;border-radius:50%;
+    background:var(--ink);color:var(--gold);display:flex;align-items:center;justify-content:center;
+    font-size:15px;font-weight:500;margin-bottom:16px}
+  .step h3{font-size:19px;font-weight:600;margin-bottom:7px;letter-spacing:-.2px}
+  .step p{color:var(--muted);font-size:14.5px}
+  .step .tip{margin-top:11px;font-family:"DM Mono",monospace;font-size:12px;color:var(--gold-d);
+    border-top:1px dashed var(--line2);padding-top:9px}
+  .step.wide{grid-column:1 / -1}
+
+  /* SCORE / VERDICT */
+  .scoreWrap{padding:26px 60px 0}
+  .scoreCard{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:28px 30px}
+  .scoreCard h3{font-size:20px;font-weight:600;margin-bottom:18px}
+  .bar{height:16px;border-radius:9px;
+    background:linear-gradient(90deg,var(--green) 0%,var(--amber) 55%,var(--red) 100%)}
+  .barLabels{display:flex;justify-content:space-between;margin-top:9px;
+    font-family:"DM Mono",monospace;font-size:12px;color:var(--muted)}
+  .verds{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:24px}
+  .verd{border-radius:13px;padding:16px 18px;border:1px solid var(--line)}
+  .verd .tag{font-family:"DM Mono",monospace;font-size:13px;font-weight:500;letter-spacing:1px;
+    display:inline-block;padding:3px 10px;border-radius:7px;margin-bottom:9px;color:#fff}
+  .verd p{font-size:13px;color:var(--muted)}
+  .v-ass .tag{background:var(--green)} .v-neg .tag{background:var(--amber)} .v-rec .tag{background:var(--red)}
+
+  /* CRITERIA */
+  .grid{padding:26px 60px 0;display:grid;grid-template-columns:1fr 1fr;gap:15px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:15px;
+    padding:21px 22px 19px;position:relative;break-inside:avoid}
+  .card .num{position:absolute;top:18px;right:20px;font-family:"DM Mono",monospace;font-size:12px;
+    color:var(--gold-d);border:1px solid var(--line2);border-radius:7px;padding:2px 8px}
+  .card h3{font-size:17px;font-weight:600;margin-bottom:8px;padding-right:44px;letter-spacing:-.2px}
+  .card .what{font-size:14px;margin-bottom:9px}
+  .card .why{font-size:13px;color:var(--muted);border-top:1px dashed var(--line2);padding-top:9px}
+  .card .why b{color:var(--gold-d);font-weight:600}
+  .grouptag{padding:30px 60px 0}
+  .grouptag span{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--ink);background:var(--cream);border:1px solid var(--line2);border-radius:999px;padding:6px 15px}
+
+  /* PLANS */
+  .plans{padding:26px 60px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+  .plan{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px 22px;position:relative}
+  .plan.best{border:1.5px solid var(--gold);box-shadow:0 8px 28px rgba(201,168,76,.18)}
+  .plan .pill{position:absolute;top:-11px;left:22px;background:var(--gold);color:var(--ink);
+    font-family:"DM Mono",monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;
+    padding:4px 10px;border-radius:7px;font-weight:500}
+  .plan .pn{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+  .plan h3{font-size:24px;font-weight:700;margin:3px 0 2px}
+  .plan .price{font-family:"Playfair Display",serif;font-size:30px;font-weight:700}
+  .plan .price small{font-family:"DM Sans",sans-serif;font-size:13px;color:var(--muted);font-weight:400}
+  .plan .vol{margin:10px 0 14px;font-size:14px;color:var(--gold-d);font-weight:600}
+  .plan ul{list-style:none;font-size:13.5px;color:var(--muted)}
+  .plan li{padding:5px 0 5px 22px;position:relative}
+  .plan li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:700}
+  .trial{margin:18px 60px 0;background:var(--ink);color:var(--cream);border-radius:16px;
+    padding:24px 28px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .trial b{font-family:"Playfair Display",serif;font-size:21px;font-weight:600;display:block}
+  .trial small{color:rgba(245,240,232,.65);font-size:13.5px}
+  .trial .gold{color:var(--gold)}
+
+  /* SECURITY */
+  .sec{padding:26px 60px 0}
+  .secCard{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:26px 28px}
+  .secCard p{color:var(--muted);font-size:14.5px;max-width:740px}
+  .secList{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .secList div{font-size:13.5px;padding-left:24px;position:relative}
+  .secList div::before{content:"⚖";position:absolute;left:0;color:var(--gold-d)}
+
+  /* FAQ */
+  .faq{padding:24px 60px 0}
+  .qa{border-top:1px solid var(--line);padding:16px 0}
+  .qa:last-child{border-bottom:1px solid var(--line)}
+  .qa h4{font-size:15.5px;font-weight:600;margin-bottom:5px}
+  .qa p{font-size:14px;color:var(--muted)}
+
+  /* FOOTER */
+  .foot{padding:50px 60px 56px;text-align:center;color:var(--muted);font-size:13px;margin-top:50px}
+  .foot .rule{height:1px;background:var(--line);margin-bottom:26px}
+  .foot b{color:var(--ink)}
+  .foot .mono{font-size:12px;letter-spacing:.3px;margin-top:8px}
+
+  /* DOWNLOAD BTN (fora do PDF) */
+  #pdfBtn{position:fixed;right:26px;bottom:26px;z-index:50;background:var(--ink);color:var(--gold);
+    border:none;border-radius:13px;padding:15px 22px;font-family:"DM Sans",sans-serif;font-size:14.5px;
+    font-weight:600;cursor:pointer;box-shadow:0 10px 30px rgba(13,13,13,.28);
+    display:flex;align-items:center;gap:9px;transition:transform .15s,box-shadow .15s}
+  #pdfBtn:hover{transform:translateY(-2px);box-shadow:0 14px 38px rgba(13,13,13,.4)}
+  #pdfBtn svg{width:18px;height:18px}
+
+  @media(max-width:720px){
+    .hero,.sect,.steps,.scoreWrap,.grid,.plans,.sec,.faq,.foot,.grouptag{padding-left:24px;padding-right:24px}
+    .trial{margin-left:24px;margin-right:24px}
+    .hero h1{font-size:34px}
+    .steps,.grid,.plans,.verds,.secList{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div id="guia">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="brand">
+      <div class="logo">IQ</div>
+      <div><b>ContratoIQ</b><small>Análise de Contratos · Conforme OAB 001/2024</small></div>
+    </div>
+    <div class="label">Guia de uso</div>
+    <h1>Como usar a ContratoIQ <em>do upload ao parecer</em></h1>
+    <p class="sub">Você assina. A ContratoIQ garante que nada passou. Este guia mostra como rodar uma análise, ler o parecer e tomar a decisão — além de detalhar os 23 critérios avaliados em cada contrato.</p>
+    <div class="chips">
+      <div class="chip">Parecer em até 5 min</div>
+      <div class="chip">10 análises grátis · sem cartão</div>
+      <div class="chip">Você revisa e assina</div>
+    </div>
+  </header>
+
+  <!-- COMO USAR -->
+  <section class="sect">
+    <div class="label">Passo a passo</div>
+    <h2>Como usar, em 5 passos</h2>
+    <p class="lead">Do primeiro acesso até o parecer pronto para a sua revisão. Sem instalação, sem treinamento — funciona pelo navegador, inclusive no celular.</p>
+  </section>
+  <div class="steps">
+    <div class="step"><div class="n">01</div>
+      <h3>Solicite o acesso</h3>
+      <p>Preencha o formulário de acesso gratuito com seu nome e email. Sem cartão, sem pré-pagamento — o nome aparece na sua conta e o email é por onde você recebe o acesso.</p>
+      <div class="tip">10 análises gratuitas por aprovação</div></div>
+
+    <div class="step"><div class="n">02</div>
+      <h3>Faça upload do contrato</h3>
+      <p>Envie o PDF do contrato direto na plataforma. Suporta documentos de até cerca de 100 páginas, com criptografia TLS de ponta a ponta.</p>
+      <div class="tip">PDF nativo é mais preciso que escaneado</div></div>
+
+    <div class="step"><div class="n">03</div>
+      <h3>A análise é feita</h3>
+      <p>O contrato é lido cláusula a cláusula e comparado com o Código Civil, CDC, CLT, LGPD e a legislação aplicável. Leva até 5 minutos, conforme o tamanho.</p>
+      <div class="tip">Passou de 5 min? O crédito é devolvido</div></div>
+
+    <div class="step"><div class="n">04</div>
+      <h3>Receba o parecer completo</h3>
+      <p>Você recebe o parecer com score de risco, análise por cláusula, riscos financeiros, pontos ausentes e a recomendação final: ASSINAR, NEGOCIAR ou RECUSAR.</p>
+      <div class="tip">Mais de 20 seções em cada parecer</div></div>
+
+    <div class="step wide"><div class="n">05</div>
+      <h3>Revise, baixe em PDF e assine</h3>
+      <p>Confira o parecer, baixe em PDF para arquivar junto ao contrato e tome a decisão. A ContratoIQ não substitui o advogado: a revisão final e a responsabilidade continuam sendo suas — exatamente como exige a OAB Recomendação 001/2024.</p>
+      <div class="tip">Sem confiança no início? Rode em paralelo com sua revisão manual e compare. Ganhou confiança, a gente amplia seu limite de análises do teste, sem custo.</div></div>
+  </div>
+
+  <!-- COMO LER -->
+  <section class="sect">
+    <div class="label">Lendo o resultado</div>
+    <h2>Como ler o score e o veredito</h2>
+    <p class="lead">Toda análise resume o risco em uma nota de 0 a 100 e fecha com um veredito objetivo. É por aí que você começa a leitura.</p>
+  </section>
+  <div class="scoreWrap">
+    <div class="scoreCard">
+      <h3>Score de risco — 0 a 100</h3>
+      <div class="bar"></div>
+      <div class="barLabels"><span>0 · risco baixo</span><span>50 · atenção</span><span>100 · crítico</span></div>
+      <div class="verds">
+        <div class="verd v-ass"><span class="tag">ASSINAR</span><p>Risco controlado. Ajustes, se houver, são pontuais e não impeditivos.</p></div>
+        <div class="verd v-neg"><span class="tag">NEGOCIAR</span><p>Há pontos relevantes a ajustar antes da assinatura. Vale levar à mesa.</p></div>
+        <div class="verd v-rec"><span class="tag">RECUSAR</span><p>Riscos graves ou cláusulas inaceitáveis. Recomendado não assinar como está.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OS 23 CRITERIOS -->
+  <section class="sect">
+    <div class="label">O que é avaliado</div>
+    <h2>Os 23 critérios da análise</h2>
+    <p class="lead">Cada contrato passa por 23 critérios, em três frentes: risco e estrutura, conformidade legal, e decisão. Para cada um: o que é avaliado e por que importa.</p>
+  </section>
+
+  <div class="grouptag"><span>Frente 1 · Risco e estrutura</span></div>
+  <div class="grid">
+    <div class="card"><div class="num">01</div><h3>Score de risco (0–100)</h3>
+      <div class="what">Nota objetiva que resume o risco global do contrato.</div>
+      <div class="why"><b>Por que importa:</b> leitura imediata — antes de abrir o parecer você já sabe se exige atenção redobrada.</div></div>
+    <div class="card"><div class="num">02</div><h3>Análise de cada cláusula</h3>
+      <div class="what">Leitura individual de todas as cláusulas, com função, efeito e nível de risco.</div>
+      <div class="why"><b>Por que importa:</b> nenhuma cláusula passa batida, nem as longas que cansam na revisão de fim de dia.</div></div>
+    <div class="card"><div class="num">03</div><h3>Cláusulas abusivas (com artigo)</h3>
+      <div class="what">Sinaliza cláusulas abusivas ou nulas com o dispositivo legal correspondente.</div>
+      <div class="why"><b>Por que importa:</b> já entrega o fundamento legal pronto para contestar ou renegociar.</div></div>
+    <div class="card"><div class="num">04</div><h3>Cláusulas ausentes</h3>
+      <div class="what">O que deveria estar no contrato e não está: proteções e salvaguardas que faltam.</div>
+      <div class="why"><b>Por que importa:</b> o maior risco costuma ser o que ninguém escreveu — o checklist manual raramente pega.</div></div>
+    <div class="card"><div class="num">05</div><h3>Obrigações do contratante</h3>
+      <div class="what">Mapa de tudo que a parte contratante assume: pagamentos, prazos e deveres.</div>
+      <div class="why"><b>Por que importa:</b> deixa claro o que seu cliente se compromete a cumprir, antes da assinatura.</div></div>
+    <div class="card"><div class="num">06</div><h3>Obrigações da contratada</h3>
+      <div class="what">Mapa equivalente do outro lado: entregas, garantias e compromissos.</div>
+      <div class="why"><b>Por que importa:</b> revela desequilíbrios — quando um lado assume muito mais que o outro.</div></div>
+    <div class="card"><div class="num">07</div><h3>Prazos críticos</h3>
+      <div class="what">Vigência, rescisão, notificação, renovação e carência.</div>
+      <div class="why"><b>Por que importa:</b> prazo perdido vira direito perdido. O parecer destaca as datas que não podem passar.</div></div>
+    <div class="card"><div class="num">08</div><h3>Passivo trabalhista estimado</h3>
+      <div class="what">Exposição trabalhista estimada, inclusive sinais de vínculo empregatício.</div>
+      <div class="why"><b>Por que importa:</b> prestação que "cheira" a vínculo é passivo na certa — melhor ver antes.</div></div>
+    <div class="card"><div class="num">09</div><h3>Riscos financeiros</h3>
+      <div class="what">Multas, cláusulas penais, reajustes, juros e gatilhos de custo no texto.</div>
+      <div class="why"><b>Por que importa:</b> o impacto financeiro real se espalha pelo contrato, raramente está num lugar só.</div></div>
+  </div>
+
+  <div class="grouptag"><span>Frente 2 · Conformidade legal</span></div>
+  <div class="grid">
+    <div class="card"><div class="num">10</div><h3>Código Civil (CC)</h3>
+      <div class="what">Aderência às regras gerais de contratos, validade e responsabilidade civil.</div>
+      <div class="why"><b>Por que importa:</b> a base de tudo. Vício aqui compromete o instrumento inteiro.</div></div>
+    <div class="card"><div class="num">11</div><h3>LGPD</h3>
+      <div class="what">Tratamento de dados, bases legais e cláusulas de proteção.</div>
+      <div class="why"><b>Por que importa:</b> cláusula de dados mal feita expõe o cliente a sanção. Quase todo contrato toca em dados.</div></div>
+    <div class="card"><div class="num">12</div><h3>CLT</h3>
+      <div class="what">Conformidade trabalhista quando há relação de trabalho envolvida.</div>
+      <div class="why"><b>Por que importa:</b> evita que cláusulas criem obrigações trabalhistas não intencionais.</div></div>
+    <div class="card"><div class="num">13</div><h3>CDC</h3>
+      <div class="what">Aderência ao Código de Defesa do Consumidor em contratos de consumo.</div>
+      <div class="why"><b>Por que importa:</b> cláusula que ignora o CDC tende a ser nula — e o detalhe escapa na pressa.</div></div>
+    <div class="card"><div class="num">14</div><h3>Propriedade intelectual</h3>
+      <div class="what">Titularidade, licenças, cessão de direitos e proteção de criações.</div>
+      <div class="why"><b>Por que importa:</b> define quem fica dono do quê. Ambiguidade aqui vira litígio caro.</div></div>
+    <div class="card"><div class="num">15</div><h3>Equilíbrio contratual</h3>
+      <div class="what">Se direitos e deveres estão distribuídos de forma equilibrada.</div>
+      <div class="why"><b>Por que importa:</b> contrato desequilibrado é frágil e abre brecha para revisão judicial.</div></div>
+    <div class="card"><div class="num">16</div><h3>Vínculos empregatícios</h3>
+      <div class="what">Detecta elementos de relação de emprego oculta: subordinação, pessoalidade, habitualidade.</div>
+      <div class="why"><b>Por que importa:</b> um dos riscos trabalhistas mais comuns — e mais caros — na prestação.</div></div>
+    <div class="card"><div class="num">17</div><h3>Garantias</h3>
+      <div class="what">Análise de fiança, caução, aval, seguro e sua suficiência.</div>
+      <div class="why"><b>Por que importa:</b> garantia mal redigida não protege ninguém na hora do problema.</div></div>
+  </div>
+
+  <div class="grouptag"><span>Frente 3 · Decisão e entregáveis</span></div>
+  <div class="grid">
+    <div class="card"><div class="num">18</div><h3>Glossário jurídico</h3>
+      <div class="what">Tradução dos termos técnicos do contrato em linguagem clara.</div>
+      <div class="why"><b>Por que importa:</b> facilita explicar o contrato ao cliente e alinhar o time mais novo.</div></div>
+    <div class="card"><div class="num">19</div><h3>Dashboard por nível de risco</h3>
+      <div class="what">Visão consolidada que organiza os pontos por gravidade: alto, médio e baixo.</div>
+      <div class="why"><b>Por que importa:</b> direciona o olho do advogado primeiro para o que realmente importa.</div></div>
+    <div class="card"><div class="num">20</div><h3>Recomendações priorizadas</h3>
+      <div class="what">Ações sugeridas, ordenadas por urgência e impacto.</div>
+      <div class="why"><b>Por que importa:</b> transforma a análise em plano de trabalho, não só diagnóstico.</div></div>
+    <div class="card"><div class="num">21</div><h3>Checklist antes de assinar</h3>
+      <div class="what">Roteiro final com os pontos que precisam estar resolvidos antes da assinatura.</div>
+      <div class="why"><b>Por que importa:</b> última barreira de segurança — garante que nada crítico ficou para trás.</div></div>
+    <div class="card"><div class="num">22</div><h3>Recomendação final</h3>
+      <div class="what">Veredito objetivo: <b style="color:var(--green)">ASSINAR</b>, <b style="color:var(--amber)">NEGOCIAR</b> ou <b style="color:var(--red)">RECUSAR</b>.</div>
+      <div class="why"><b>Por que importa:</b> conclusão clara, fundamentada em tudo que foi analisado.</div></div>
+    <div class="card"><div class="num">23</div><h3>Pontos de negociação</h3>
+      <div class="what">Cláusulas com maior potencial de renegociação, com sugestão de contraproposta.</div>
+      <div class="why"><b>Por que importa:</b> dá poder de barganha — você chega à mesa sabendo o que pedir.</div></div>
+  </div>
+
+  <!-- PLANOS -->
+  <section class="sect">
+    <div class="label">Planos</div>
+    <h2>Qual plano usar</h2>
+    <p class="lead">Todos incluem parecer jurídico completo, download em PDF e suporte. Comece pelas 10 análises gratuitas e escolha o plano pelo seu volume mensal.</p>
+  </section>
+  <div class="plans">
+    <div class="plan">
+      <div class="pn">Entrada</div><h3>Lite</h3>
+      <div class="price">R$1.790<small> /mês</small></div>
+      <div class="vol">300 análises por mês</div>
+      <ul><li>Parecer jurídico completo</li><li>Score de risco</li><li>Download em PDF</li><li>Suporte por email</li></ul>
+    </div>
+    <div class="plan best">
+      <div class="pill">Mais escolhido</div>
+      <div class="pn">Escritório</div><h3>Starter</h3>
+      <div class="price">R$5.970<small> /mês</small></div>
+      <div class="vol">1.000 análises por mês</div>
+      <ul><li>Tudo do Lite</li><li>Análise legislativa completa</li><li>Cláusulas abusivas detectadas</li><li>Suporte prioritário</li></ul>
+    </div>
+    <div class="plan">
+      <div class="pn">Crescimento</div><h3>Advanced</h3>
+      <div class="price">R$16.900<small> /mês</small></div>
+      <div class="vol">3.000 análises por mês</div>
+      <ul><li>Tudo do Starter</li><li>Múltiplos usuários</li><li>API dedicada</li><li>SLA garantido</li></ul>
+    </div>
+  </div>
+  <div class="trial">
+    <div><b>10 análises gratuitas para começar</b><small>Sem cartão, sem pré-pagamento. Só nome e email no formulário de acesso.</small></div>
+    <div class="mono gold">contratoiq.com/formulario →</div>
+  </div>
+
+  <!-- SEGURANCA -->
+  <section class="sect">
+    <div class="label">Sigilo e conformidade</div>
+    <h2>Construída para quem não pode errar</h2>
+  </section>
+  <div class="sec">
+    <div class="secCard">
+      <p>A OAB Recomendação 001/2024 exige supervisão humana em todo uso de IA. A ContratoIQ foi desenhada exatamente para isso: você recebe o parecer, revisa e assina. A ferramenta não substitui seu julgamento — torna seu julgamento mais seguro.</p>
+      <div class="secList">
+        <div>Documentos enviados nunca treinam nenhum modelo</div>
+        <div>Exclusão automática do documento após a análise</div>
+        <div>O advogado sempre revisa e assina a decisão</div>
+        <div>Criptografia TLS em todo o processo</div>
+        <div>Conforme LGPD — Lei 13.709/2018</div>
+        <div>Conforme OAB Recomendação 001/2024</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <section class="sect">
+    <div class="label">Dúvidas frequentes</div>
+    <h2>Perguntas rápidas</h2>
+  </section>
+  <div class="faq">
+    <div class="qa"><h4>Preciso instalar algo?</h4><p>Não. Funciona pelo navegador, no computador ou no celular. Você faz upload do PDF e baixa o parecer.</p></div>
+    <div class="qa"><h4>Qual o tamanho máximo de contrato?</h4><p>Em torno de 100 páginas. PDF com texto nativo gera resultado mais preciso que escaneado.</p></div>
+    <div class="qa"><h4>O contrato fica guardado?</h4><p>Não. O documento é analisado e excluído automaticamente. Fica apenas o parecer, que é seu. Nada treina IA.</p></div>
+    <div class="qa"><h4>Funciona para contrato em inglês?</h4><p>Funciona melhor em português. Em inglês o resultado pode ser menos preciso.</p></div>
+    <div class="qa"><h4>Tem fidelidade?</h4><p>Não. É mensal, cancela quando quiser, sem multa.</p></div>
+    <div class="qa"><h4>Isso substitui o advogado?</h4><p>Não. É apoio à decisão. A revisão final e a responsabilidade continuam sendo do advogado que assina.</p></div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="rule"></div>
+    <p><b>ContratoIQ</b> — Análise de Contratos · contratoiq.com · joiciano@contratoiq.com</p>
+    <p class="mono">CNPJ 66.816.981/0001-58 · Joiciano Gomes Soares de Lima · Fortaleza/CE · © 2026 ContratoIQ</p>
+    <p style="margin-top:12px;max-width:640px;margin-left:auto;margin-right:auto">A análise é uma ferramenta de apoio à decisão. A revisão final e a responsabilidade permanecem sempre do advogado.</p>
+  </div>
+
+</div>
+
+<button id="pdfBtn" onclick="baixarPDF()" aria-label="Baixar guia em PDF">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>
+  </svg>
+  Baixar PDF
+</button>
+
+<script>
+function baixarPDF(){
+  var btn = document.getElementById('pdfBtn');
+  var el  = document.getElementById('guia');
+  btn.style.display = 'none';
+
+  var w = el.offsetWidth, h = el.offsetHeight;
+  var opt = {
+    margin: 0,
+    filename: 'Guia-de-Uso-ContratoIQ.pdf',
+    image: { type: 'jpeg', quality: 1 },
+    html2canvas: { scale: 2, backgroundColor: '#F5F0E8', useCORS: true, scrollY: 0, windowWidth: w },
+    jsPDF: { unit: 'px', format: [w, h], orientation: (w > h ? 'landscape' : 'portrait'), hotfixes: ['px_scaling'] }
+  };
+  html2pdf().set(opt).from(el).save().then(function(){ btn.style.display=''; })
+    .catch(function(){ btn.style.display=''; });
+}
+</script>
+</body>
+</html>
