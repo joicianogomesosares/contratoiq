@@ -27,10 +27,13 @@ body{background:#05070F;color:var(--ink)}
 .hero .divider{width:92px;height:3px;margin:26px auto 20px;background:linear-gradient(90deg,var(--gold),var(--cyan));border-radius:3px;box-shadow:0 0 18px rgba(54,224,224,.6)}
 .hero p{color:#eaf0ff;font-size:19px;max-width:660px;margin:0 auto;line-height:1.7;text-shadow:0 1px 16px rgba(0,0,0,.85)}
 .hero .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
-.btn{display:inline-block;background:linear-gradient(135deg,var(--cyan),#2bb8c9);color:#04121a;text-decoration:none;font-family:var(--head);font-weight:700;letter-spacing:.3px;padding:15px 32px;border-radius:12px;box-shadow:0 0 30px rgba(54,224,224,.4);font-size:16px;cursor:pointer;border:0}
-.btn:hover{filter:brightness(1.08)}
-.btn.o{background:transparent;border:1px solid var(--line);color:var(--ink);box-shadow:none}
-.btn.gold{background:linear-gradient(135deg,var(--gold),#e0a52e);box-shadow:0 0 30px rgba(255,201,77,.4)}
+.btn{display:inline-block;background:linear-gradient(180deg,#43e8e8,#1f9fb0);color:#04121a;text-decoration:none;font-family:var(--head);font-weight:700;letter-spacing:.3px;padding:15px 32px;border-radius:14px;font-size:16px;cursor:pointer;border:0;position:relative;box-shadow:0 6px 0 #15707e,0 12px 22px rgba(0,0,0,.45),0 0 26px rgba(54,224,224,.35);transition:transform .08s ease,box-shadow .08s ease,filter .15s}
+.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 #15707e,0 4px 12px rgba(0,0,0,.4)}
+.btn.o{background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.03));border:1px solid var(--line);color:var(--ink);box-shadow:0 6px 0 rgba(0,0,0,.35),0 12px 20px rgba(0,0,0,.4)}
+.btn.o:active{transform:translateY(5px);box-shadow:0 1px 0 rgba(0,0,0,.35),0 4px 10px rgba(0,0,0,.4)}
+.btn.gold{background:linear-gradient(180deg,#ffd76b,#e0a52e);box-shadow:0 6px 0 #a9741a,0 12px 22px rgba(0,0,0,.45),0 0 26px rgba(255,201,77,.4)}
+.btn.gold:active{transform:translateY(5px);box-shadow:0 1px 0 #a9741a,0 4px 12px rgba(0,0,0,.4)}
 .free{display:block;color:var(--muted);font-size:13px;margin-top:12px;letter-spacing:.5px}
 .stats-band{max-width:1000px;margin:10px auto 0;padding:0 24px}
 .stats-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;background:linear-gradient(120deg,rgba(255,201,77,.08),rgba(54,224,224,.06));border:1px solid rgba(54,224,224,.25);border-radius:18px;padding:22px}
@@ -306,7 +309,7 @@ footer{border-top:1px solid var(--line);background:rgba(5,7,15,.6);backdrop-filt
     let ok=true;
     const cands = musicSrc ? [musicSrc] : ['assets/music.mp3','assets/music.mpeg','assets/music.mpg','assets/music.m4a','assets/music.ogg','assets/music.wav'];
     let ci=0;
-    function tryNext(){ if(ci>=cands.length){ ok=false; if(btn) btn.style.display='none'; return; } audio.src=cands[ci++]; audio.load(); }
+    function tryNext(){ if(ci>=cands.length){ ok=false; return; } audio.src=cands[ci++]; audio.load(); }
     audio.addEventListener('error',tryNext);
     const btn=document.createElement('button');
     btn.setAttribute('aria-label','Ligar/desligar música');
@@ -326,6 +329,7 @@ footer{border-top:1px solid var(--line);background:rgba(5,7,15,.6);backdrop-filt
 if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){
   document.body.style.background='radial-gradient(circle at 50% 18%,#171033,#05070F)';
   var c=document.getElementById('bg'); if(c) c.style.display='none';
+  if(window.setupMusic) setupMusic();
 } else {
   setupBlackHole('bg');
 }
