@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ContratoIQ — Sobre / Manifesto</title>
+<title>ContratoIQ — Aprenda uma vez. Domine para sempre.</title>
 <meta name="description" content="ContratoIQ: aprenda qualquer assunto e domine para sempre. Do zero à maestria, 15 minutos por dia, com um método que garante compreensão, retenção e prática — para qualquer idade.">
 <meta property="og:title" content="ContratoIQ — Aprenda uma vez. Domine para sempre.">
 <meta property="og:description" content="Um sistema que transforma qualquer assunto em competência verificável: do desconhecimento à maestria, 15 minutos por dia.">
@@ -32,7 +32,6 @@ body{background:#05070F;color:var(--ink)}
 .btn.o{background:transparent;border:1px solid var(--line);color:var(--ink);box-shadow:none}
 .btn.gold{background:linear-gradient(135deg,var(--gold),#e0a52e);box-shadow:0 0 30px rgba(255,201,77,.4)}
 .free{display:block;color:var(--muted);font-size:13px;margin-top:12px;letter-spacing:.5px}
-/* faixa de números */
 .stats-band{max-width:1000px;margin:10px auto 0;padding:0 24px}
 .stats-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;background:linear-gradient(120deg,rgba(255,201,77,.08),rgba(54,224,224,.06));border:1px solid rgba(54,224,224,.25);border-radius:18px;padding:22px}
 @media(max-width:680px){.stats-inner{grid-template-columns:1fr 1fr}}
@@ -57,12 +56,10 @@ body{background:#05070F;color:var(--ink)}
 .pillar .ic svg{width:30px;height:30px}
 .pillar h4{font-family:var(--head);font-weight:700;font-size:18px;margin:4px 0 8px;color:#fff}
 .pillar p{color:#cdd8ea;font-size:15px;line-height:1.6}
-/* stepper "como funciona" */
 .steps{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;margin-top:6px}
 .step{flex:1;min-width:120px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
 .step .n{width:30px;height:30px;border-radius:50%;background:rgba(54,224,224,.15);border:1px solid rgba(54,224,224,.4);color:var(--cyan);font-family:var(--head);font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:14px}
 .step b{font-family:var(--head);font-weight:600;font-size:15px;color:#fff;display:block}
-/* personas */
 .personas{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
 @media(max-width:760px){.personas{grid-template-columns:1fr}.steps .step{min-width:45%}}
 .persona{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;padding:20px}
@@ -75,9 +72,7 @@ footer{border-top:1px solid var(--line);background:rgba(5,7,15,.6);backdrop-filt
 .foot-inner a{color:var(--muted);text-decoration:none;display:block;margin:6px 0}.foot-inner a:hover{color:var(--cyan)}
 .foot-col h5{font-family:var(--head);font-weight:600;color:#fff;font-size:14px;margin-bottom:8px;letter-spacing:.5px}
 .foot-bottom{max-width:1000px;margin:24px auto 0;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
-/* tablets */
 @media(max-width:1024px){.pillars{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:54px}}
-/* celulares */
 @media(max-width:560px){
   .nav{flex-wrap:wrap;gap:10px;padding:12px 16px}
   .nav .logo{font-size:20px}
@@ -98,7 +93,15 @@ footer{border-top:1px solid var(--line);background:rgba(5,7,15,.6);backdrop-filt
   .foot-inner{flex-direction:column;gap:18px}
 }
 @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
-</style><link rel="stylesheet" href="logo.css"></head><body>
+/* ===== logo animado (embutido) ===== */
+.logo{background:linear-gradient(90deg,#FFC94D,#36E0E0,#A77BFF,#FF6FD8,#FFC94D);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent !important;filter:drop-shadow(0 0 10px rgba(54,224,224,.45)) drop-shadow(0 0 22px rgba(167,123,255,.25));animation:logoSweep 6s linear infinite, logoGlow 3.2s ease-in-out infinite, logoFloat 5s ease-in-out infinite;display:inline-block;transform-style:preserve-3d;transition:transform .25s ease;text-shadow:none !important;cursor:pointer;will-change:background-position,transform,filter}
+.logo span{color:transparent !important;-webkit-text-fill-color:transparent;text-shadow:none !important}
+.logo:hover{transform:perspective(500px) rotateX(6deg) rotateY(14deg) scale(1.05)}
+@keyframes logoSweep{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+@keyframes logoGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(54,224,224,.35)) drop-shadow(0 0 18px rgba(167,123,255,.2))}50%{filter:drop-shadow(0 0 16px rgba(54,224,224,.7)) drop-shadow(0 0 34px rgba(255,201,77,.4))}}
+@keyframes logoFloat{0%,100%{transform:perspective(500px) rotateX(0deg) translateY(0)}50%{transform:perspective(500px) rotateX(7deg) translateY(-1.5px)}}
+@media (prefers-reduced-motion: reduce){.logo{animation:logoSweep 10s linear infinite}}
+</style></head><body>
 <canvas id="bg"></canvas>
 <div class="content">
 <div class="nav"><div class="logo">CONTRATO<span>IQ</span></div>
@@ -214,8 +217,112 @@ footer{border-top:1px solid var(--line);background:rgba(5,7,15,.6);backdrop-filt
   <div class="foot-bottom"><span>© 2026 ContratoIQ. Todos os direitos reservados.</span><span>Feito para quem leva o aprendizado a sério.</span></div>
 </footer>
 </div>
-<script src="blackhole.js"></script>
 <script>
+/* ===== Buraco negro + vídeo + música (embutido) ===== */
+(function(){
+  const FRAG = `
+  precision highp float;
+  uniform float t; uniform vec2 res;
+  float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+  float noise(vec2 p){vec2 i=floor(p),f=fract(p);float a=hash(i),b=hash(i+vec2(1.,0.)),c=hash(i+vec2(0.,1.)),d=hash(i+vec2(1.,1.));vec2 u=f*f*(3.-2.*f);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
+  float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.02;a*=.5;}return v;}
+  void main(){
+    vec2 uv=(gl_FragCoord.xy-0.5*res)/res.y;
+    float r=length(uv);
+    vec2 duv=vec2(uv.x, uv.y/0.42);
+    float dr=length(duv);
+    float da=atan(duv.y,duv.x);
+    float swirl=da + 1.25/(dr+0.08) - t*0.45;
+    float disk=0.0;
+    float inner=0.33, outer=1.15;
+    if(dr>inner && dr<outer){
+      float band=fbm(vec2(swirl*1.7, dr*3.6 - t*0.25));
+      band=pow(band,1.4);
+      float falloff=smoothstep(outer,inner+0.02,dr)*smoothstep(inner,inner+0.06,dr);
+      disk=band*falloff;
+    }
+    float dopp=0.55+0.7*smoothstep(0.35,-0.35,uv.x);
+    disk*=dopp*1.7;
+    vec3 cool=vec3(0.42,0.16,0.62);
+    vec3 mid=vec3(1.0,0.52,0.13);
+    vec3 hot=vec3(1.0,0.95,0.78);
+    vec3 col=mix(cool,mid,smoothstep(0.0,0.5,disk));
+    col=mix(col,hot,smoothstep(0.5,1.25,disk));
+    col*=disk;
+    float horizon=0.30;
+    float photon=exp(-pow((r-horizon-0.015)/0.014,2.0))*1.5;
+    col+=vec3(1.0,0.86,0.72)*photon;
+    col*=smoothstep(horizon-0.012,horizon+0.02,r);
+    vec2 sc=floor(gl_FragCoord.xy*0.6);
+    float st=step(0.9975,hash(sc));
+    col+=vec3(st)*(0.4+0.5*sin(t*2.5+hash(sc)*6.28))*smoothstep(0.55,1.3,r);
+    col*=1.0-0.28*smoothstep(0.75,1.7,r);
+    col=pow(col,vec3(0.92));
+    gl_FragColor=vec4(col,1.0);
+  }`;
+  const VERT='void main(){gl_Position=vec4(position,1.0);}';
+  function startShader(canvas){
+    if(typeof THREE==='undefined'){canvas.style.background='radial-gradient(circle at 50% 50%,#1a0e2e,#05070F)';return;}
+    const renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    const scene=new THREE.Scene();const cam=new THREE.Camera();
+    const uni={t:{value:0},res:{value:new THREE.Vector2(innerWidth,innerHeight)}};
+    const mat=new THREE.ShaderMaterial({uniforms:uni,vertexShader:VERT,fragmentShader:FRAG});
+    scene.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(2,2),mat));
+    function size(){renderer.setSize(innerWidth,innerHeight);uni.res.value.set(innerWidth*Math.min(devicePixelRatio,2),innerHeight*Math.min(devicePixelRatio,2));}
+    size();addEventListener('resize',size);
+    let run=true; canvas._stopBH=()=>{run=false;};
+    let t0=performance.now();
+    (function loop(){if(!run)return;requestAnimationFrame(loop);uni.t.value=(performance.now()-t0)/1000;renderer.render(scene,cam);})();
+  }
+  window.setupBlackHole=function(canvasId,videoSrc){
+    const canvas=document.getElementById(canvasId);
+    if(!canvas)return;
+    canvas.style.cssText+=';position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;';
+    startShader(canvas);
+    if(!document.getElementById('bh-scrim')){
+      const scrim=document.createElement('div');scrim.id='bh-scrim';
+      scrim.style.cssText='position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(130% 130% at 50% 38%,rgba(4,6,14,.38) 0%,rgba(4,6,14,.66) 55%,rgba(4,6,14,.88) 100%)';
+      document.body.appendChild(scrim);
+    }
+    const src=videoSrc||'assets/blackhole.mp4';
+    const v=document.createElement('video');
+    v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('loop','');
+    v.style.cssText='position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none;';
+    v.src=src;
+    v.addEventListener('loadeddata',function(){v.style.display='block';if(canvas._stopBH)canvas._stopBH();canvas.style.display='none';v.play().catch(()=>{});});
+    v.addEventListener('ended',function(){v.currentTime=0;v.play().catch(()=>{});});
+    v.addEventListener('error',function(){v.remove();});
+    document.body.appendChild(v);
+    setupMusic();
+  };
+  let musicReady=false;
+  window.setupMusic=function(musicSrc){
+    if(musicReady)return; musicReady=true;
+    const audio=document.createElement('audio');
+    audio.loop=true; audio.preload='auto'; audio.volume=0.35; audio.setAttribute('loop','');
+    audio.addEventListener('ended',function(){audio.currentTime=0;audio.play().catch(()=>{});});
+    document.body.appendChild(audio);
+    let ok=true;
+    const cands = musicSrc ? [musicSrc] : ['assets/music.mp3','assets/music.mpeg','assets/music.mpg','assets/music.m4a','assets/music.ogg','assets/music.wav'];
+    let ci=0;
+    function tryNext(){ if(ci>=cands.length){ ok=false; if(btn) btn.style.display='none'; return; } audio.src=cands[ci++]; audio.load(); }
+    audio.addEventListener('error',tryNext);
+    const btn=document.createElement('button');
+    btn.setAttribute('aria-label','Ligar/desligar música');
+    btn.innerHTML='🔈';
+    btn.style.cssText='position:fixed;bottom:18px;right:18px;z-index:60;width:46px;height:46px;border-radius:50%;border:1px solid rgba(120,150,255,.3);background:rgba(12,18,38,.8);color:#E7ECFF;font-size:20px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 0 18px rgba(54,224,224,.25)';
+    document.body.appendChild(btn);
+    let playing=false;
+    function play(){ if(!ok)return; audio.play().then(()=>{playing=true;btn.innerHTML='🔊';}).catch(()=>{}); }
+    function pause(){ audio.pause(); playing=false; btn.innerHTML='🔈'; }
+    btn.addEventListener('click',function(e){ e.stopPropagation(); playing?pause():play(); });
+    function firstGesture(){ if(!playing&&ok&&localStorage.getItem('ciq_music')!=='off'){ play(); } document.removeEventListener('click',firstGesture); }
+    document.addEventListener('click',firstGesture,{once:true});
+    btn.addEventListener('click',function(){ localStorage.setItem('ciq_music', playing?'on':'off'); });
+    tryNext();
+  };
+})();
 if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){
   document.body.style.background='radial-gradient(circle at 50% 18%,#171033,#05070F)';
   var c=document.getElementById('bg'); if(c) c.style.display='none';
