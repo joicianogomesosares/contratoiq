@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContratoIQ — Plataforma de Ensino</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F6EEE0; --cream2:#FBF5EA; --paper:#FFFDF8;
+  --ink:#2A2620; --ink2:#5C544A; --muted:#8B8275;
+  --green:#3F7D5B; --green-d:#2F5E44; --green-l:#E6F0E8;
+  --amber:#E8A53D; --amber-d:#C8821C; --gold:#F2C14E;
+  --terra:#C8643C; --terra-d:#A84E2C; --terra-l:#F7E5DB;
+  --blue:#3E6B8C; --purple:#6B5B8A;
+  --line:#E5D9C5; --line2:#D8C9B0;
+  --shadow:#D8C7AD;
+  --ok:#3F7D5B; --err:#C8643C;
+  --r:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Inter',system-ui,sans-serif;background:#E9DFCB;color:var(--ink);
+  display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px;
+}
+.phone{
+  width:430px;max-width:100%;height:880px;max-height:94vh;background:var(--cream);
+  border-radius:38px;overflow:hidden;position:relative;
+  box-shadow:0 30px 70px rgba(60,45,25,.35), inset 0 0 0 8px #2A2620, inset 0 0 0 9px #3a342b;
+  display:flex;flex-direction:column;
+}
+.screen{position:absolute;inset:9px;border-radius:30px;overflow:hidden;display:none;flex-direction:column;background:var(--cream)}
+.screen.active{display:flex;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden}
+.scroll::-webkit-scrollbar{width:0}
+.pad{padding:22px}
+
+/* ---------- typography ---------- */
+.display{font-family:'Fraunces',serif;font-weight:900;line-height:1.04;letter-spacing:-.02em}
+.serif{font-family:'Fraunces',serif}
+h1.display{font-size:34px}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--terra)}
+.sub{color:var(--ink2);font-size:15px;line-height:1.5}
+
+/* ---------- buttons (game 3D) ---------- */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
+  font-family:'Inter';font-weight:800;font-size:16px;letter-spacing:.01em;
+  padding:16px 18px;border:none;border-radius:16px;cursor:pointer;color:#fff;
+  background:var(--green);box-shadow:0 5px 0 var(--green-d);transition:.06s;user-select:none;
+}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--green-d)}
+.btn.amber{background:var(--amber);box-shadow:0 5px 0 var(--amber-d)}
+.btn.terra{background:var(--terra);box-shadow:0 5px 0 var(--terra-d)}
+.btn.ghost{background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line2);border:2px solid var(--line)}
+.btn.ghost:active{box-shadow:0 1px 0 var(--line2)}
+.btn.sm{padding:11px 14px;font-size:14px;border-radius:13px;box-shadow:0 4px 0 var(--green-d)}
+.btn.sm:active{box-shadow:0 1px 0 var(--green-d)}
+.btn.block{width:100%}
+.link{background:none;border:none;color:var(--green-d);font-weight:700;font-family:'Inter';font-size:14px;cursor:pointer;padding:8px}
+.icn{width:22px;height:22px;display:inline-block;vertical-align:middle}
+
+/* ---------- top bar ---------- */
+.topbar{display:flex;align-items:center;gap:12px;padding:16px 18px;background:var(--paper);border-bottom:2px solid var(--line)}
+.back{width:38px;height:38px;border-radius:12px;background:var(--cream2);border:2px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;font-size:18px;color:var(--ink)}
+.back:active{transform:scale(.92)}
+.topttl{font-weight:800;font-size:16px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crumb{font-size:11px;color:var(--muted);font-weight:600}
+
+/* ---------- pills / stats ---------- */
+.stat{display:flex;align-items:center;gap:6px;font-weight:800;font-size:15px;padding:7px 12px;border-radius:30px;background:var(--paper);border:2px solid var(--line)}
+.stat.flame{color:var(--terra)}
+.stat.gem{color:var(--blue)}
+.stat.heart{color:#D14B4B}
+.statrow{display:flex;gap:9px;padding:14px 18px;background:var(--cream);align-items:center}
+
+/* ---------- cards ---------- */
+.card{background:var(--paper);border:2px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:0 4px 0 var(--shadow)}
+.card.flat{box-shadow:none}
+.tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--terra-l);color:var(--terra-d)}
+.tag.green{background:var(--green-l);color:var(--green-d)}
+.tag.amber{background:#FBEFD2;color:var(--amber-d)}
+
+/* ---------- node / trilha ---------- */
+.path{display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 0 30px}
+.node{position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer}
+.bub{width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;
+  border:none;box-shadow:0 7px 0 var(--green-d), inset 0 -4px 8px rgba(0,0,0,.12);background:var(--green);color:#fff;transition:.08s}
+.node:active .bub{transform:translateY(5px);box-shadow:0 2px 0 var(--green-d), inset 0 -4px 8px rgba(0,0,0,.12)}
+.bub.done{background:var(--gold);box-shadow:0 7px 0 var(--amber-d), inset 0 -4px 8px rgba(0,0,0,.12)}
+.bub.lock{background:#CFC4B0;box-shadow:0 7px 0 #B3A78F;color:#8a8170;cursor:default}
+.bub.active{background:var(--terra);box-shadow:0 7px 0 var(--terra-d), inset 0 -4px 8px rgba(0,0,0,.12)}
+.bub.active::after{content:"";position:absolute;width:96px;height:96px;border-radius:50%;border:3px dashed var(--terra);opacity:.45;animation:spin 9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nlabel{font-size:12px;font-weight:700;color:var(--ink2);margin-top:8px;max-width:130px;text-align:center}
+.connect{width:5px;height:34px;background:repeating-linear-gradient(var(--line2) 0 7px,transparent 7px 14px);margin:2px 0}
+.startflag{position:absolute;top:-14px;right:-58px;background:var(--paper);border:2px solid var(--terra);color:var(--terra-d);font-weight:800;font-size:11px;padding:5px 9px;border-radius:10px;box-shadow:0 3px 0 var(--line2);white-space:nowrap}
+.startflag::before{content:"";position:absolute;left:-7px;top:11px;border:6px solid transparent;border-right-color:var(--terra)}
+
+/* ---------- list row ---------- */
+.row{display:flex;align-items:center;gap:14px;padding:15px;background:var(--paper);border:2px solid var(--line);border-radius:15px;cursor:pointer;box-shadow:0 4px 0 var(--shadow);transition:.07s}
+.row:active{transform:translateY(3px);box-shadow:0 1px 0 var(--shadow)}
+.row.lock{opacity:.55;box-shadow:none;cursor:default}
+.row.lock:active{transform:none}
+.ricon{width:48px;height:48px;border-radius:13px;flex:none;display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--green-l)}
+.rmain{flex:1;min-width:0}
+.rttl{font-weight:800;font-size:15px;margin-bottom:3px}
+.rsub{font-size:12px;color:var(--muted);font-weight:600}
+.rprog{height:7px;border-radius:6px;background:var(--cream);overflow:hidden;margin-top:8px}
+.rprog>i{display:block;height:100%;background:var(--green);border-radius:6px}
+
+/* ---------- progress ring ---------- */
+.ring{position:relative;width:120px;height:120px}
+.ring svg{transform:rotate(-90deg)}
+.ringc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+
+/* ---------- lesson ---------- */
+.lessbar{height:14px;background:var(--cream2);border-radius:10px;overflow:hidden;border:2px solid var(--line)}
+.lessbar>i{display:block;height:100%;background:linear-gradient(var(--gold),var(--amber));border-radius:8px;transition:.4s}
+.bubble{background:var(--paper);border:2px solid var(--line);border-radius:18px;border-top-left-radius:4px;padding:16px;font-size:15px;line-height:1.55;box-shadow:0 4px 0 var(--shadow)}
+.mascot{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-d));display:flex;align-items:center;justify-content:center;font-size:34px;flex:none;box-shadow:0 5px 0 var(--green-d)}
+.term{color:var(--terra-d);font-weight:800;border-bottom:2px dotted var(--terra);cursor:pointer}
+.opt{display:flex;align-items:center;gap:12px;padding:15px;border:2px solid var(--line);border-radius:15px;background:var(--paper);cursor:pointer;font-weight:700;font-size:15px;box-shadow:0 4px 0 var(--shadow);transition:.07s}
+.opt:active{transform:translateY(3px);box-shadow:0 1px 0 var(--shadow)}
+.opt.sel{border-color:var(--green);background:var(--green-l)}
+.opt.right{border-color:var(--green);background:var(--green-l);color:var(--green-d)}
+.opt.wrong{border-color:var(--terra);background:var(--terra-l);color:var(--terra-d)}
+.opt .k{width:30px;height:30px;border-radius:9px;background:var(--cream2);border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:none}
+.feedback{padding:16px;border-radius:15px;font-weight:600;font-size:14px;line-height:1.5}
+.feedback.ok{background:var(--green-l);color:var(--green-d);border:2px solid var(--green)}
+.feedback.no{background:var(--terra-l);color:var(--terra-d);border:2px solid var(--terra)}
+
+/* ---------- glossary tooltip ---------- */
+.gloss{position:absolute;left:18px;right:18px;bottom:18px;background:var(--ink);color:var(--cream);border-radius:16px;padding:16px;box-shadow:0 12px 30px rgba(0,0,0,.4);display:none;z-index:40}
+.gloss.show{display:block;animation:fade .25s}
+.gloss b{color:var(--gold)}
+.gloss .al{display:block;margin-top:7px;font-style:italic;color:#cdbfa6;font-size:13px}
+.gloss .x{position:absolute;top:10px;right:12px;cursor:pointer;font-weight:800;opacity:.7}
+
+/* ---------- bottom nav ---------- */
+.tabbar{display:flex;background:var(--paper);border-top:2px solid var(--line);padding:8px 6px 10px}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px;cursor:pointer;color:var(--muted);font-size:10px;font-weight:700;border-radius:12px}
+.tab.on{color:var(--green-d)}
+.tab.on .ti{background:var(--green-l)}
+.ti{width:46px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+
+/* ---------- inputs ---------- */
+.field{width:100%;padding:15px;border:2px solid var(--line);border-radius:14px;font-family:'Inter';font-size:15px;font-weight:600;background:var(--paper);color:var(--ink);margin-bottom:12px}
+.field:focus{outline:none;border-color:var(--green)}
+.label{font-weight:800;font-size:13px;margin-bottom:7px;display:block;color:var(--ink2)}
+
+/* ---------- chips ---------- */
+.chip{padding:13px 16px;border:2px solid var(--line);border-radius:14px;background:var(--paper);font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 0 var(--shadow);transition:.07s;display:flex;align-items:center;gap:10px}
+.chip:active{transform:translateY(3px);box-shadow:0 1px 0 var(--shadow)}
+.chip.sel{border-color:var(--green);background:var(--green-l)}
+
+/* ---------- upload / ingest ---------- */
+.drop{border:3px dashed var(--line2);border-radius:18px;padding:28px;text-align:center;background:var(--cream2)}
+.pdf{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--paper);border:2px solid var(--line);border-radius:12px;font-size:13px;font-weight:700}
+.pdf .ic{width:30px;height:36px;background:var(--terra-l);border:1.5px solid var(--terra);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--terra-d);flex:none}
+.stepline{display:flex;gap:10px;align-items:flex-start}
+.stepdot{width:30px;height:30px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;background:var(--green)}
+.stepdot.run{background:var(--amber);animation:pulse 1.1s infinite}
+.stepdot.wait{background:#CFC4B0}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+/* ---------- confetti dots ---------- */
+.celebrate{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:100%;gap:16px;padding:30px;position:relative;overflow:hidden}
+.dot{position:absolute;width:10px;height:10px;border-radius:2px;animation:fall 2.4s linear infinite}
+@keyframes fall{0%{transform:translateY(-40px) rotate(0)}100%{transform:translateY(720px) rotate(540deg)}}
+
+.center{display:flex;flex-direction:column;align-items:center}
+.gap8{gap:8px}.gap10{gap:10px}.gap12{gap:12px}.gap14{gap:14px}.gap16{gap:16px}
+.col{display:flex;flex-direction:column}
+.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}.mt24{margin-top:24px}
+.mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.mb16{margin-bottom:16px}.mb20{margin-bottom:20px}
+.tc{text-align:center}.b{font-weight:800}.small{font-size:12px}.muted{color:var(--muted)}
+.divider{height:2px;background:var(--line);margin:16px 0;border-radius:2px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+<div class="phone">
+
+  <!-- ============ 1. LANDING ============ -->
+  <section class="screen active" id="s-landing">
+    <div class="scroll">
+      <div class="pad" style="min-height:100%;display:flex;flex-direction:column">
+        <div class="center mt16">
+          <div style="width:84px;height:84px;border-radius:24px;background:var(--green);display:flex;align-items:center;justify-content:center;box-shadow:0 7px 0 var(--green-d)">
+            <span style="font-size:44px">🧠</span>
+          </div>
+          <div class="display mt16 tc" style="font-size:30px">Contrato<span style="color:var(--terra)">IQ</span></div>
+          <div class="small b mt8" style="color:var(--muted);letter-spacing:.1em">DOMINE QUALQUER ASSUNTO</div>
+        </div>
+
+        <div class="mt24 tc">
+          <h1 class="display" style="font-size:32px">Aprenda de verdade.<br>E <span style="color:var(--terra)">não esqueça.</span></h1>
+          <p class="sub mt12">Trilhas que partem do zero e constroem domínio completo — no ritmo de um jogo, com a profundidade de um mestre.</p>
+        </div>
+
+        <div class="mt20 col gap12">
+          <div class="card flat" style="display:flex;gap:13px;align-items:center;padding:14px">
+            <div style="font-size:28px">🧩</div>
+            <div><div class="b">Entenda o porquê</div><div class="small muted">Cada ideia nasce de uma história real</div></div>
+          </div>
+          <div class="card flat" style="display:flex;gap:13px;align-items:center;padding:14px">
+            <div style="font-size:28px">🔁</div>
+            <div><div class="b">Errou? Recomeça mais fácil</div><div class="small muted">Ninguém fica para trás, nunca</div></div>
+          </div>
+          <div class="card flat" style="display:flex;gap:13px;align-items:center;padding:14px">
+            <div style="font-size:28px">🔥</div>
+            <div><div class="b">Pouco por dia, sem pressa</div><div class="small muted">A ofensiva te puxa de volta</div></div>
+          </div>
+        </div>
+
+        <div style="flex:1"></div>
+        <div class="col gap10 mt20">
+          <button class="btn" onclick="entrarComGoogle()">COMEÇAR DE GRAÇA</button>
+          <button class="btn ghost" onclick="entrarComGoogle()">JÁ TENHO CONTA</button>
+        </div>
+        <p class="tc small muted mt12">Grátis para sempre. O conhecimento profundo não devia ter preço.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. ONBOARDING — escolher tema ============ -->
+  <section class="screen" id="s-onb1">
+    <div class="topbar"><div class="back" onclick="go('s-landing')">‹</div><div class="topttl">Vamos começar</div><div class="small b muted">1/3</div></div>
+    <div class="scroll pad">
+      <div class="eyebrow">PASSO 1</div>
+      <h1 class="display mt8" style="font-size:26px">O que você quer dominar primeiro?</h1>
+      <p class="sub mt8">Cada tema é uma jornada completa, do absoluto zero ao avançado.</p>
+      <div class="col gap12 mt20" id="temas-list">
+        <div class="small muted tc" style="padding:20px">Carregando temas…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. ONBOARDING — calibração (cold start) ============ -->
+  <section class="screen" id="s-onb2">
+    <div class="topbar"><div class="back" onclick="go('s-onb1')">‹</div><div class="topttl">Calibragem</div><div class="small b muted">2/3</div></div>
+    <div class="scroll pad">
+      <div class="center"><div class="mascot" style="width:72px;height:72px;font-size:38px">🧠</div></div>
+      <div class="bubble mt16" style="border-top-left-radius:18px">Antes de montar sua trilha de <b id="cal-theme">Língua Portuguesa</b>, me conta: <b>você já viu isso antes?</b><br><span class="small muted">Isso só decide por onde você entra. Você nunca pula o que ainda não domina.</span></div>
+      <div class="col gap12 mt20">
+        <div class="chip" onclick="calib(this)"><span style="font-size:22px">🌱</span><div><div class="b">Nunca estudei</div><div class="small muted">Quero do começo de tudo</div></div></div>
+        <div class="chip" onclick="calib(this)"><span style="font-size:22px">🌿</span><div><div class="b">Vi um pouco</div><div class="small muted">Lembro de algumas coisas</div></div></div>
+        <div class="chip" onclick="calib(this)"><span style="font-size:22px">🌳</span><div><div class="b">Estudei bastante</div><div class="small muted">Quero achar minhas falhas</div></div></div>
+      </div>
+      <div id="cal-next" style="display:none" class="mt24">
+        <div class="feedback ok mb12">Perfeito. Como você ainda não tem histórico aqui, vou começar sua trilha do conceito-base e subir rápido enquanto você for acertando.</div>
+        <button class="btn" onclick="iniciarTrilha()">VER MINHA TRILHA</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. ONBOARDING — sondagem rápida ============ -->
+  <section class="screen" id="s-onb3">
+    <div class="topbar"><div class="back" onclick="go('s-onb2')">‹</div><div class="topttl">Sondagem</div><div class="small b muted">3/3</div></div>
+    <div class="scroll pad">
+      <div class="lessbar mb16"><i style="width:66%"></i></div>
+      <div class="tag green mb12">Pergunta 2 de 3 · fácil</div>
+      <h1 class="display" style="font-size:23px">Qual frase está escrita corretamente?</h1>
+      <div class="col gap12 mt20">
+        <div class="opt" onclick="sondar(this,false)"><span class="k">A</span> Houveram muitos erros no texto.</div>
+        <div class="opt" onclick="sondar(this,true)"><span class="k">B</span> Houve muitos erros no texto.</div>
+        <div class="opt" onclick="sondar(this,false)"><span class="k">C</span> Houveriam muitos erros no texto.</div>
+      </div>
+      <div id="sond-fb"></div>
+    </div>
+    <div class="pad" id="sond-cta" style="display:none;border-top:2px solid var(--line);background:var(--paper)">
+      <button class="btn" onclick="go('s-onb-done')">VER MINHA TRILHA</button>
+    </div>
+  </section>
+
+  <!-- ============ 5. ONBOARDING done / criar conta ============ -->
+  <section class="screen" id="s-onb-done">
+    <div class="celebrate">
+      <div id="conf1"></div>
+      <div class="mascot" style="width:90px;height:90px;font-size:48px;z-index:2">🧠</div>
+      <h1 class="display tc" style="font-size:28px;z-index:2">Sua trilha está pronta!</h1>
+      <p class="sub tc" style="z-index:2">Encontrei seu ponto de partida em <b id="done-theme">Língua Portuguesa</b>. São <b>8 seções</b> até o domínio completo.</p>
+      <div class="card mt8" style="width:100%;z-index:2">
+        <div class="b mb12">Para salvar seu progresso e ofensiva:</div>
+        <button class="btn block" onclick="go('s-sections')">COMEÇAR A APRENDER</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. SIGN UP ============ -->
+  <section class="screen" id="s-signup">
+    <div class="topbar"><div class="back" onclick="go('s-onb-done')">‹</div><div class="topttl">Criar conta</div></div>
+    <div class="scroll pad">
+      <h1 class="display" style="font-size:25px">Guarde seu progresso 🔒</h1>
+      <p class="sub mt8 mb20">Leva 20 segundos. Sua ofensiva agradece.</p>
+      <button class="btn ghost mb12" onclick="entrarComGoogle()"><span>🇬</span> Continuar com Google</button>
+      <div class="divider"></div>
+      <label class="label">Como te chamamos?</label>
+      <input class="field" placeholder="Seu nome ou apelido" disabled>
+      <label class="label">E-mail</label>
+      <input class="field" placeholder="voce@email.com" type="email" disabled>
+      <label class="label">Senha</label>
+      <input class="field" placeholder="Crie uma senha" type="password" disabled>
+      <button class="btn mt8" disabled style="opacity:.5" title="Em breve">CRIAR CONTA COM E-MAIL (EM BREVE)</button>
+      <p class="tc small muted mt8" id="signup-st"></p>
+      <p class="tc small muted">Já tem conta? <button class="link" onclick="go('s-login')">Entrar</button></p>
+    </div>
+  </section>
+
+  <!-- ============ 7. LOGIN ============ -->
+  <section class="screen" id="s-login">
+    <div class="topbar"><div class="back" onclick="go('s-landing')">‹</div><div class="topttl">Entrar</div></div>
+    <div class="scroll pad">
+      <div class="center mt12 mb20"><div style="width:64px;height:64px;border-radius:20px;background:var(--green);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 0 var(--green-d)"><span style="font-size:34px">🧠</span></div></div>
+      <h1 class="display tc" style="font-size:26px">Bem-vindo de volta</h1>
+      <p class="sub tc mt8 mb20">Sua trilha esperou por você.</p>
+      <button class="btn mb16" onclick="entrarComGoogle()"><span>🇬</span> Entrar com Google</button>
+      <div class="divider"></div>
+      <label class="label">E-mail</label>
+      <input class="field" placeholder="voce@email.com" type="email" disabled>
+      <label class="label">Senha</label>
+      <input class="field" placeholder="Sua senha" type="password" disabled>
+      <button class="btn ghost" disabled style="opacity:.5" title="Em breve">ENTRAR COM E-MAIL (EM BREVE)</button>
+      <p class="tc small muted mt8" id="login-st"></p>
+      <p class="tc small muted mt16">Novo aqui? <button class="link" onclick="go('s-onb1')">Criar conta grátis</button></p>
+    </div>
+  </section>
+
+  <!-- ============ 8. HOME / DASHBOARD ============ -->
+  <section class="screen" id="s-home">
+    <div class="statrow">
+      <div class="stat flame">🔥 <span data-st="streak">0</span></div>
+      <div class="stat gem">💎 <span data-st="gems">0</span></div>
+      <div class="stat heart">❤️ <span data-st="hearts">5</span></div>
+      <div style="flex:1"></div>
+      <div onclick="go('s-profile')" style="width:40px;height:40px;border-radius:50%;background:var(--terra);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;box-shadow:0 4px 0 var(--terra-d)">🦊</div>
+    </div>
+    <div class="scroll">
+      <div class="pad" style="padding-bottom:8px">
+        <div class="eyebrow">CONTINUE DE ONDE PAROU</div>
+        <div class="card mt12" style="background:linear-gradient(135deg,var(--green),var(--green-d));border:none;color:#fff;box-shadow:0 5px 0 var(--green-d)">
+          <div class="tag" style="background:rgba(255,255,255,.2);color:#fff">SEÇÃO 1 · UNIDADE 2</div>
+          <div class="serif mt12" style="font-size:21px;font-weight:700;line-height:1.2">Por que as palavras<br>têm classes?</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:14px">
+            <div style="flex:1" class="rprog"><i style="width:40%;background:var(--gold)"></i></div>
+            <div class="small b">4/10</div>
+          </div>
+          <button class="btn amber mt16" onclick="continuarOuEscolher()">CONTINUAR LIÇÃO →</button>
+        </div>
+      </div>
+
+      <div class="pad" style="padding-top:14px">
+        <div class="eyebrow mb12">SUA OFENSIVA DA SEMANA</div>
+        <div class="card flat" style="display:flex;justify-content:space-between;text-align:center;padding:14px 8px">
+          <div class="col" style="align-items:center;gap:4px"><div class="small b muted">S</div><div style="font-size:20px">🔥</div></div>
+          <div class="col" style="align-items:center;gap:4px"><div class="small b muted">T</div><div style="font-size:20px">🔥</div></div>
+          <div class="col" style="align-items:center;gap:4px"><div class="small b muted">Q</div><div style="font-size:20px">🔥</div></div>
+          <div class="col" style="align-items:center;gap:4px"><div class="small b muted">Q</div><div style="font-size:20px">🔥</div></div>
+          <div class="col" style="align-items:center;gap:4px"><div class="small b muted">S</div><div style="font-size:20px">🔥</div></div>
+          <div class="col" style="align-items:center;gap:4px"><div class="small b" style="color:var(--terra)">S</div><div style="font-size:20px;border:2px dashed var(--terra);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center">·</div></div>
+          <div class="col" style="align-items:center;gap:4px"><div class="small b muted">D</div><div style="font-size:20px;opacity:.3">·</div></div>
+        </div>
+
+        <div class="eyebrow mt20 mb12">REVISÃO DE HOJE</div>
+        <div class="row" onclick="go('s-review')"><div class="ricon" style="background:#FBEFD2">🔁</div><div class="rmain"><div class="rttl">3 conceitos esmaecendo</div><div class="rsub">Revise para não esquecer · +30 💎</div></div><div style="font-size:20px;color:var(--muted)">›</div></div>
+
+        <div class="eyebrow mt20 mb12">SEUS TEMAS</div>
+        <div class="col gap12">
+          <div class="row" onclick="go('s-sections')"><div class="ricon" style="background:#F7E5DB">📖</div><div class="rmain"><div class="rttl">Língua Portuguesa</div><div class="rsub">Seção 1 de 8 · 12% dominado</div><div class="rprog"><i style="width:12%"></i></div></div></div>
+          <div class="row" onclick="go('s-create')"><div class="ricon" style="background:var(--green-l)">➕</div><div class="rmain"><div class="rttl">Criar novo tema</div><div class="rsub">Suba seus PDFs e monte uma trilha</div></div><div style="font-size:20px;color:var(--muted)">›</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tabbar">
+      <div class="tab on"><div class="ti">🏠</div>Início</div>
+      <div class="tab" onclick="go('s-sections')"><div class="ti">🗺️</div>Trilha</div>
+      <div class="tab" onclick="go('s-league')"><div class="ti">🏆</div>Liga</div>
+      <div class="tab" onclick="go('s-profile')"><div class="ti">🦊</div>Perfil</div>
+    </div>
+  </section>
+
+  <!-- ============ 9. SEÇÕES (mapa) ============ -->
+  <section class="screen" id="s-sections">
+    <div class="topbar"><div class="back" onclick="go('s-home')">‹</div><div class="col" style="flex:1"><div class="topttl" style="font-size:15px" id="sec-tema-nome">Trilha</div><div class="crumb" id="sec-crumb">carregando…</div></div></div>
+    <div class="scroll pad">
+      <div class="path" id="path-secoes"><div class="small muted tc" style="padding:30px">Carregando sua trilha…</div></div>
+    </div>
+    <div class="tabbar">
+      <div class="tab" onclick="go('s-home')"><div class="ti">🏠</div>Início</div>
+      <div class="tab on"><div class="ti">🗺️</div>Trilha</div>
+      <div class="tab" onclick="go('s-league')"><div class="ti">🏆</div>Liga</div>
+      <div class="tab" onclick="go('s-profile')"><div class="ti">🦊</div>Perfil</div>
+    </div>
+  </section>
+
+  <!-- ============ 10. UNIDADES > ATIVIDADES > LIÇÕES ============ -->
+  <section class="screen" id="s-units">
+    <div class="topbar"><div class="back" onclick="go('s-sections')">‹</div><div class="col" style="flex:1"><div class="topttl" style="font-size:15px" id="unit-sec-titulo">Seção</div><div class="crumb" id="unit-crumb"></div></div></div>
+    <div class="scroll pad">
+      <div class="small muted mb12" id="unit-objetivo"></div>
+      <div class="col gap12" id="unidades-list"><div class="small muted tc" style="padding:20px">Carregando…</div></div>
+    </div>
+  </section>
+
+  <!-- ============ 11. LIÇÕES da atividade ============ -->
+  <section class="screen" id="s-lessons">
+    <div class="topbar"><div class="back" onclick="go('s-units')">‹</div><div class="col" style="flex:1"><div class="topttl" style="font-size:15px" id="less-unid-titulo">Unidade</div><div class="crumb" id="less-crumb"></div></div></div>
+    <div class="scroll pad">
+      <div class="path" id="path-licoes"><div class="small muted tc" style="padding:20px">Carregando…</div></div>
+    </div>
+  </section>
+
+  <!-- ============ 12. LIÇÃO ATIVA ============ -->
+  <section class="screen" id="s-lesson">
+    <div class="topbar" style="gap:14px">
+      <div class="back" onclick="if(confirm('Sair da lição? Seu progresso desta lição não será perdido.'))go('s-lessons')">✕</div>
+      <div class="lessbar" style="flex:1"><i id="less-prog" style="width:20%"></i></div>
+      <div class="stat heart" style="padding:6px 10px">❤️ <span id="hearts" data-st="hearts">5</span></div>
+    </div>
+    <div class="scroll pad" id="lesson-body"><!-- injected --></div>
+    <div class="pad" id="lesson-foot" style="border-top:2px solid var(--line);background:var(--paper)"><!-- injected --></div>
+    <!-- glossário -->
+    <div class="gloss" id="gloss">
+      <span class="x" onclick="document.getElementById('gloss').classList.remove('show')">✕</span>
+      <div id="gloss-body"></div>
+    </div>
+  </section>
+
+  <!-- ============ 13. LIÇÃO COMPLETA ============ -->
+  <section class="screen" id="s-lesson-done">
+    <div class="celebrate">
+      <div id="conf2"></div>
+      <div style="font-size:64px;z-index:2">🏅</div>
+      <h1 class="display tc" style="font-size:30px;z-index:2">Lição concluída!</h1>
+      <p class="sub tc" style="z-index:2" id="done-conceito-nome">Você avançou neste conceito. Isso é domínio de verdade.</p>
+      <div style="display:flex;gap:12px;z-index:2" class="mt8">
+        <div class="card flat tc" style="padding:14px 20px"><div style="font-size:24px">💎</div><div class="b mt8" data-st="gems">+15</div><div class="small muted">Gemas</div></div>
+        <div class="card flat tc" style="padding:14px 20px"><div style="font-size:24px">🔥</div><div class="b mt8" data-st="streak">0</div><div class="small muted">Ofensiva</div></div>
+      </div>
+      <div class="col gap10 mt16" style="width:100%;z-index:2">
+        <button class="btn" onclick="voltarParaSecaoAtual()">CONTINUAR NA SEÇÃO →</button>
+        <button class="btn ghost" onclick="go('s-home')">VOLTAR AO INÍCIO</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 14. REVISÃO ESPAÇADA ============ -->
+  <section class="screen" id="s-review">
+    <div class="topbar"><div class="back" onclick="go('s-home')">‹</div><div class="topttl">Revisão de hoje</div></div>
+    <div class="scroll pad">
+      <div class="center"><div class="mascot">🧠</div></div>
+      <div class="bubble mt16">Estes 3 conceitos estão começando a <b>esmaecer</b> na sua memória. Uma revisão rápida agora fixa cada um por muito mais tempo.</div>
+      <div class="col gap12 mt20">
+        <div class="row flat" style="cursor:default;box-shadow:none"><div class="ricon" style="background:#FBEFD2">📖</div><div class="rmain"><div class="rttl">Dígrafo</div><div class="rsub">Visto há 5 dias · retenção 62%</div><div class="rprog"><i style="width:62%;background:var(--amber)"></i></div></div></div>
+        <div class="row flat" style="cursor:default;box-shadow:none"><div class="ricon" style="background:#FBEFD2">📖</div><div class="rmain"><div class="rttl">Encontro consonantal</div><div class="rsub">Visto há 6 dias · retenção 58%</div><div class="rprog"><i style="width:58%;background:var(--amber)"></i></div></div></div>
+        <div class="row flat" style="cursor:default;box-shadow:none"><div class="ricon" style="background:#FBEFD2">📖</div><div class="rmain"><div class="rttl">Tonicidade</div><div class="rsub">Visto há 7 dias · retenção 49%</div><div class="rprog"><i style="width:49%;background:var(--terra)"></i></div></div></div>
+      </div>
+    </div>
+    <div class="pad" style="border-top:2px solid var(--line);background:var(--paper)"><button class="btn amber" onclick="go('s-lesson')">REVISAR AGORA · +30 💎</button></div>
+  </section>
+
+  <!-- ============ 15. PERFIL / DOMÍNIO ============ -->
+  <section class="screen" id="s-profile">
+    <div class="scroll">
+      <div class="pad" style="background:linear-gradient(160deg,var(--terra),var(--terra-d));color:#fff">
+        <div style="display:flex;justify-content:flex-end"><div onclick="go('s-settings')" style="cursor:pointer;font-size:22px">⚙️</div></div>
+        <div class="center">
+          <div style="width:88px;height:88px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:46px;box-shadow:0 6px 0 rgba(0,0,0,.2)">🦊</div>
+          <div class="display mt12" style="font-size:24px;color:#fff" id="perfil-nome">Você</div>
+          <div class="small b" style="opacity:.85">Aprendiz · entrou em junho</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:18px">
+          <div class="card flat tc" style="flex:1;background:rgba(255,255,255,.16);border:none;color:#fff"><div style="font-size:22px">🔥</div><div class="b mt8">7</div><div class="small" style="opacity:.85">Ofensiva</div></div>
+          <div class="card flat tc" style="flex:1;background:rgba(255,255,255,.16);border:none;color:#fff"><div style="font-size:22px">💎</div><div class="b mt8">340</div><div class="small" style="opacity:.85">Gemas</div></div>
+          <div class="card flat tc" style="flex:1;background:rgba(255,255,255,.16);border:none;color:#fff"><div style="font-size:22px">⭐</div><div class="b mt8">Prata</div><div class="small" style="opacity:.85">Liga</div></div>
+        </div>
+      </div>
+      <div class="pad">
+        <div class="eyebrow mb12">SEU MAPA DE DOMÍNIO</div>
+        <div class="card mb16">
+          <div style="display:flex;gap:18px;align-items:center">
+            <div class="ring">
+              <svg width="120" height="120"><circle cx="60" cy="60" r="50" fill="none" stroke="var(--cream)" stroke-width="14"/><circle cx="60" cy="60" r="50" fill="none" stroke="var(--green)" stroke-width="14" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="276"/></svg>
+              <div class="ringc"><div class="display" style="font-size:26px">12%</div><div class="small muted b">dominado</div></div>
+            </div>
+            <div style="flex:1">
+              <div class="small b mb8" style="color:var(--green-d)">● 18 conceitos firmes</div>
+              <div class="small b mb8" style="color:var(--amber-d)">● 6 esmaecendo</div>
+              <div class="small b" style="color:var(--muted)">● 122 a descobrir</div>
+            </div>
+          </div>
+        </div>
+        <div class="eyebrow mb12">SUAS LACUNAS (PRIORIDADE)</div>
+        <div class="col gap10">
+          <div class="row flat" style="box-shadow:none;cursor:default"><div class="ricon" style="background:var(--terra-l)">⚠️</div><div class="rmain"><div class="rttl">Tonicidade</div><div class="rsub">Trava 9 conceitos à frente</div></div><button class="btn sm terra" style="width:auto;box-shadow:0 4px 0 var(--terra-d)" onclick="go('s-lesson')">Treinar</button></div>
+          <div class="row flat" style="box-shadow:none;cursor:default"><div class="ricon" style="background:#FBEFD2">⚠️</div><div class="rmain"><div class="rttl">Encontro consonantal</div><div class="rsub">Trava 4 conceitos à frente</div></div><button class="btn sm amber" style="width:auto;box-shadow:0 4px 0 var(--amber-d)" onclick="go('s-lesson')">Treinar</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="tabbar">
+      <div class="tab" onclick="go('s-home')"><div class="ti">🏠</div>Início</div>
+      <div class="tab" onclick="go('s-sections')"><div class="ti">🗺️</div>Trilha</div>
+      <div class="tab" onclick="go('s-league')"><div class="ti">🏆</div>Liga</div>
+      <div class="tab on"><div class="ti">🦊</div>Perfil</div>
+    </div>
+  </section>
+
+  <!-- ============ 16. LIGA / RANKING ============ -->
+  <section class="screen" id="s-league">
+    <div class="topbar"><div class="back" onclick="go('s-home')">‹</div><div class="topttl">Liga Prata</div></div>
+    <div class="scroll pad">
+      <div class="center mb16">
+        <div style="font-size:46px">🥈</div>
+        <div class="b mt8">Faltam 4 dias · top 7 sobem para o Ouro</div>
+      </div>
+      <div class="col gap10">
+        <div class="row flat" style="box-shadow:none;cursor:default;border-color:var(--gold);background:#FFFBF0"><div class="b muted" style="width:24px">1</div><div class="ricon" style="background:#FBEFD2;width:38px;height:38px;font-size:18px">🦁</div><div class="rmain"><div class="rttl">Marina</div></div><div class="b" style="color:var(--amber-d)">1240💎</div></div>
+        <div class="row flat" style="box-shadow:none;cursor:default"><div class="b muted" style="width:24px">2</div><div class="ricon" style="background:var(--green-l);width:38px;height:38px;font-size:18px">🐢</div><div class="rmain"><div class="rttl">Pedro</div></div><div class="b">980💎</div></div>
+        <div class="row flat" style="box-shadow:none;cursor:default"><div class="b muted" style="width:24px">3</div><div class="ricon" style="background:#DCEAF2;width:38px;height:38px;font-size:18px">🐬</div><div class="rmain"><div class="rttl">Ana</div></div><div class="b">760💎</div></div>
+        <div class="divider" style="margin:8px 0"></div>
+        <div class="row" style="border-color:var(--terra);background:var(--terra-l);cursor:default"><div class="b" style="width:24px;color:var(--terra-d)">8</div><div class="ricon" style="background:var(--terra);width:38px;height:38px;font-size:18px">🦊</div><div class="rmain"><div class="rttl">Você</div><div class="rsub">100💎 para o top 7</div></div><div class="b" style="color:var(--terra-d)">340💎</div></div>
+        <div class="row flat" style="box-shadow:none;cursor:default"><div class="b muted" style="width:24px">9</div><div class="ricon" style="background:#EFE6D2;width:38px;height:38px;font-size:18px">🐢</div><div class="rmain"><div class="rttl">Carla</div></div><div class="b">300💎</div></div>
+      </div>
+      <button class="btn mt20" onclick="go('s-home')">GANHAR GEMAS AGORA</button>
+    </div>
+    <div class="tabbar">
+      <div class="tab" onclick="go('s-home')"><div class="ti">🏠</div>Início</div>
+      <div class="tab" onclick="go('s-sections')"><div class="ti">🗺️</div>Trilha</div>
+      <div class="tab on"><div class="ti">🏆</div>Liga</div>
+      <div class="tab" onclick="go('s-profile')"><div class="ti">🦊</div>Perfil</div>
+    </div>
+  </section>
+
+  <!-- ============ 17. CRIAR TEMA / INGESTÃO IA ============ -->
+  <section class="screen" id="s-create">
+    <div class="topbar"><div class="back" onclick="go('s-home')">‹</div><div class="topttl">Criar novo tema</div></div>
+    <div class="scroll pad">
+      <div class="eyebrow">INGESTÃO INTELIGENTE</div>
+      <h1 class="display mt8" style="font-size:23px">Suba os livros. O resto é com a gente.</h1>
+      <p class="sub mt8 mb16">Nossa IA lê tudo, identifica cada conceito, descobre a ordem certa de aprender e monta as 8 seções da trilha — do zero ao avançado.</p>
+      <label class="label">Nome do tema</label>
+      <input class="field" placeholder="Ex.: Direito Constitucional" value="Direito Constitucional">
+      <label class="label">Material de origem (PDF)</label>
+      <div class="drop mb12">
+        <div style="font-size:34px">📚</div>
+        <div class="b mt8">Arraste seus PDFs aqui</div>
+        <div class="small muted">Até 200 livros · ~300 páginas cada</div>
+        <button class="btn sm mt12" style="width:auto;margin:12px auto 0" onclick="addPdf()">Selecionar arquivos</button>
+      </div>
+      <div id="pdf-list" class="col gap8 mb16">
+        <div class="pdf"><div class="ic">PDF</div><div style="flex:1">Curso de Direito Constitucional.pdf<div class="small muted">412 págs</div></div>✓</div>
+        <div class="pdf"><div class="ic">PDF</div><div style="flex:1">Constituição Comentada.pdf<div class="small muted">388 págs</div></div>✓</div>
+      </div>
+      <button class="btn" onclick="go('s-ingest')">🤖 MONTAR TRILHA COM IA</button>
+      <p class="tc small muted mt12">Processado uma vez. Depois, milhares de alunos aprendem sem custo de IA.</p>
+    </div>
+  </section>
+
+  <!-- ============ 18. PROCESSAMENTO IA ============ -->
+  <section class="screen" id="s-ingest">
+    <div class="topbar"><div class="back" onclick="go('s-create')">‹</div><div class="topttl">Montando a trilha…</div></div>
+    <div class="scroll pad">
+      <div class="center mt8 mb20">
+        <div class="mascot" style="width:80px;height:80px;font-size:42px;animation:pulse 1.4s infinite">🤖</div>
+        <div class="b mt12">Vertex AI · Gemini lendo seu material</div>
+        <div class="small muted">2 livros · 800 páginas</div>
+      </div>
+      <div class="col gap16">
+        <div class="stepline"><div class="stepdot" id="ist1">✓</div><div style="flex:1"><div class="b">Lendo e destrinchando os PDFs</div><div class="small muted">Extraindo texto, tabelas e estrutura</div></div></div>
+        <div class="stepline"><div class="stepdot run" id="ist2">2</div><div style="flex:1"><div class="b">Identificando os conceitos</div><div class="small muted" id="ist2sub">347 conceitos encontrados…</div></div></div>
+        <div class="stepline"><div class="stepdot wait" id="ist3">3</div><div style="flex:1"><div class="b">Descobrindo a ordem de aprender</div><div class="small muted">O que vem antes, o que depende de quê</div></div></div>
+        <div class="stepline"><div class="stepdot wait" id="ist4">4</div><div style="flex:1"><div class="b">Dividindo nas 8 seções</div><div class="small muted">Do zero ao domínio completo</div></div></div>
+        <div class="stepline"><div class="stepdot wait" id="ist5">5</div><div style="flex:1"><div class="b">Gerando lições e exercícios</div><div class="small muted">Explicações e questões originais</div></div></div>
+      </div>
+      <div class="card mt24" style="background:var(--green-l);border-color:var(--green)">
+        <div class="small b" style="color:var(--green-d)">💡 A IA trabalha aqui só uma vez. A trilha gerada fica pronta para sempre — e os alunos aprendem sem disparar nenhum custo de IA.</div>
+      </div>
+      <button class="btn mt20" id="ingest-cta" style="display:none" onclick="go('s-create-done')">VER TRILHA PRONTA</button>
+    </div>
+  </section>
+
+  <!-- ============ 19. TEMA CRIADO ============ -->
+  <section class="screen" id="s-create-done">
+    <div class="celebrate">
+      <div id="conf3"></div>
+      <div style="font-size:60px;z-index:2">🗺️</div>
+      <h1 class="display tc" style="font-size:26px;z-index:2">Trilha criada!</h1>
+      <p class="sub tc" style="z-index:2"><b>Direito Constitucional</b> agora tem 8 seções, 347 conceitos e mais de 5.000 exercícios — tudo na ordem certa de aprender.</p>
+      <div class="card mt8" style="width:100%;z-index:2;text-align:left">
+        <div style="display:flex;justify-content:space-between" class="mb8"><span class="muted small b">SEÇÕES</span><span class="b">8</span></div>
+        <div style="display:flex;justify-content:space-between" class="mb8"><span class="muted small b">CONCEITOS</span><span class="b">347</span></div>
+        <div style="display:flex;justify-content:space-between"><span class="muted small b">EXERCÍCIOS</span><span class="b">5.205</span></div>
+      </div>
+      <div class="col gap10 mt16" style="width:100%;z-index:2">
+        <button class="btn" onclick="go('s-sections')">COMEÇAR A APRENDER</button>
+        <button class="btn ghost" onclick="go('s-home')">IR PARA O INÍCIO</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 20. CONFIGURAÇÕES / ACESSIBILIDADE ============ -->
+  <section class="screen" id="s-settings">
+    <div class="topbar"><div class="back" onclick="go('s-profile')">‹</div><div class="topttl">Configurações</div></div>
+    <div class="scroll pad">
+      <div class="eyebrow mb12">ACESSIBILIDADE</div>
+      <div class="col gap10 mb20">
+        <div class="card flat" style="display:flex;align-items:center;gap:12px"><span style="font-size:22px">🔠</span><div style="flex:1"><div class="b">Texto maior</div><div class="small muted">Para leitura confortável</div></div><div class="tgl" onclick="tgl(this)"></div></div>
+        <div class="card flat" style="display:flex;align-items:center;gap:12px"><span style="font-size:22px">🎨</span><div style="flex:1"><div class="b">Modo daltônico</div><div class="small muted">Cores + ícones e rótulos</div></div><div class="tgl" onclick="tgl(this)"></div></div>
+        <div class="card flat" style="display:flex;align-items:center;gap:12px"><span style="font-size:22px">📖</span><div style="flex:1"><div class="b">Fonte para dislexia</div><div class="small muted">Tipografia de alta legibilidade</div></div><div class="tgl" onclick="tgl(this)"></div></div>
+        <div class="card flat" style="display:flex;align-items:center;gap:12px"><span style="font-size:22px">🔊</span><div style="flex:1"><div class="b">Ler em voz alta</div><div class="small muted">Áudio das explicações</div></div><div class="tgl" onclick="tgl(this)"></div></div>
+      </div>
+      <div class="eyebrow mb12">CONTA</div>
+      <div class="col gap10 mb20">
+        <div class="row flat" style="box-shadow:none" onclick="alert('Editar perfil')"><div class="ricon" style="background:var(--cream2);width:38px;height:38px;font-size:18px">👤</div><div class="rmain"><div class="rttl">Editar perfil</div></div><div style="color:var(--muted)">›</div></div>
+        <div class="row flat" style="box-shadow:none" onclick="alert('Tira-dúvidas com IA — recurso opcional')"><div class="ricon" style="background:var(--green-l);width:38px;height:38px;font-size:18px">💬</div><div class="rmain"><div class="rttl">Tira-dúvidas com IA</div><div class="rsub">Recurso opcional</div></div><div style="color:var(--muted)">›</div></div>
+        <div class="row flat" style="box-shadow:none" onclick="alert('Notificações')"><div class="ricon" style="background:var(--cream2);width:38px;height:38px;font-size:18px">🔔</div><div class="rmain"><div class="rttl">Lembretes diários</div></div><div style="color:var(--muted)">›</div></div>
+      </div>
+      <button class="btn ghost" onclick="saindo()">SAIR DA CONTA</button>
+      <p class="tc small muted mt16">ContratoIQ · v1.0</p>
+    </div>
+  </section>
+
+</div>
+
+<style>
+.tgl{width:48px;height:28px;border-radius:20px;background:var(--line2);position:relative;cursor:pointer;flex:none;transition:.2s}
+.tgl::after{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.tgl.on{background:var(--green)}
+.tgl.on::after{left:23px}
+</style>
+
+<script>
+// ---------- router ----------
+async function go(id){
+  if(id==='s-sections' && !TEMA_ATUAL){
+    // Sem tema escolhido ainda: manda pro onboarding em vez de quebrar.
+    id='s-onb1';
+  }
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  var el=document.getElementById(id);
+  el.classList.add('active');
+  var sc=el.querySelector('.scroll'); if(sc) sc.scrollTop=0;
+  if(id==='s-onb1') renderTemasOnboarding();
+  if(id==='s-sections') carregarTrilha();
+  if(id==='s-lesson') startLesson();
+  if(id==='s-ingest') runIngest();
+  if(id.indexOf('done')>-1||id==='s-onb-done') confetti(el.querySelector('[id^=conf]'));
+}
+function tgl(e){e.classList.toggle('on')}
+
+// ---------- onboarding ----------
+function selectTheme(row,name){
+  document.getElementById('cal-theme').textContent=name;
+  document.getElementById('done-theme').textContent=name;
+  go('s-onb2');
+}
+function calib(c){
+  document.querySelectorAll('#s-onb2 .chip').forEach(x=>x.classList.remove('sel'));
+  c.classList.add('sel');
+  document.getElementById('cal-next').style.display='block';
+}
+function sondar(opt,correct){
+  var box=opt.parentElement;
+  box.querySelectorAll('.opt').forEach(o=>o.style.pointerEvents='none');
+  var fb=document.getElementById('sond-fb');
+  if(correct){opt.classList.add('right');fb.innerHTML='<div class="feedback ok mt20">✓ Isso! \u201CHouve\u201D não varia no plural — é impessoal. Já sei seu nível.</div>';}
+  else{opt.classList.add('wrong');box.querySelectorAll('.opt').forEach(o=>{if(o.textContent.indexOf('Houve muitos')>-1)o.classList.add('right')});fb.innerHTML='<div class="feedback no mt20">Quase. O certo é \u201CHouve\u201D — o verbo haver no sentido de existir não vai pro plural. Anotado, vou começar por aqui.</div>';}
+  document.getElementById('sond-cta').style.display='block';
+}
+
+// ---------- LESSON engine (motor pedagogico real — Lei III aplicada) ----------
+// Fila DINAMICA (queue), igual ao padrao dos prototipos jogaveis: cada grupo de
+// pergunta e uma cadeia de variantes. Erro NUNCA avanca — em vez disso, a
+// proxima variante do MESMO grupo (mais uma tentativa, enunciado diferente,
+// mesmo objetivo) e injetada logo apos a posicao atual. Quando as variantes de
+// um grupo se esgotam, repete a ultima (nivel minimo), igual ao prototipo de
+// referencia (`Math.min(level, chain.length-1)`). So avanca de verdade quando
+// acerta. Isso é a Lei III ("recuperação infinita decrescente") de verdade,
+// não um botão de pular.
+var queue=[], pos=0, LICAO_CONCEITO_ID=null, LICAO_CONCEITO_NOME='', respondendo=false;
+
+async function abrirConceito(conceito_id,nome){
+  LICAO_CONCEITO_ID=conceito_id; LICAO_CONCEITO_NOME=nome;
+  go('s-lesson');
+}
+async function startLesson(){
+  queue=[]; pos=0;
+  document.getElementById('hearts').textContent=ALUNO?ALUNO.hearts:5;
+  document.getElementById('lesson-body').innerHTML='<div class="tc" style="padding:40px"><div class="mascot" style="margin:0 auto">🧠</div><div class="small muted mt12">Preparando a lição…</div></div>';
+  document.getElementById('lesson-foot').innerHTML='';
+  try{
+    var d=await alunoApi('alunoGetLicao',{conceito_id:LICAO_CONCEITO_ID});
+    var c=d.conceito;
+    // Passos de ensino: Lei I (por que existe) + Lei IV completa (o que é, que
+    // problema resolve, quando usar, quando NÃO usar) + alegoria. Nada de
+    // conteúdo fixo — tudo vem do que a Fase 3 gerou pra este conceito.
+    var txtTeach='<b>'+esc(c.nome)+'</b>. '+esc(c.definicao);
+    if(c.explicacao_simples) txtTeach+='<br><br>'+esc(c.explicacao_simples);
+    queue.push({tipo:'teach',txt:txtTeach});
+    if(c.por_que_existe) queue.push({tipo:'teach',txt:'<b>Por que isso existe:</b><br>'+esc(c.por_que_existe)});
+    if(c.que_problema_resolve) queue.push({tipo:'teach',txt:'<b>Que problema resolve:</b><br>'+esc(c.que_problema_resolve)});
+    if(d.alegoria && d.alegoria.principal){
+      queue.push({tipo:'teach',txt:'💡 <b>Pense assim:</b> '+esc(d.alegoria.principal)+(d.alegoria.analogia_cotidiana?('<br><br>'+esc(d.alegoria.analogia_cotidiana)):'')});
+    }
+    if(c.quando_usar||c.quando_nao_usar){
+      queue.push({tipo:'teach',txt:(c.quando_usar?('<b>Quando usar:</b> '+esc(c.quando_usar)+'<br><br>'):'')+(c.quando_nao_usar?('<b>Quando NÃO usar:</b> '+esc(c.quando_nao_usar)):'')});
+    }
+    // 1 passo de pergunta por grupo — pega a variante[0] de cada cadeia.
+    (d.grupos||[]).forEach(function(cadeia){
+      if(!cadeia||!cadeia.length) return;
+      queue.push({tipo:'q',cadeia:cadeia,nivel:0,base:true});
+    });
+    if(queue.filter(function(s){return s.tipo==='q';}).length===0){
+      document.getElementById('lesson-body').innerHTML='<div class="warn">Esta lição ainda não tem exercícios suficientes.</div>';
+      return;
+    }
+    renderStep();
+  }catch(e){
+    document.getElementById('lesson-body').innerHTML='<div class="warn">Não foi possível carregar a lição: '+esc(e.message)+'</div>';
+  }
+}
+function totalBase(){ return queue.filter(function(s){return s.base;}).length; }
+function feitosBase(){ return queue.slice(0,pos+1).filter(function(s){return s.base;}).length; }
+function renderStep(){
+  var s=queue[pos];
+  var pct = s.tipo==='q' && !s.base ? null : Math.round((feitosBase()-1)/Math.max(1,totalBase())*100);
+  if(pct!=null) document.getElementById('less-prog').style.width=Math.max(0,pct)+'%';
+  var body=document.getElementById('lesson-body'), foot=document.getElementById('lesson-foot');
+  if(s.tipo==='teach'){
+    body.innerHTML='<div style="display:flex;gap:12px;align-items:flex-start" class="mt8"><div class="mascot">🧠</div><div class="bubble" style="flex:1">'+s.txt+'</div></div>';
+    foot.innerHTML='<button class="btn" onclick="nextStep()">CONTINUAR</button>';
+  } else if(s.tipo==='q'){
+    var p=s.cadeia[Math.min(s.nivel,s.cadeia.length-1)];
+    var tagTxt = p.tipo==='tf' ? 'VERDADEIRO OU FALSO' : 'ESCOLHA A CERTA';
+    var h='';
+    if(!s.base) h+='<div class="feedback no mb12">↻ Sem pressa. Vamos por um caminho mais simples — você só avança quando acertar.</div>';
+    h+='<div class="tag green mb12">'+tagTxt+'</div><h1 class="display" style="font-size:21px">'+esc(p.enunciado)+'</h1><div class="col gap12 mt20" id="opts">';
+    (p.opcoes||[]).forEach(function(o,i){h+='<div class="opt" onclick="responder('+i+',this)"><span class="k">'+'ABCDEFGH'[i]+'</span>'+esc(o)+'</div>';});
+    body.innerHTML=h+'</div><div id="fb"></div>';
+    foot.innerHTML='<button class="btn ghost" disabled style="opacity:.4">VERIFICAR</button>';
+  }
+}
+async function responder(opcaoIndex,el){
+  if(respondendo) return; respondendo=true;
+  var box=el.parentElement;
+  box.querySelectorAll('.opt').forEach(function(o){o.style.pointerEvents='none';});
+  var s=queue[pos];
+  var p=s.cadeia[Math.min(s.nivel,s.cadeia.length-1)];
+  try{
+    var d=await alunoApi('alunoResponder',{pergunta_id:p.id,opcao_index:opcaoIndex,tempo_seg:0,remediacao:!s.base});
+    if(ALUNO && typeof d.hearts==='number'){ALUNO.hearts=d.hearts;document.getElementById('hearts').textContent=d.hearts;paintStats();}
+    if(d.acertou){
+      el.classList.add('right');
+      document.getElementById('fb').innerHTML='<div class="feedback ok mt20">✓ '+esc(d.explicacao||'Isso mesmo.')+'</div>';
+      document.getElementById('lesson-foot').innerHTML='<button class="btn" onclick="nextStep()">CONTINUAR</button>';
+    } else {
+      el.classList.add('wrong');
+      if(box.children[d.correta]) box.children[d.correta].classList.add('right');
+      var msg=d.erro_opcao||d.explicacao||'Vamos por um caminho mais simples.';
+      document.getElementById('fb').innerHTML='<div class="feedback no mt20">✕ '+esc(msg)+'</div>';
+      // Lei III: NUNCA avança sem acertar. Injeta a proxima variante da MESMA
+      // cadeia logo apos a posicao atual — cria uma nova tentativa, nunca pula.
+      document.getElementById('lesson-foot').innerHTML='<button class="btn terra" onclick="tentarDeNovo()">TENTAR DE UM JEITO MAIS SIMPLES</button>';
+    }
+  }catch(e){
+    document.getElementById('fb').innerHTML='<div class="warn mt20">Erro ao registrar resposta: '+esc(e.message)+'</div>';
+  }
+  respondendo=false;
+}
+function tentarDeNovo(){
+  var atual=queue[pos];
+  queue.splice(pos+1,0,{tipo:'q',cadeia:atual.cadeia,nivel:atual.nivel+1,base:false});
+  pos++;
+  renderStep();
+}
+function nextStep(){
+  pos++;
+  if(pos>=queue.length){
+    document.getElementById('less-prog').style.width='100%';
+    if(ALUNO){ALUNO.gems=(ALUNO.gems||0)+15;paintStats();}
+    var el=document.getElementById('done-conceito-nome');
+    if(el) el.innerHTML='Você avançou em <b>'+esc(LICAO_CONCEITO_NOME)+'</b>. Isso é domínio de verdade.';
+    marcarConcluidoESalvar();
+    go('s-lesson-done');
+    return;
+  }
+  renderStep();
+}
+async function marcarConcluidoESalvar(){
+  if(!TEMA_ATUAL) return;
+  try{
+    var prog=await alunoApi('alunoGetProgresso',{tema_id:TEMA_ATUAL.id}).catch(function(){return{progresso:null};});
+    var concluidos=(prog.progresso&&prog.progresso.concluidos)||[];
+    if(concluidos.indexOf(LICAO_CONCEITO_ID)===-1) concluidos.push(LICAO_CONCEITO_ID);
+    await alunoApi('alunoSalvarProgresso',{tema_id:TEMA_ATUAL.id,secao:(prog.progresso&&prog.progresso.secao)||1,concluidos:concluidos});
+  }catch(e){}
+}
+function voltarParaSecaoAtual(){ if(UNIDADE_ATUAL) go('s-lessons'); else go('s-units'); }
+
+// ---------- ingest sim ----------
+function runIngest(){
+  ['ist1','ist2','ist3','ist4','ist5'].forEach(function(id,i){
+    var d=document.getElementById(id);
+    d.className='stepdot '+(i===0?'':'wait'); d.textContent=i===0?'✓':(i+1);
+  });
+  document.getElementById('ist2').className='stepdot run';
+  document.getElementById('ingest-cta').style.display='none';
+  var seq=[1,2,3,4]; var t=900;
+  seq.forEach(function(idx){
+    setTimeout(function(){
+      var prev=document.getElementById('ist'+(idx+1)); prev.className='stepdot'; prev.textContent='✓';
+      var nx=document.getElementById('ist'+(idx+2));
+      if(nx){nx.className='stepdot run';}
+      if(idx===4-1){ // last
+        setTimeout(function(){
+          var l=document.getElementById('ist5'); l.className='stepdot'; l.textContent='✓';
+          document.getElementById('ingest-cta').style.display='flex';
+        },900);
+      }
+    }, t*idx + 900);
+  });
+}
+function addPdf(){
+  var l=document.getElementById('pdf-list');
+  var names=['Teoria da Constituição.pdf','Jurisprudência Comentada.pdf','Direitos Fundamentais.pdf'];
+  var n=names[Math.floor(Math.random()*names.length)];
+  var d=document.createElement('div');d.className='pdf';d.innerHTML='<div class="ic">PDF</div><div style="flex:1">'+n+'<div class="small muted">'+(200+Math.floor(Math.random()*300))+' págs</div></div>✓';
+  l.appendChild(d);
+}
+
+// ---------- CONFIG ----------
+// SUPABASE_URL e ANON_KEY nao sao segredos (design do Supabase: RLS protege as
+// tabelas). WORKER_URL e o unico gateway que fala com service_role — preencha
+// com o endereco do seu Worker publicado antes de subir pro ar.
+var SUPABASE_URL='https://nawvcvrasgsadvujlpvd.supabase.co';
+var SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hd3ZjdnJhc2dzYWR2dWpscHZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4NjQ0MjAsImV4cCI6MjA5ODQ0MDQyMH0.a2zf5z1txMfAMbf5r6LJVSsAOZ3F6AvXCq-59SAkQtk';
+var WORKER_URL='https://SEU-WORKER.workers.dev'; // <<< TROQUE pelo endereço real do Worker
+
+var sbClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+var SESSAO=null, ALUNO=null, TEMA_ATUAL=null, TRILHA_ATUAL=null;
+
+function esc(s){ return String(s==null?'':s).replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];}); }
+
+async function alunoApi(action,payload){
+  if(!SESSAO) throw new Error('Não autenticado.');
+  var body=Object.assign({action:action,jwt:SESSAO.access_token},payload||{});
+  var r=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  var d=await r.json().catch(function(){return{error:'resposta inválida do servidor'};});
+  if(!r.ok||d.error) throw new Error(d.error||('HTTP '+r.status));
+  return d;
+}
+
+// ---------- AUTENTICAÇÃO (Supabase Auth + Google) ----------
+async function entrarComGoogle(){
+  try{
+    await sbClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.href.split('#')[0]}});
+  }catch(e){ alert('Erro ao iniciar login: '+e.message); }
+}
+async function saindo(){
+  await sbClient.auth.signOut();
+  SESSAO=null; ALUNO=null;
+  go('s-landing');
+}
+async function aoAutenticar(session){
+  SESSAO=session;
+  try{
+    var d=await alunoApi('alunoEntrar',{});
+    ALUNO=d.aluno;
+    paintStats();
+    go('s-home');
+    carregarTemasHome();
+    alunoApi('alunoRegenerarVidas',{}).then(function(r){ if(ALUNO){ALUNO.hearts=r.hearts;paintStats();} }).catch(function(){});
+  }catch(e){
+    alert('Erro ao entrar: '+e.message);
+  }
+}
+sbClient.auth.onAuthStateChange(function(event,session){
+  if(session && !SESSAO){ aoAutenticar(session); }
+});
+window.addEventListener('DOMContentLoaded',async function(){
+  paintStats();
+  var res=await sbClient.auth.getSession();
+  if(res && res.data && res.data.session){ aoAutenticar(res.data.session); }
+});
+
+function paintStats(){
+  var streak=ALUNO?ALUNO.streak:0, gems=ALUNO?ALUNO.gems:0, hearts=ALUNO?ALUNO.hearts:5;
+  document.querySelectorAll('[data-st=streak]').forEach(function(e){e.textContent=streak;});
+  document.querySelectorAll('[data-st=gems]').forEach(function(e){e.textContent=gems;});
+  document.querySelectorAll('[data-st=hearts]').forEach(function(e){e.textContent=hearts;});
+  var pn=document.getElementById('perfil-nome'); if(pn&&ALUNO) pn.textContent=ALUNO.nome||'Você';
+}
+
+// ---------- TEMAS (onboarding + home) ----------
+async function renderTemasOnboarding(){
+  var host=document.getElementById('temas-list');
+  host.innerHTML='<div class="small muted tc" style="padding:20px">Carregando temas…</div>';
+  try{
+    var d=await alunoApi('alunoListTemas',{});
+    if(!d.temas.length){ host.innerHTML='<div class="small muted tc" style="padding:20px">Nenhum tema publicado ainda. Volte em breve.</div>'; return; }
+    host.innerHTML='';
+    d.temas.forEach(function(t){
+      var div=document.createElement('div');
+      div.className='row'+(t.jogavel?'':' lock');
+      div.innerHTML='<div class="ricon" style="background:#F7E5DB">📖</div><div class="rmain"><div class="rttl">'+esc(t.nome)+'</div><div class="rsub">'+(t.jogavel?(t.total_conceitos+' conceitos mapeados'):'Em preparação')+'</div></div><div style="font-size:20px;color:var(--muted)">'+(t.jogavel?'›':'🔒')+'</div>';
+      if(t.jogavel) div.onclick=function(){ selectTheme(t.id,t.nome); };
+      host.appendChild(div);
+    });
+  }catch(e){ host.innerHTML='<div class="warn">'+esc(e.message)+'</div>'; }
+}
+function continuarOuEscolher(){
+  if(TEMA_ATUAL){ go('s-sections'); } else { go('s-onb1'); }
+}
+function selectTheme(tema_id,nome){
+  TEMA_ATUAL={id:tema_id,nome:nome};
+  document.getElementById('cal-theme').textContent=nome;
+  document.getElementById('done-theme').textContent=nome;
+  go('s-onb2');
+}
+async function iniciarTrilha(){
+  try{ await alunoApi('alunoDiagnostico',{tema_id:TEMA_ATUAL.id}); }catch(e){}
+  go('s-onb-done');
+}
+async function carregarTemasHome(){
+  try{
+    var d=await alunoApi('alunoListTemas',{});
+    var jogaveis=d.temas.filter(function(t){return t.jogavel;});
+    var host=document.querySelector('#s-home .row[onclick*="s-create"]');
+    if(host && host.parentElement){
+      var lista=host.parentElement;
+      Array.from(lista.querySelectorAll('.row')).forEach(function(r){ if(r!==host) r.remove(); });
+      jogaveis.forEach(function(t){
+        var div=document.createElement('div'); div.className='row';
+        div.innerHTML='<div class="ricon" style="background:#F7E5DB">📖</div><div class="rmain"><div class="rttl">'+esc(t.nome)+'</div><div class="rsub">'+t.total_conceitos+' conceitos</div></div>';
+        div.onclick=function(){ TEMA_ATUAL={id:t.id,nome:t.nome}; go('s-sections'); };
+        lista.insertBefore(div,host);
+      });
+    }
+  }catch(e){}
+}
+
+// ---------- TRILHA (mapa de seções + lista de conceitos) ----------
+async function carregarTrilha(){
+  document.getElementById('sec-tema-nome').textContent=TEMA_ATUAL?TEMA_ATUAL.nome:'Trilha';
+  document.getElementById('path-secoes').innerHTML='<div class="small muted tc" style="padding:30px">Carregando sua trilha…</div>';
+  try{
+    var d=await alunoApi('alunoGetTrilha',{tema_id:TEMA_ATUAL.id});
+    TRILHA_ATUAL=d;
+    document.getElementById('sec-crumb').textContent=d.secoes.length+' seções até o domínio';
+    var host=document.getElementById('path-secoes'); host.innerHTML='';
+    if(!d.secoes.length){ host.innerHTML='<div class="small muted tc" style="padding:30px">Esta trilha ainda não tem seções.</div>'; return; }
+    d.secoes.forEach(function(s,i){
+      var qtdPronta=(s.itens||[]).filter(function(it){return it.jogavel;}).length;
+      var bubClass=i===0?'active':(qtdPronta>0?'':'lock');
+      var icon=qtdPronta>0?'📖':'🔒';
+      var node=document.createElement('div'); node.className='node';
+      node.innerHTML=(i===0?'<div class="startflag">COMECE AQUI</div>':'')+'<div class="bub '+bubClass+'">'+icon+'</div><div class="nlabel">'+s.n+' · '+esc(s.titulo)+'</div>';
+      if(qtdPronta>0) node.onclick=function(){ abrirSecao(i); };
+      host.appendChild(node);
+      if(i<d.secoes.length-1){ var c=document.createElement('div'); c.className='connect'; host.appendChild(c); }
+    });
+  }catch(e){ document.getElementById('path-secoes').innerHTML='<div class="warn">'+esc(e.message)+'</div>'; }
+}
+var SECAO_ATUAL_IDX=null, UNIDADE_ATUAL=null;
+function abrirSecao(i){
+  SECAO_ATUAL_IDX=i;
+  var s=TRILHA_ATUAL.secoes[i];
+  document.getElementById('unit-sec-titulo').textContent=s.n+' · '+s.titulo;
+  document.getElementById('unit-crumb').textContent=(TEMA_ATUAL?TEMA_ATUAL.nome:'')+' › Seção '+s.n;
+  document.getElementById('unit-objetivo').textContent=s.objetivo||'';
+  var host=document.getElementById('unidades-list'); host.innerHTML='';
+  var unidades=s.unidades||[];
+  if(!unidades.length){ host.innerHTML='<div class="small muted tc" style="padding:20px">Sem conceitos prontos nesta seção ainda.</div>'; go('s-units'); return; }
+  unidades.forEach(function(u,ui){
+    var prontos=u.itens.filter(function(it){return it.jogavel;}).length;
+    var concluidos=u.itens.filter(function(it){return it.jogavel && it.dominio>=80;}).length;
+    var row=document.createElement('div');
+    row.className='row'+(prontos?'':' lock');
+    var icon=concluidos===u.itens.length&&u.itens.length?'🏅':(prontos?'▶':'🔒');
+    row.innerHTML='<div class="ricon" style="background:'+(concluidos===u.itens.length&&u.itens.length?'var(--gold)':'var(--green-l)')+'">'+icon+'</div><div class="rmain"><div class="rttl">Unidade '+u.u+'</div><div class="rsub">'+u.itens.length+' conceitos · '+concluidos+' concluídos</div><div class="rprog"><i style="width:'+Math.round(100*concluidos/Math.max(1,u.itens.length))+'%"></i></div></div>';
+    if(prontos) row.onclick=function(){ abrirUnidade(ui); };
+    host.appendChild(row);
+  });
+  go('s-units');
+}
+function abrirUnidade(ui){
+  var s=TRILHA_ATUAL.secoes[SECAO_ATUAL_IDX];
+  var u=s.unidades[ui];
+  UNIDADE_ATUAL=u;
+  document.getElementById('less-unid-titulo').textContent='Unidade '+u.u;
+  document.getElementById('less-crumb').textContent=(TEMA_ATUAL?TEMA_ATUAL.nome:'')+' › Seção '+s.n+' › Unidade '+u.u;
+  var host=document.getElementById('path-licoes'); host.innerHTML='';
+  u.itens.forEach(function(it,idx){
+    var pronto=it.jogavel;
+    var dominado=pronto&&it.dominio>=80;
+    var bubClass=dominado?'done':(pronto?(idx===0||u.itens[idx-1].dominio>=40?'active':''):'lock');
+    var icon=dominado?'✓':(pronto?'📘':'🔒');
+    var node=document.createElement('div'); node.className='node';
+    node.innerHTML='<div class="bub '+bubClass+'">'+icon+'</div><div class="nlabel">'+esc(it.nome)+'</div>';
+    if(pronto) node.onclick=function(){ abrirConceito(it.conceito_id,it.nome); };
+    host.appendChild(node);
+    if(idx<u.itens.length-1){ var c=document.createElement('div'); c.className='connect'; host.appendChild(c); }
+  });
+  go('s-lessons');
+}
+
+// ---------- confetti ----------
+function confetti(host){
+  if(!host)return; host.innerHTML='';
+  var cols=['#3F7D5B','#E8A53D','#C8643C','#F2C14E','#3E6B8C'];
+  for(var i=0;i<28;i++){
+    var d=document.createElement('div');d.className='dot';
+    d.style.left=Math.random()*100+'%';
+    d.style.background=cols[i%cols.length];
+    d.style.animationDelay=(Math.random()*2)+'s';
+    d.style.top='-20px';
+    host.appendChild(d);
+  }
+}
+</script>
+</body>
+</html>
