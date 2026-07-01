@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContratoIQ — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+:root{--cream:#F6EEE0;--cream2:#FBF5EA;--paper:#FFFDF8;--ink:#2A2620;--ink2:#5C544A;--muted:#8B8275;--green:#3F7D5B;--green-d:#2F5E44;--green-l:#E6F0E8;--amber:#E8A53D;--amber-d:#C8821C;--gold:#F2C14E;--terra:#C8643C;--terra-d:#A84E2C;--terra-l:#F7E5DB;--line:#E5D9C5;--line2:#D8C9B0;--shadow:#D8C7AD}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',system-ui,sans-serif;background:#E9DFCB;color:var(--ink);min-height:100vh;padding:24px 16px;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto}
+.display{font-family:'Fraunces',serif;font-weight:900;letter-spacing:-.02em;line-height:1.05}
+.serif{font-family:'Fraunces',serif}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--terra)}
+.card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 4px 0 var(--shadow);margin-bottom:18px}
+.btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;font-family:'Inter';font-weight:800;font-size:16px;padding:16px;border:none;border-radius:15px;cursor:pointer;color:#fff;background:var(--green);box-shadow:0 5px 0 var(--green-d);transition:.06s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--green-d)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.amber{background:var(--amber);box-shadow:0 5px 0 var(--amber-d)}
+.btn.ghost{background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line2);border:2px solid var(--line)}
+.btn.sm{padding:10px 14px;font-size:14px;width:auto;border-radius:12px;box-shadow:0 4px 0 var(--green-d)}
+.field{width:100%;padding:14px;border:2px solid var(--line);border-radius:13px;font-family:'Inter';font-size:15px;font-weight:600;background:var(--cream2);color:var(--ink)}
+.field:focus{outline:none;border-color:var(--green)}
+.label{font-weight:800;font-size:13px;margin-bottom:7px;display:block;color:var(--ink2)}
+.drop{border:3px dashed var(--line2);border-radius:16px;padding:30px;text-align:center;background:var(--cream2);cursor:pointer;transition:.15s}
+.drop:hover{border-color:var(--green);background:var(--green-l)}
+.pdf{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--cream2);border:2px solid var(--line);border-radius:11px;font-size:13px;font-weight:700;margin-top:8px}
+.pdf .ic{width:28px;height:34px;background:var(--terra-l);border:1.5px solid var(--terra);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--terra-d);flex:none}
+.bar{height:14px;background:var(--cream2);border-radius:10px;overflow:hidden;border:2px solid var(--line);margin:10px 0}
+.bar>i{display:block;height:100%;background:linear-gradient(var(--gold),var(--amber));border-radius:8px;transition:.3s;width:0}
+.log{font-family:ui-monospace,monospace;font-size:12px;background:#2A2620;color:#cdbfa6;border-radius:12px;padding:14px;max-height:190px;overflow:auto;margin-top:12px;line-height:1.6}
+.log b{color:var(--gold)}
+.sec{border:2px solid var(--line);border-radius:15px;margin-bottom:12px;overflow:hidden;background:var(--paper)}
+.sec-h{display:flex;align-items:center;gap:12px;padding:15px;cursor:pointer;background:var(--cream2)}
+.sec-n{width:38px;height:38px;border-radius:11px;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none;box-shadow:0 3px 0 var(--green-d)}
+.sec-b{padding:0 15px 15px;display:none}.sec.open .sec-b{display:block}
+.concept{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.concept:last-child{border:none}
+.concept .d{width:7px;height:7px;border-radius:50%;background:var(--green);margin-top:7px;flex:none}
+.concept.new .d{background:var(--terra)}
+.hide{display:none}
+.small{font-size:12px}.muted{color:var(--muted)}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.b{font-weight:800}
+.warn{background:var(--terra-l);border:2px solid var(--terra);color:var(--terra-d);border-radius:12px;padding:12px;font-size:13px;font-weight:600}
+.ok{background:var(--green-l);border:2px solid var(--green);color:var(--green-d);border-radius:12px;padding:12px;font-size:13px;font-weight:600}
+.stepline{display:flex;gap:11px;align-items:center;margin:10px 0}
+.dot{width:28px;height:28px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;background:#CFC4B0}
+.dot.run{background:var(--amber);animation:pulse 1.1s infinite}.dot.done{background:var(--green)}
+@keyframes pulse{50%{transform:scale(1.12)}}
+.seg{display:flex;gap:8px;background:var(--cream2);border:2px solid var(--line);border-radius:14px;padding:5px}
+.seg button{flex:1;padding:12px;border:none;background:transparent;border-radius:10px;font-weight:800;font-family:Inter;font-size:14px;color:var(--ink2);cursor:pointer}
+.seg button.on{background:var(--green);color:#fff;box-shadow:0 3px 0 var(--green-d)}
+select.field{appearance:none}
+a{color:var(--green-d)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div style="text-align:center;margin-bottom:20px">
+    <div class="display" style="font-size:30px">Contrato<span style="color:var(--terra)">IQ</span></div>
+    <div class="small b muted mt8" style="letter-spacing:.1em">PAINEL DE ADMINISTRAÇÃO · GERADOR DE TRILHAS</div>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="card" id="card-login">
+    <div class="eyebrow">Acesso restrito</div>
+    <h2 class="serif mt8 mb12" style="font-size:20px">Entrar</h2>
+    <label class="label">Endereço do Worker</label>
+    <input class="field mb12" id="worker" type="text" placeholder="https://seu-worker.workers.dev">
+    <label class="label">Senha de administrador</label>
+    <input class="field" id="pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+    <button class="btn mt16" id="loginbtn" onclick="login()">Entrar</button>
+    <div id="login-st" class="small b mt12"></div>
+    <div class="small muted mt12">A chave da Gemini e a senha ficam no Cloudflare. Este site não guarda segredo nenhum.</div>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="hide">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div class="eyebrow">Sessão</div><div class="b mt8" id="who">Conectado ✓</div></div>
+        <button class="btn sm ghost" style="box-shadow:0 4px 0 var(--line2)" onclick="logout()">Sair</button>
+      </div>
+    </div>
+
+    <!-- MODO -->
+    <div class="card">
+      <div class="eyebrow">Passo 1</div>
+      <h2 class="serif mt8 mb12" style="font-size:20px">O que você vai fazer?</h2>
+      <div class="seg mb12">
+        <button id="m-novo" class="on" onclick="setModo('novo')">Criar novo tema</button>
+        <button id="m-att" onclick="setModo('atualizar')">Atualizar tema existente</button>
+      </div>
+      <div id="box-novo">
+        <label class="label">Nome do novo tema</label>
+        <input class="field" id="tema" placeholder="Ex.: Língua Portuguesa">
+      </div>
+      <div id="box-att" class="hide">
+        <label class="label">Tema a atualizar</label>
+        <select class="field" id="temaSel"></select>
+        <div class="small muted mt8" id="att-info"></div>
+      </div>
+    </div>
+
+    <!-- UPLOAD -->
+    <div class="card">
+      <div class="eyebrow">Passo 2</div>
+      <h2 class="serif mt8 mb12" style="font-size:20px">Suba o livro (PDF)</h2>
+      <div class="drop" onclick="document.getElementById('file').click()">
+        <div style="font-size:34px">📚</div>
+        <div class="b mt8">Clique para escolher PDFs</div>
+        <div class="small muted">Texto selecionável · extraído no navegador</div>
+      </div>
+      <input type="file" id="file" accept="application/pdf" multiple class="hide" onchange="addFiles(this.files)">
+      <div id="filelist"></div>
+      <div class="mt16">
+        <label class="label">Tamanho do pedaço (caracteres/chamada)</label>
+        <input class="field" id="chunksize" type="number" value="45000">
+      </div>
+    </div>
+
+    <!-- GERAR -->
+    <div class="card">
+      <div class="eyebrow">Passo 3</div>
+      <h2 class="serif mt8 mb12" style="font-size:20px">Processar</h2>
+      <div class="stepline"><div class="dot" id="d1">1</div><div><div class="b">Extrair texto</div></div></div>
+      <div class="stepline"><div class="dot" id="d2">2</div><div><div class="b">Fase 1 · Mapear (dedup com o que já existe)</div><div class="small muted" id="d2sub">contexto acumulado + memória do Supabase</div></div></div>
+      <div class="stepline"><div class="dot" id="d3">3</div><div><div class="b">Fase 2 · Recosturar 8 seções</div></div></div>
+      <div class="stepline"><div class="dot" id="d4">4</div><div><div class="b">Salvar no Supabase</div></div></div>
+      <div class="bar"><i id="bar"></i></div>
+      <button class="btn amber mt12" id="genbtn" onclick="run()">🤖 GERAR / ATUALIZAR TRILHA</button>
+      <div class="log hide" id="log"></div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="card hide" id="card-out">
+      <div class="eyebrow">Resultado</div>
+      <h2 class="serif mt8 mb12" id="out-tema" style="font-size:22px"></h2>
+      <div id="out-stats" class="ok mb12"></div>
+      <div id="secoes"></div>
+    </div>
+
+    <!-- ENRIQUECER (Fases 3-4) -->
+    <div class="card">
+      <div class="eyebrow">Passo 4</div>
+      <h2 class="serif mt8 mb12" style="font-size:20px">Enriquecer conceitos</h2>
+      <div class="small muted mb12">Fase 3 (definição, exemplos, quando usar/não usar) + Fase 4 (alegoria, perguntas) rodando com Gemini Pro, sob demanda. Escolha um tema já mapeado.</div>
+      <label class="label">Tema</label>
+      <select class="field" id="enrTemaSel" onchange="atualizarStatusEnr()"></select>
+      <div id="enrStatus" class="mt12 small"></div>
+
+      <div class="mt16" style="display:flex;gap:10px">
+        <button class="btn ghost" style="flex:1" onclick="enriquecerUm()">🧪 Enriquecer 1 (testar)</button>
+      </div>
+      <div id="enrUmOut" class="mt12 hide"></div>
+
+      <div class="mt16">
+        <label class="label">Tamanho do lote por chamada</label>
+        <input class="field mb8" id="enrBatch" type="number" value="8" min="1" max="20">
+        <button class="btn amber" id="enrLoteBtn" onclick="enriquecerLote()">⚙️ Processar lote</button>
+        <div class="bar mt8"><i id="enrBar"></i></div>
+        <div id="enrLoteOut" class="log hide"></div>
+      </div>
+
+      <div class="mt16">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <label class="label" style="margin:0">Presos em "revisar"</label>
+          <button class="btn sm ghost" onclick="carregarRevisar()">Atualizar</button>
+        </div>
+        <div id="revisarOut" class="mt8"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+var FILES=[], MODO='novo', TEMAS=[], EXIST=[];
+
+function normp(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();}
+function WURL(){return (localStorage.getItem('cq_worker')||document.getElementById('worker').value||'').trim().replace(/\/$/,'');}
+function TOKEN(){return localStorage.getItem('cq_admin')||'';}
+
+async function api(payload){
+  var w=WURL(); if(!w) throw new Error('Configure o endereço do Worker.');
+  var r=await fetch(w,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  var d=await r.json().catch(function(){return{error:'resposta inválida do Worker'};});
+  if(!r.ok||d.error) throw new Error(d.error||('HTTP '+r.status));
+  return d;
+}
+async function gem(prompt){ var d=await api({action:'gemini',token:TOKEN(),prompt:prompt}); return d.text||''; }
+
+// ---------- login ----------
+window.onload=function(){
+  var w=localStorage.getItem('cq_worker'); if(w) document.getElementById('worker').value=w;
+  if(TOKEN()){ enterApp(); }
+};
+async function login(){
+  var w=document.getElementById('worker').value.trim().replace(/\/$/,'');
+  var pass=document.getElementById('pass').value;
+  if(!w){setLoginSt('Cole o endereço do Worker.','var(--terra-d)');return;}
+  if(!pass){setLoginSt('Digite a senha.','var(--terra-d)');return;}
+  localStorage.setItem('cq_worker',w);
+  setLoginSt('Entrando…','var(--amber-d)');
+  try{
+    var d=await api({action:'login',pass:pass});
+    localStorage.setItem('cq_admin',d.token);
+    enterApp();
+  }catch(e){ setLoginSt('Erro: '+e.message,'var(--terra-d)'); }
+}
+function setLoginSt(t,c){var e=document.getElementById('login-st');e.textContent=t;e.style.color=c;}
+function logout(){ localStorage.removeItem('cq_admin'); location.reload(); }
+async function enterApp(){
+  document.getElementById('card-login').classList.add('hide');
+  document.getElementById('app').classList.remove('hide');
+  try{ await loadTemas(); }catch(e){ /* token velho */ if(String(e.message).indexOf('autoriz')>-1){logout();} }
+}
+
+// ---------- temas ----------
+async function loadTemas(){
+  var d=await api({action:'listTemas',token:TOKEN()});
+  TEMAS=d.temas||[];
+  var sel=document.getElementById('temaSel'); sel.innerHTML='';
+  if(!TEMAS.length){ sel.innerHTML='<option value="">— nenhum tema ainda —</option>'; }
+  TEMAS.forEach(function(t){ var o=document.createElement('option'); o.value=t.id; o.textContent=t.nome+' (v'+t.versao+' · '+t.total_conceitos+' conceitos)'; sel.appendChild(o); });
+  sel.onchange=showAttInfo; showAttInfo();
+  popularSelectEnr();
+}
+
+// ---------- enriquecer (Fases 3-4) ----------
+function popularSelectEnr(){
+  var sel=document.getElementById('enrTemaSel'); sel.innerHTML='';
+  if(!TEMAS.length){ sel.innerHTML='<option value="">— nenhum tema ainda —</option>'; return; }
+  TEMAS.forEach(function(t){ var o=document.createElement('option'); o.value=t.id; o.textContent=t.nome; sel.appendChild(o); });
+  atualizarStatusEnr();
+}
+async function atualizarStatusEnr(){
+  var tema_id=document.getElementById('enrTemaSel').value;
+  var box=document.getElementById('enrStatus');
+  if(!tema_id){ box.innerHTML=''; return; }
+  box.innerHTML='Carregando status…';
+  try{
+    var d=await api({action:'contarStatus',token:TOKEN(),tema_id:tema_id});
+    var c=d.contagem||{};
+    var partes=['pronto','enriquecido','bruto','mapeado','validado','revisar'].filter(function(k){return c[k];}).map(function(k){return '<b>'+c[k]+'</b> '+k;});
+    box.innerHTML='Total <b>'+d.total+'</b> · '+(partes.join(' · ')||'sem conceitos ainda');
+  }catch(e){ box.innerHTML='Erro: '+e.message; }
+  carregarRevisar();
+}
+async function enriquecerUm(){
+  var tema_id=document.getElementById('enrTemaSel').value;
+  if(!tema_id){ alert('Escolha um tema.'); return; }
+  var out=document.getElementById('enrUmOut'); out.classList.remove('hide'); out.innerHTML='<div class="small muted">Processando 1 conceito (Pro)…</div>';
+  try{
+    var d=await api({action:'enriquecerUm',token:TOKEN(),tema_id:tema_id});
+    if(d.vazio){ out.innerHTML='<div class="ok">Nenhum conceito cru restante neste tema.</div>'; return; }
+    var p=d.preview;
+    var h='<div class="ok mb8"><b>'+d.conceito.nome+'</b> → '+d.conceito.status+(d.fase3_reaproveitada?' <span class="small">(Fase 3 reaproveitada)</span>':'')+' · custo $'+(d._uso.custo_usd||0).toFixed(4)+'</div>';
+    h+='<div class="small mb8"><b>Definição:</b> '+esc(p.definicao)+'</div>';
+    h+='<div class="small mb8"><b>Quando usar:</b> '+esc(p.quando_usar)+'</div>';
+    h+='<div class="small mb8"><b>Quando NÃO usar:</b> '+esc(p.quando_nao_usar)+'</div>';
+    h+='<div class="small mb8"><b>Alegoria:</b> '+esc(p.alegoria)+'</div>';
+    h+='<div class="small">'+p.n_perguntas+' perguntas em '+p.n_grupos_variante+' grupos de variante</div>';
+    out.innerHTML=h;
+  }catch(e){ out.innerHTML='<div class="warn">Erro: '+e.message+'</div>'; }
+  atualizarStatusEnr();
+}
+function esc(s){ return String(s||'').replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];}); }
+async function enriquecerLote(){
+  var tema_id=document.getElementById('enrTemaSel').value;
+  if(!tema_id){ alert('Escolha um tema.'); return; }
+  var batch=parseInt(document.getElementById('enrBatch').value)||8;
+  var btn=document.getElementById('enrLoteBtn'); btn.disabled=true;
+  var out=document.getElementById('enrLoteOut'); out.classList.remove('hide');
+  out.innerHTML+='<b>Processando lote de até '+batch+'…</b><br>';
+  try{
+    var d=await api({action:'enriquecerLote',token:TOKEN(),tema_id:tema_id,batch:batch});
+    d.feitos.forEach(function(f){ out.innerHTML+='· '+f.nome+' → '+(f.status||(f.ok?'pronto':'erro'))+(f.erro?(' ('+f.erro+')'):'')+'<br>'; });
+    out.innerHTML+='<b>Processados: '+d.processados+' · custo $'+(d._uso.custo_usd||0).toFixed(4)+' · restam: '+d.restantes+'</b><br>';
+    out.scrollTop=out.scrollHeight;
+    document.getElementById('enrBar').style.width=d.restantes===0?'100%':'50%';
+    atualizarStatusEnr();
+    if(d.restantes>0){
+      if(confirm('Restam '+d.restantes+' conceitos crus neste tema. Processar outro lote agora?')){ btn.disabled=false; enriquecerLote(); return; }
+    } else {
+      out.innerHTML+='<b style="color:var(--green)">✓ Tema totalmente enriquecido.</b><br>';
+    }
+  }catch(e){ out.innerHTML+='<span style="color:#E8A53D">Erro: '+e.message+'</span><br>'; }
+  btn.disabled=false;
+}
+async function carregarRevisar(){
+  var tema_id=document.getElementById('enrTemaSel').value;
+  var box=document.getElementById('revisarOut');
+  if(!tema_id){ box.innerHTML=''; return; }
+  try{
+    var d=await api({action:'listarRevisar',token:TOKEN(),tema_id:tema_id});
+    if(!d.conceitos.length){ box.innerHTML='<div class="small muted">Nenhum, tudo em dia.</div>'; return; }
+    box.innerHTML=d.conceitos.map(function(c){
+      return '<div class="concept new"><div class="d"></div><div style="flex:1">'+esc(c.nome)+'</div><button class="btn sm" style="width:auto" onclick="reprocessar(\''+c.id+'\',\''+tema_id+'\')">Reprocessar</button></div>';
+    }).join('');
+  }catch(e){ box.innerHTML='Erro: '+e.message; }
+}
+async function reprocessar(conceito_id,tema_id){
+  try{
+    var d=await api({action:'enriquecerUm',token:TOKEN(),tema_id:tema_id,conceito_id:conceito_id});
+    alert(d.vazio?'Nada a fazer.':('Resultado: '+d.conceito.status));
+    atualizarStatusEnr();
+  }catch(e){ alert('Erro: '+e.message); }
+}
+function showAttInfo(){
+  var t=TEMAS.find(function(x){return x.id===document.getElementById('temaSel').value;});
+  document.getElementById('att-info').textContent=t?('Versão atual v'+t.versao+' · '+t.total_conceitos+' conceitos já mapeados. O novo livro será somado sem duplicar.'):'';
+}
+function setModo(m){
+  MODO=m;
+  document.getElementById('m-novo').classList.toggle('on',m==='novo');
+  document.getElementById('m-att').classList.toggle('on',m==='atualizar');
+  document.getElementById('box-novo').classList.toggle('hide',m!=='novo');
+  document.getElementById('box-att').classList.toggle('hide',m!=='atualizar');
+}
+
+// ---------- files ----------
+function addFiles(list){ for(var i=0;i<list.length;i++) FILES.push(list[i]); renderFiles(); }
+function renderFiles(){
+  var el=document.getElementById('filelist'); el.innerHTML='';
+  FILES.forEach(function(f,i){ var d=document.createElement('div'); d.className='pdf';
+    d.innerHTML='<div class="ic">PDF</div><div style="flex:1">'+f.name+'<div class="small muted">'+(f.size/1048576).toFixed(1)+' MB</div></div><span style="cursor:pointer" onclick="rmFile('+i+')">✕</span>';
+    el.appendChild(d); });
+}
+function rmFile(i){ FILES.splice(i,1); renderFiles(); }
+
+// ---------- helpers ----------
+function extractJson(s){s=s.replace(/```json/gi,'').replace(/```/g,'').trim();var a=s.indexOf('{'),b=s.lastIndexOf('}'),c=s.indexOf('['),dd=s.lastIndexOf(']');if(c>-1&&(a===-1||c<a))return JSON.parse(s.slice(c,dd+1));return JSON.parse(s.slice(a,b+1));}
+function chunkText(text,size){var out=[],i=0;text=text.replace(/\s+/g,' ');while(i<text.length){var end=Math.min(i+size,text.length);if(end<text.length){var sp=text.lastIndexOf(' ',end);if(sp>i)end=sp;}out.push(text.slice(i,end));i=end;}return out;}
+async function extractPdf(file){var buf=await file.arrayBuffer();var pdf=await pdfjsLib.getDocument({data:buf}).promise;var txt='';for(var p=1;p<=pdf.numPages;p++){var page=await pdf.getPage(p);var c=await page.getTextContent();txt+=c.items.map(function(it){return it.str;}).join(' ')+'\n';}return txt;}
+function log(m){var l=document.getElementById('log');l.classList.remove('hide');l.innerHTML+=m+'<br>';l.scrollTop=l.scrollHeight;}
+function dot(id,st){var e=document.getElementById(id);e.className='dot'+(st?' '+st:'');if(st==='done')e.textContent='✓';}
+function bar(p){document.getElementById('bar').style.width=Math.round(p*100)+'%';}
+
+// ---------- run ----------
+async function run(){
+  var btn=document.getElementById('genbtn'); btn.disabled=true;
+  document.getElementById('log').innerHTML=''; bar(0);
+  ['d1','d2','d3','d4'].forEach(function(d){dot(d,'');});
+  try{
+    if(!FILES.length) throw new Error('Suba ao menos um PDF.');
+    var tema_id=null, nome='';
+    if(MODO==='novo'){ nome=document.getElementById('tema').value.trim(); if(!nome) throw new Error('Dê um nome ao tema.'); }
+    else { tema_id=document.getElementById('temaSel').value; if(!tema_id) throw new Error('Escolha um tema para atualizar.'); nome=(TEMAS.find(function(t){return t.id===tema_id;})||{}).nome||''; }
+    var size=parseInt(document.getElementById('chunksize').value)||45000;
+
+    // memória existente (para dedup)
+    EXIST=[];
+    if(MODO==='atualizar'){
+      log('<b>Carregando memória do tema…</b>');
+      var dc=await api({action:'loadConceitos',token:TOKEN(),tema_id:tema_id});
+      EXIST=dc.conceitos||[]; log('· '+EXIST.length+' conceitos já existentes carregados.');
+    }
+    var existSet={}; EXIST.forEach(function(c){existSet[c.nome_norm||normp(c.nome)]=true;});
+
+    // extrair
+    dot('d1','run'); log('<b>Extraindo texto…</b>');
+    var full='';
+    for(var f=0;f<FILES.length;f++){ log('· '+FILES[f].name); full+=await extractPdf(FILES[f])+'\n\n'; }
+    var chunks=chunkText(full,size);
+    dot('d1','done'); log('Texto: <b>'+full.length.toLocaleString()+'</b> chars · <b>'+chunks.length+'</b> pedaços.');
+
+    // FASE 1 — mapear com contexto acumulado (existentes + novos desta sessão)
+    dot('d2','run'); log('<b>Fase 1 — mapeando (ignorando o que já existe)…</b>');
+    var known=EXIST.map(function(c){return {nome:c.nome,prereqs:c.prereqs||[],resumo:c.resumo||''};}); // grafo completo
+    var novos=[]; // só o que é realmente novo
+    var seen={}; Object.keys(existSet).forEach(function(k){seen[k]=true;});
+    for(var i=0;i<chunks.length;i++){
+      var prompt='Você é um mapeador de conhecimento rigoroso. Extraia os CONCEITOS ensináveis do TRECHO.\n'
+        +'Para cada: "nome" (curto), "prereqs" (nomes exigidos antes), "resumo" (1 frase).\n'
+        +'Reutilize EXATAMENTE os nomes já mapeados quando o conceito reaparecer (não crie variação).\n'
+        +'JÁ MAPEADOS (não repita, só aponte prereqs a eles):\n'+JSON.stringify(known.slice(-150).map(function(k){return k.nome;}))+'\n'
+        +'Responda SOMENTE um array JSON. TRECHO:\n'+chunks[i];
+      var arr=[];
+      try{ arr=extractJson(await gem(prompt)); }catch(e){ log('· pedaço '+(i+1)+' falhou ('+String(e.message).slice(0,40)+')'); }
+      (arr||[]).forEach(function(c){
+        if(!c||!c.nome) return;
+        var nn=normp(c.nome);
+        if(seen[nn]) return; // já existe (no Supabase ou nesta sessão) → ignora, sem duplicar
+        seen[nn]=true;
+        var item={nome:c.nome,prereqs:c.prereqs||[],resumo:c.resumo||'',fonte:FILES.map(function(x){return x.name;}).join(', ')};
+        known.push(item); novos.push(item);
+      });
+      document.getElementById('d2sub').textContent=(i+1)+'/'+chunks.length+' · novos: '+novos.length+' · total: '+known.length;
+      bar(0.10+0.60*((i+1)/chunks.length));
+      log('· pedaço '+(i+1)+'/'+chunks.length+' → novos <b>'+novos.length+'</b> / total <b>'+known.length+'</b>');
+    }
+    dot('d2','done');
+    if(MODO==='novo' && !known.length) throw new Error('Nenhum conceito extraído. O PDF tem texto selecionável?');
+    log('Dedup: <b>'+novos.length+'</b> conceitos novos · <b>'+(chunksSeenIgnored(seen,existSet))+'</b> ignorados por já existirem.');
+
+    // FASE 2 — recosturar as 8 seções com o grafo COMPLETO (existente + novo)
+    dot('d3','run'); log('<b>Fase 2 — recosturando as 8 seções…</b>'); bar(0.80);
+    var prompt2='Você é arquiteto curricular de classe mundial. Recebe o GRAFO completo de conceitos (com prereqs) do tema "'+nome+'".\n'
+      +'Ordene TODOS respeitando dependências e distribua nas 8 SEÇÕES, do zero absoluto ao nível de autoridade internacional.\n'
+      +'Cada seção: "n"(1-8),"titulo","objetivo","conceitos"(lista ordenada de nomes). Sem repetir. Sem buraco.\n'
+      +'Responda SOMENTE {"secoes":[...]}. GRAFO:\n'+JSON.stringify(known.map(function(k){return {nome:k.nome,prereqs:k.prereqs};}));
+    var out=extractJson(await gem(prompt2));
+    dot('d3','done'); bar(0.90);
+
+    // Monta o grafo de relacoes 'depende' a partir dos prereqs coletados na Fase 1.
+    // Sem isso o grafo nunca era gravado — worker.saveTema so grava relacoes
+    // recebidas explicitamente no body, e essa etapa nunca existiu antes.
+    var relacoes=[];
+    known.forEach(function(k){ (k.prereqs||[]).forEach(function(preq){
+      if(preq && k.nome && normp(preq)!==normp(k.nome)) relacoes.push({origem:preq,destino:k.nome,tipo:'depende',peso:1});
+    }); });
+    log('Grafo: <b>'+relacoes.length+'</b> relações de dependência detectadas.');
+
+    // SALVAR
+    dot('d4','run'); log('<b>Salvando no Supabase…</b>');
+    var slug=MODO==='novo'?(normp(nome).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'-'+Date.now().toString(36)):undefined;
+    var save=await api({action:'saveTema',token:TOKEN(),modo:MODO,tema_id:tema_id,nome:nome,slug:slug,
+      novos:novos,relacoes:relacoes,secoes:out.secoes||[],
+      fonteMeta:{nome_arquivo:FILES.map(function(x){return x.name;}).join(', '),chars:full.length}});
+    dot('d4','done'); bar(1);
+    log('<b>✓ Salvo.</b> versão v'+save.versao+' · +'+save.inseridos+' conceitos · total '+save.total);
+
+    render(nome,out.secoes||[],save,novos);
+    await loadTemas();
+  }catch(e){ log('<b style="color:#E8A53D">ERRO:</b> '+e.message); alert('Erro: '+e.message); }
+  finally{ btn.disabled=false; }
+}
+function chunksSeenIgnored(seen,existSet){ // quantos dos existentes reapareceram (aprox informativo)
+  return Object.keys(existSet).length;
+}
+
+// ---------- render ----------
+function render(nome,secoes,save,novos){
+  document.getElementById('card-out').classList.remove('hide');
+  document.getElementById('out-tema').textContent=nome;
+  document.getElementById('out-stats').textContent='Versão v'+save.versao+' · '+secoes.length+' seções · '+save.total+' conceitos no total ('+save.inseridos+' novos adicionados agora).';
+  var novoSet={}; novos.forEach(function(n){novoSet[normp(n.nome)]=true;});
+  var host=document.getElementById('secoes'); host.innerHTML='';
+  secoes.forEach(function(s){
+    var div=document.createElement('div'); div.className='sec';
+    var inner='<div class="sec-h" onclick="this.parentElement.classList.toggle(\'open\')"><div class="sec-n">'+(s.n||'')+'</div><div style="flex:1"><div class="b">'+(s.titulo||'Seção')+'</div><div class="small muted">'+((s.conceitos||[]).length)+' conceitos</div></div><span style="color:var(--muted)">▾</span></div><div class="sec-b"><div class="small muted mb12" style="font-style:italic">'+(s.objetivo||'')+'</div>';
+    (s.conceitos||[]).forEach(function(c){var nm=(typeof c==='string'?c:(c.nome||''));var isNew=novoSet[normp(nm)];inner+='<div class="concept'+(isNew?' new':'')+'"><div class="d"></div><div>'+nm+(isNew?' <span class="small" style="color:var(--terra-d);font-weight:800">NOVO</span>':'')+'</div></div>';});
+    inner+='</div>';
+    div.innerHTML=inner; host.appendChild(div);
+  });
+  document.getElementById('card-out').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
