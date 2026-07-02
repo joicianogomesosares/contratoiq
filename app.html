@@ -935,13 +935,25 @@ async function aoAutenticar(session){
     alert('Erro ao entrar: '+e.message);
   }
 }
-sbClient.auth.onAuthStateChange(function(event,session){
-  if(session && !SESSAO){ aoAutenticar(session); }
+// Escuta mudancas de sessao — captura o evento SIGNED_IN que dispara
+// logo apos o Supabase processar o callback do Google OAuth. Sem isso,
+// um getSession() chamado antes do processamento terminar retorna null.
+sbClient.auth.onAuthStateChange(function(event, session){
+  if((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session){
+    if(!SESSAO || session.access_token !== SESSAO.access_token){
+      aoAutenticar(session);
+    }
+  }
+  if(event === 'SIGNED_OUT'){ SESSAO=null; ALUNO=null; go('s-landing'); }
 });
-window.addEventListener('DOMContentLoaded',async function(){
+window.addEventListener('DOMContentLoaded', async function(){
   paintStats();
-  var res=await sbClient.auth.getSession();
-  if(res && res.data && res.data.session){ aoAutenticar(res.data.session); }
+  // getSession() resolve sessoes ja existentes (ex: reload da pagina).
+  // O fluxo pos-OAuth e pego pelo onAuthStateChange acima.
+  var res = await sbClient.auth.getSession();
+  if(res && res.data && res.data.session && !SESSAO){
+    aoAutenticar(res.data.session);
+  }
 });
 
 function paintStats(){
@@ -1081,4 +1093,3 @@ function confetti(host){
 </script>
 </body>
 </html>
-
