@@ -24,63 +24,72 @@
 html,body{height:100%}
 body{
   font-family:'Inter',system-ui,sans-serif;color:var(--ink);
-  display:flex;align-items:center;justify-content:center;min-height:100dvh;padding:16px;gap:56px;
-  /* Fundo com identidade da marca (nao mais bege chapado) — visivel em tablet/desktop,
-     onde sobra espaco ao redor do "aparelho". No celular real isso e substituido
-     (ver media query abaixo), porque la o app preenche a tela toda. */
-  background:
-    radial-gradient(1100px 760px at 12% -12%, rgba(63,125,91,.16), transparent 58%),
-    radial-gradient(950px 680px at 108% 8%, rgba(200,100,60,.13), transparent 55%),
-    radial-gradient(700px 520px at 50% 115%, rgba(232,165,61,.10), transparent 55%),
-    linear-gradient(180deg,#F2E8D5 0%,#E9DFCB 55%,#E2D5BA 100%);
-}
-.phone{
-  width:430px;max-width:100%;height:880px;max-height:min(94vh,94dvh);background:var(--cream);
-  border-radius:38px;overflow:hidden;position:relative;flex:none;
-  box-shadow:0 30px 70px rgba(60,45,25,.35), inset 0 0 0 8px #2A2620, inset 0 0 0 9px #3a342b;
+  min-height:100dvh;
+  /* MOBILE-FIRST: no celular o app preenche a tela inteira, sem moldura, sem
+     fundo decorativo (ele so aparece no desktop, onde sobra espaco ao redor). */
+  background:var(--cream);
   display:flex;flex-direction:column;
 }
-.screen{position:absolute;inset:9px;border-radius:30px;overflow:hidden;display:none;flex-direction:column;background:var(--cream)}
 
-/* ================= RESPONSIVO ================= */
-/* Celular real (<=640px): o app PREENCHE a tela. A moldura de "device frame"
-   so existe pra simular um celular dentro de um navegador de desktop — no
-   proprio celular ela so rouba espaco de tela util, entao some por completo. */
-@media (max-width:640px){
-  body{ padding:0; gap:0; background:var(--cream); align-items:stretch; }
-  .phone{
-    width:100vw; max-width:100vw; height:100dvh; max-height:100dvh;
-    border-radius:0; box-shadow:none;
+/* -------- MOBILE (base, <=1023px): app ocupa 100% da tela -------- */
+.desktop-aside{ display:none; }
+.phone{
+  width:100%;flex:1;min-height:100dvh;background:var(--cream);
+  position:relative;overflow:hidden;display:flex;flex-direction:column;
+}
+.screen{position:absolute;inset:0;overflow:hidden;display:none;flex-direction:column;background:var(--cream)}
+/* Respeita notch / ilha dinamica / barra de gestos (iOS/Android) */
+.topbar{ padding-top:calc(16px + env(safe-area-inset-top)); }
+.statrow{ padding-top:calc(14px + env(safe-area-inset-top)); }
+.tabbar{ padding-bottom:calc(10px + env(safe-area-inset-bottom)); }
+.gloss{ bottom:calc(18px + env(safe-area-inset-bottom)); }
+
+/* ============================================================
+   DESKTOP / TABLET LARGO (>=1024px): NAO e mais "um celular no
+   canto". O palco preenche a viewport inteira com o fundo de
+   marca; a esquerda um hero grande, a direita o app como um
+   PAINEL DE APLICACAO alto e amplo (nao um telefone).
+   ============================================================ */
+@media (min-width:1024px){
+  body{
+    flex-direction:row; align-items:stretch; justify-content:center;
+    gap:clamp(32px,5vw,80px); padding:clamp(24px,4vh,56px) clamp(32px,5vw,72px);
+    background:
+      radial-gradient(1100px 760px at 10% -10%, rgba(63,125,91,.18), transparent 58%),
+      radial-gradient(950px 680px at 112% 6%, rgba(200,100,60,.14), transparent 55%),
+      radial-gradient(760px 560px at 40% 118%, rgba(232,165,61,.11), transparent 55%),
+      linear-gradient(180deg,#F2E8D5 0%,#E9DFCB 55%,#E2D5BA 100%);
   }
-  .screen{ inset:0; border-radius:0; }
-  /* Respeita notch/ilha dinamica e barra de gestos (iOS/Android) */
-  .topbar{ padding-top:calc(16px + env(safe-area-inset-top)); }
-  .statrow{ padding-top:calc(14px + env(safe-area-inset-top)); }
-  .tabbar{ padding-bottom:calc(10px + env(safe-area-inset-bottom)); }
-  .gloss{ bottom:calc(18px + env(safe-area-inset-bottom)); }
-}
-
-/* Tablet (641-1024px): moldura um pouco menor, ainda centralizada, com o
-   fundo de marca visivel nas bordas. */
-@media (min-width:641px) and (max-width:1024px){
-  .phone{ width:min(430px,88vw); height:min(880px,90dvh); }
-  .desktop-aside{ display:none; }
-}
-
-/* Desktop amplo (>=1280px): acompanha o "aparelho" com uma coluna de marca ao
-   lado, pra sobrar aproveitado o espaco em vez de vazio. So aparece se tiver
-   largura de sobra pras duas colunas nao brigarem. */
-@media (min-width:1280px){
   .desktop-aside{
-    display:flex; flex-direction:column; justify-content:center; gap:22px;
-    width:380px; flex:none; color:var(--ink);
+    display:flex;flex-direction:column;justify-content:center;gap:26px;
+    flex:1 1 0;max-width:560px;color:var(--ink);align-self:center;
   }
-  .desktop-aside .display{ font-size:44px; }
-  .desktop-aside .sub{ font-size:16px; max-width:340px; }
-  .desktop-aside .feat{ display:flex; gap:12px; align-items:center; }
-  .desktop-aside .feat .ic{ font-size:22px; }
+  .desktop-aside .display{ font-size:clamp(40px,4.4vw,60px); }
+  .desktop-aside .sub{ font-size:17px;line-height:1.55;max-width:440px; }
+  .desktop-aside .feat{ display:flex;gap:14px;align-items:flex-start; }
+  .desktop-aside .feat .ic{ font-size:26px;line-height:1; }
+  /* O "app" vira um painel alto, encostado, com respiro vertical de tela cheia.
+     Largura de leitura confortavel — largo o bastante pra nao parecer telefone,
+     estreito o bastante pra a UI vertical (trilha, cards) respirar bem. */
+  .phone{
+    flex:0 0 clamp(460px,34vw,560px);
+    width:clamp(460px,34vw,560px);min-height:0;height:auto;
+    align-self:stretch;max-height:calc(100dvh - clamp(48px,8vh,112px));
+    border-radius:28px;background:var(--cream);
+    box-shadow:0 30px 80px rgba(60,45,25,.28), 0 0 0 1px rgba(42,38,32,.06);
+  }
+  .screen{ border-radius:28px; }
+  /* Telas de texto longo nao devem esticar a linha inteira: miolo legivel.
+     Trilha, cards e listas ja ficam otimos na largura do painel. */
+  #s-lesson .scroll > .pad,
+  #s-onb1 .scroll, #s-onb2 .scroll, #s-onb3 .scroll{ }
 }
-@media (max-width:1279px){ .desktop-aside{ display:none; } }
+
+/* Desktop MUITO amplo (>=1600px): painel um pouco maior, hero mais generoso. */
+@media (min-width:1600px){
+  .phone{ flex-basis:600px;width:600px; }
+  .desktop-aside{ max-width:620px; }
+}
 .screen.active{display:flex;animation:fade .35s ease}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .scroll{flex:1;overflow-y:auto;overflow-x:hidden}
@@ -233,12 +242,17 @@ h1.display{font-size:34px}
 </head>
 <body>
 <div class="desktop-aside" aria-hidden="true">
-  <div style="width:64px;height:64px;border-radius:20px;background:var(--green);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 0 var(--green-d)"><span style="font-size:34px">🧠</span></div>
-  <div class="display">Contrato<span style="color:var(--terra)">IQ</span></div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <div style="width:64px;height:64px;border-radius:20px;background:var(--green);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 0 var(--green-d)"><span style="font-size:34px">🧠</span></div>
+    <div class="display" style="font-size:clamp(34px,3.4vw,46px)">Contrato<span style="color:var(--terra)">IQ</span></div>
+  </div>
+  <h1 class="display" style="font-size:clamp(40px,4.4vw,60px);line-height:1.03;letter-spacing:-.02em;margin-top:4px">Aprenda de verdade.<br>E <span style="color:var(--terra)">não esqueça.</span></h1>
   <p class="sub">Trilhas que partem do zero e constroem domínio completo — no ritmo de um jogo, com a profundidade de um mestre.</p>
-  <div class="feat"><span class="ic">🧩</span><div><b>Entenda o porquê</b><div class="small muted">Cada ideia nasce de uma história real</div></div></div>
-  <div class="feat"><span class="ic">🔁</span><div><b>Errou? Recomeça mais fácil</b><div class="small muted">Ninguém fica pra trás, nunca</div></div></div>
-  <div class="feat"><span class="ic">🔥</span><div><b>Pouco por dia, sem pressa</b><div class="small muted">A ofensiva te puxa de volta</div></div></div>
+  <div class="col gap12" style="margin-top:6px">
+    <div class="feat"><span class="ic">🧩</span><div><b>Entenda o porquê</b><div class="small muted">Cada ideia nasce de uma história real</div></div></div>
+    <div class="feat"><span class="ic">🔁</span><div><b>Errou? Recomeça mais fácil</b><div class="small muted">Ninguém fica pra trás, nunca</div></div></div>
+    <div class="feat"><span class="ic">🔥</span><div><b>Pouco por dia, sem pressa</b><div class="small muted">A ofensiva te puxa de volta</div></div></div>
+  </div>
 </div>
 <div class="phone">
 
